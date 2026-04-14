@@ -1,8 +1,6 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import Link from 'next/link'
-import SectionHeader from '@/components/ui/SectionHeader'
 import GlassCard from '@/components/ui/GlassCard'
 import GoldButton from '@/components/ui/GoldButton'
 import GhostButton from '@/components/ui/GhostButton'
