@@ -47,9 +47,9 @@ function LineGraph() {
   const geometry = useMemo(() => new THREE.BufferGeometry().setFromPoints(points), [points])
 
   return (
-    <threeLine geometry={geometry}>
+    <line geometry={geometry}>
       <lineBasicMaterial color="#f5d060" opacity={0.6} transparent />
-    </threeLine>
+    </line>
   )
 }
 

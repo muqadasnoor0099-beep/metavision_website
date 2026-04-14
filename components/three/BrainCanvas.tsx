@@ -30,9 +30,9 @@ function ConnectionLine({ start, end }: { start: [number, number, number]; end: 
   }, [points])
 
   return (
-    <threeLine geometry={geometry}>
+    <line geometry={geometry}>
       <lineBasicMaterial color="#d4af37" opacity={0.18} transparent />
-    </threeLine>
+    </line>
   )
 }
 
