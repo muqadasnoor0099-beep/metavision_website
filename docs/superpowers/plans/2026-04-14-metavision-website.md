@@ -2718,7 +2718,7 @@ import ContactForm from '@/components/contact/ContactForm'
 const INFO = [
   { Icon: Mail, label: 'Email', value: 'hello@metavision.in' },
   { Icon: Phone, label: 'Phone', value: '+92 300 1231234' },
-  { Icon: MapPin, label: 'Address', value: 'Koramangala, Bangalore, Karnataka 560034' },
+  { Icon: MapPin, label: 'Address', value: ' , Bangalore, Karnataka 560034' },
   { Icon: Clock, label: 'Hours', value: 'Mon–Fri, 9 AM – 7 PM IST' },
 ]
 
@@ -2763,7 +2763,7 @@ export default function ContactPage() {
                   className="w-full h-52 object-cover"
                 />
                 <div className="p-4">
-                  <p className="text-white/40 text-xs">MetaVision Technologies Pvt. Ltd. — Koramangala, Bangalore</p>
+                  <p className="text-white/40 text-xs">MetaVision Technologies Pvt. Ltd. —  , Bangalore</p>
                 </div>
               </div>
             </div>
