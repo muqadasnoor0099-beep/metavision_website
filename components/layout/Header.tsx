@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { Menu, X, ChevronDown } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 import GoldButton from '@/components/ui/GoldButton'
+import ThemeToggle from '@/components/ui/ThemeToggle'
 import { NAV_LINKS } from '@/lib/constants'
 
 export default function Header() {
@@ -20,11 +21,11 @@ export default function Header() {
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 backdrop-blur-[12px] ${
-        scrolled
-          ? 'bg-[rgba(6,6,9,0.95)] shadow-[0_1px_0_rgba(212,175,55,0.1)]'
-          : 'bg-[rgba(6,6,9,0.6)]'
-      }`}
+      style={{
+        backgroundColor: scrolled ? 'var(--clr-header-bg-scrolled)' : 'var(--clr-header-bg)',
+        boxShadow: scrolled ? '0 1px 0 rgba(212,175,55,0.1)' : 'none',
+      }}
+      className="fixed top-0 left-0 right-0 z-50 transition-all duration-300 backdrop-blur-[12px]"
     >
       <div className="max-w-7xl mx-auto px-6 lg:px-8 h-16 flex items-center justify-between">
         {/* Logo */}
@@ -79,18 +80,22 @@ export default function Header() {
           )}
         </nav>
 
-        <div className="hidden lg:block">
+        <div className="hidden lg:flex items-center gap-3">
+          <ThemeToggle />
           <GoldButton href="/contact" size="sm">Get Demo</GoldButton>
         </div>
 
-        {/* Mobile toggle */}
-        <button
-          className="lg:hidden text-white/70 hover:text-white transition-colors"
-          onClick={() => setMobileOpen((o) => !o)}
-          aria-label="Toggle menu"
-        >
-          {mobileOpen ? <X size={22} /> : <Menu size={22} />}
-        </button>
+        {/* Mobile right side */}
+        <div className="lg:hidden flex items-center gap-2">
+          <ThemeToggle />
+          <button
+            className="text-white/70 hover:text-white transition-colors"
+            onClick={() => setMobileOpen((o) => !o)}
+            aria-label="Toggle menu"
+          >
+            {mobileOpen ? <X size={22} /> : <Menu size={22} />}
+          </button>
+        </div>
       </div>
 
       {/* Mobile menu */}
@@ -101,7 +106,8 @@ export default function Header() {
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.25 }}
-            className="lg:hidden bg-[rgba(6,6,9,0.98)] border-t border-gold/10 overflow-hidden"
+            style={{ backgroundColor: 'var(--clr-mobile-menu)' }}
+            className="lg:hidden border-t border-gold/10 overflow-hidden"
           >
             <nav className="px-6 py-5 flex flex-col gap-4">
               {NAV_LINKS.map((link) => (

@@ -107,7 +107,7 @@ function BrainScene() {
 
 export default function BrainCanvas() {
   return (
-    <Canvas camera={{ position: [0, 0, 4.8], fov: 48 }} dpr={[1, 2]}>
+    <Canvas camera={{ position: [0, 0, 4.8], fov: 48 }} dpr={[1, 2]} gl={{ alpha: true }} style={{ background: 'transparent' }}>
       <ambientLight intensity={0.25} />
       <pointLight position={[-3, 3, 3]} intensity={2} color="#d4af37" />
       <pointLight position={[3, -2, -2]} intensity={0.6} color="#ffffff" />

@@ -10,13 +10,45 @@
   --font-body: var(--font-inter), sans-serif;
 }
 
+/* ── Theme tokens for values not managed by Tailwind ── */
+:root {
+  --clr-bg: #060609;
+  --clr-header-bg: rgba(6, 6, 9, 0.60);
+  --clr-header-bg-scrolled: rgba(6, 6, 9, 0.95);
+  --clr-mobile-menu: rgba(6, 6, 9, 0.98);
+}
+
+/* ── Light mode overrides ── */
+html.light {
+  /*
+   * Override Tailwind v4's built-in --color-white.
+   * Since text-white/XX, border-white/XX, bg-white/XX all resolve via
+   * color-mix(in oklab, var(--color-white) N%, transparent), overriding
+   * this one variable adapts every white-based utility across the site.
+   */
+  --color-white: #1c1608;
+
+  /* Override surface colors defined in @theme above */
+  --color-surface: #fff3c4;
+  --color-surface-high: #fffae0;
+
+  /* Layout-specific tokens */
+  --clr-bg: #fef9ec;
+  --clr-header-bg: rgba(254, 249, 236, 0.82);
+  --clr-header-bg-scrolled: rgba(254, 249, 236, 0.96);
+  --clr-mobile-menu: rgba(254, 249, 236, 0.98);
+}
+
 @layer base {
   html {
     scroll-behavior: smooth;
   }
   body {
-    background-color: #060609;
+    background-color: var(--clr-bg);
     color: #ffffff;
+  }
+  html.light body {
+    color: #1c1608;
   }
   * {
     box-sizing: border-box;
@@ -24,11 +56,24 @@
 }
 
 @layer components {
+  /* ── Dark mode glass card ── */
   .glass-card {
     background: rgba(14, 14, 20, 0.75);
     border: 1px solid rgba(212, 175, 55, 0.18);
     backdrop-filter: blur(14px);
     -webkit-backdrop-filter: blur(14px);
     border-radius: 0.75rem;
+  }
+
+  /* ── Light mode glass card override ── */
+  html.light .glass-card {
+    background: rgba(255, 249, 215, 0.88);
+    border: 1px solid rgba(180, 140, 0, 0.22);
+    box-shadow: 0 4px 20px rgba(180, 140, 0, 0.07), 0 1px 0 rgba(255, 255, 255, 0.75) inset;
+  }
+
+  /* ── Light mode glass card hover shadow ── */
+  html.light .glass-card:hover {
+    box-shadow: 0 8px 28px rgba(180, 140, 0, 0.13), 0 0 32px rgba(212, 175, 55, 0.08), 0 1px 0 rgba(255, 255, 255, 0.8) inset;
   }
 }

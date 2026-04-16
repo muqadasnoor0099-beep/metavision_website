@@ -71,7 +71,7 @@ function DashboardScene() {
       {/* Dashboard backing plane */}
       <mesh position={[0, 0.1, -0.1]}>
         <planeGeometry args={[4.2, 3.2]} />
-        <meshStandardMaterial color="#0e0e14" opacity={0.85} transparent side={THREE.DoubleSide} />
+        <meshStandardMaterial color="#1a150a" opacity={0.55} transparent side={THREE.DoubleSide} />
       </mesh>
 
       {/* Animated bars */}
@@ -108,7 +108,7 @@ function DashboardScene() {
 
 export default function DashboardCanvas() {
   return (
-    <Canvas camera={{ position: [0, 0.3, 5.5], fov: 46 }} dpr={[1, 2]}>
+    <Canvas camera={{ position: [0, 0.3, 5.5], fov: 46 }} dpr={[1, 2]} gl={{ alpha: true }} style={{ background: 'transparent' }}>
       <ambientLight intensity={0.35} />
       <pointLight position={[0, 3, 4]} intensity={1.8} color="#d4af37" />
       <pointLight position={[-3, -2, 2]} intensity={0.5} color="#ffffff" />
