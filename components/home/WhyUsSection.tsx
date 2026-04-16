@@ -14,7 +14,7 @@ export default function WhyUsSection() {
           overline="Why MetaVision"
           title="Trusted by"
           titleGold="Industry Leaders"
-          subtitle="From solo practitioners to hospital chains, professionals across India rely on MetaVision."
+          subtitle="From solo practitioners to hospital chains, professionals across Pakistan rely on MetaVision."
         />
         <div className="grid grid-cols-1 md:grid-cols-3 gap-10 mt-16">
           {WHY_US.map((item, i) => (

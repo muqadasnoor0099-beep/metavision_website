@@ -9,18 +9,18 @@ const TIMELINE = [
   { year: '2019', title: 'Founded', description: 'MetaVision started as a medical software consultancy in Bangalore with a mission to bring AI to everyday healthcare.' },
   { year: '2020', title: 'First Product Launch', description: 'Launched our telemedicine platform, onboarding 50 clinics in the first 6 months.' },
   { year: '2022', title: 'CA Suite Launch', description: 'Expanded into financial software with AI-driven accounting tools for chartered accountants.' },
-  { year: '2024', title: 'Scale', description: 'Now serving 1,700+ professionals across India with 24/7 dedicated support.' },
+  { year: '2024', title: 'Scale', description: 'Now serving 1,700+ professionals across Pakistan with 24/7 dedicated support.' },
 ]
 
 const TEAM = [
-  { name: 'Arjun Nair', role: 'CEO & Co-Founder', avatar: 'https://placehold.co/80x80/d4af37/060609?text=AN' },
-  { name: 'Priya Krishnan', role: 'CTO & Co-Founder', avatar: 'https://placehold.co/80x80/d4af37/060609?text=PK' },
-  { name: 'Rahul Desai', role: 'Head of Product', avatar: 'https://placehold.co/80x80/d4af37/060609?text=RD' },
+  { name: 'Faisal Ayub', role: 'CEO & Co-Founder', avatar: 'https://placehold.co/80x80/d4af37/060609?text=AN' },
+  { name: 'Faisal Ayub', role: 'CTO & Co-Founder', avatar: 'https://placehold.co/80x80/d4af37/060609?text=PK' },
+  { name: 'Faisal Ayub', role: 'Head of Product', avatar: 'https://placehold.co/80x80/d4af37/060609?text=RD' },
 ]
 
 const UNIQUE = [
   { icon: '🧠', title: 'AI at the Core', body: "Our AI isn't a feature — it's the foundation every product is built on." },
-  { icon: '🇮🇳', title: 'India-First', body: 'Built for India\'s regulatory landscape: HIPAA, GST, and IT Act compliance out of the box.' },
+  { icon: '🇮🇳', title: 'Pakistan-First', body: 'Built for Pakistan\'s regulatory landscape: HIPAA, GST, and IT Act compliance out of the box.' },
   { icon: '⚡', title: 'Speed to Value', body: 'Most clients go live in under 48 hours. No 6-month implementations.' },
 ]
 
@@ -54,7 +54,7 @@ export default function AboutPage() {
             {
               tag: 'Our Mission',
               title: 'Democratise AI for Professionals',
-              body: 'Make enterprise-grade AI tools accessible to every doctor and CA in India — regardless of their practice size.',
+              body: 'Make enterprise-grade AI tools accessible to every doctor and CA in Pakistan — regardless of their practice size.',
             },
             {
               tag: 'Our Vision',

@@ -176,7 +176,7 @@ _Accounting mode — Financial Dashboard:_
 ### 5.3 Why Choose Us
 
 - 3-column layout with large numbers / icons
-- "Trusted by 1,700+ professionals", "Built for India's compliance landscape", "AI-first — not an afterthought"
+- "Trusted by 1,700+ professionals", "Built for Pakistan's compliance landscape", "AI-first — not an afterthought"
 - Subtle animated counter on scroll-enter (0 → final value)
 
 ---

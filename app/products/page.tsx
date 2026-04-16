@@ -80,7 +80,7 @@ export default function ProductsPage() {
             <span className="bg-gradient-to-r from-gold to-gold-light bg-clip-text text-transparent">One Vision.</span>
           </h1>
           <p className="text-white/50 text-base leading-relaxed">
-            MetaVision builds AI-first software for two of India's most demanding professions. Both products share the same commitment: intelligence that works in the background, so you can focus on what matters.
+            MetaVision builds AI-first software for two of Pakistan's most demanding professions. Both products share the same commitment: intelligence that works in the background, so you can focus on what matters.
           </p>
         </div>
       </section>

@@ -50,9 +50,9 @@ export const ACCOUNTING_FEATURES: Feature[] = [
 ]
 
 export const WHY_US = [
-  { value: '1,700+', label: 'Professionals', description: 'Trusted by doctors and CAs across India.' },
+  { value: '1,700+', label: 'Professionals', description: 'Trusted by doctors and CAs across Pakistan.' },
   { value: 'AI-First', label: 'Philosophy', description: 'Not bolted on — AI is core to every workflow.' },
-  { value: '100%', label: 'Compliance', description: "Built for India's regulatory landscape — HIPAA, GST, IT Act." },
+  { value: '100%', label: 'Compliance', description: "Built for Pakistan's regulatory landscape — HIPAA, GST, IT Act." },
 ]
 
 export const TESTIMONIALS: Testimonial[] = [

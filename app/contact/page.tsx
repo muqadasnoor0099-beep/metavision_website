@@ -4,7 +4,7 @@ import ContactForm from '@/components/contact/ContactForm'
 
 const INFO = [
   { Icon: Mail, label: 'Email', value: 'hello@metavision.in' },
-  { Icon: Phone, label: 'Phone', value: '+91 98765 43210' },
+  { Icon: Phone, label: 'Phone', value: '+92 300 1231234' },
   { Icon: MapPin, label: 'Address', value: 'Koramangala, Bangalore, Karnataka 560034' },
   { Icon: Clock, label: 'Hours', value: 'Mon–Fri, 9 AM – 7 PM IST' },
 ]

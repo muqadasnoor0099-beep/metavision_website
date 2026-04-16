@@ -28,7 +28,7 @@ export default function Footer() {
               <span className="font-heading font-bold text-white">MetaVision</span>
             </div>
             <p className="text-white/40 text-sm leading-relaxed max-w-xs">
-              Premium AI software for healthcare and finance professionals. India-built, globally ready.
+              Premium AI software for healthcare and finance professionals. Pakistan-built, globally ready.
             </p>
             <div className="flex gap-3 mt-1">
               {[Globe, Share2, Code2].map((Icon, i) => (
@@ -69,11 +69,11 @@ export default function Footer() {
               </li>
               <li className="flex items-start gap-2.5 text-white/40 text-sm">
                 <Phone size={14} className="text-gold mt-0.5 shrink-0" />
-                +91 98765 43210
+                +92 300 1231234
               </li>
               <li className="flex items-start gap-2.5 text-white/40 text-sm">
                 <MapPin size={14} className="text-gold mt-0.5 shrink-0" />
-                Bangalore, Karnataka, India
+                Islamabad, Pakistan
               </li>
             </ul>
           </div>
@@ -83,7 +83,7 @@ export default function Footer() {
       <div className="border-t border-white/[0.05] py-5">
         <div className="max-w-7xl mx-auto px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-3">
           <p className="text-white/25 text-xs">© 2026 MetaVision Technologies Pvt. Ltd. All rights reserved.</p>
-          <p className="text-white/25 text-xs">Built with ♥ in India</p>
+          <p className="text-white/25 text-xs">Built with ♥ in Pakistan</p>
         </div>
       </div>
     </footer>

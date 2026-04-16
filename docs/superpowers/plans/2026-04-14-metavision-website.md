@@ -315,9 +315,9 @@ export const ACCOUNTING_FEATURES: Feature[] = [
 ]
 
 export const WHY_US = [
-  { value: '1,700+', label: 'Professionals', description: 'Trusted by doctors and CAs across India.' },
+  { value: '1,700+', label: 'Professionals', description: 'Trusted by doctors and CAs across Pakistan.' },
   { value: 'AI-First', label: 'Philosophy', description: 'Not bolted on — AI is core to every workflow.' },
-  { value: '100%', label: 'Compliance', description: "Built for India's regulatory landscape — HIPAA, GST, IT Act." },
+  { value: '100%', label: 'Compliance', description: "Built for Pakistan's regulatory landscape — HIPAA, GST, IT Act." },
 ]
 
 export const TESTIMONIALS: Testimonial[] = [
@@ -894,7 +894,7 @@ export default function Footer() {
               <span className="font-heading font-bold text-white">MetaVision</span>
             </div>
             <p className="text-white/40 text-sm leading-relaxed max-w-xs">
-              Premium AI software for healthcare and finance professionals. India-built, globally ready.
+              Premium AI software for healthcare and finance professionals. Pakistan-built, globally ready.
             </p>
             <div className="flex gap-3 mt-1">
               {[Linkedin, Twitter, Github].map((Icon, i) => (
@@ -935,11 +935,11 @@ export default function Footer() {
               </li>
               <li className="flex items-start gap-2.5 text-white/40 text-sm">
                 <Phone size={14} className="text-gold mt-0.5 shrink-0" />
-                +91 98765 43210
+                +92 300 1231234
               </li>
               <li className="flex items-start gap-2.5 text-white/40 text-sm">
                 <MapPin size={14} className="text-gold mt-0.5 shrink-0" />
-                Bangalore, Karnataka, India
+                Islamabad, Pakistan
               </li>
             </ul>
           </div>
@@ -949,7 +949,7 @@ export default function Footer() {
       <div className="border-t border-white/[0.05] py-5">
         <div className="max-w-7xl mx-auto px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-3">
           <p className="text-white/25 text-xs">© 2026 MetaVision Technologies Pvt. Ltd. All rights reserved.</p>
-          <p className="text-white/25 text-xs">Built with ♥ in India</p>
+          <p className="text-white/25 text-xs">Built with ♥ in Pakistan</p>
         </div>
       </div>
     </footer>
@@ -1658,7 +1658,7 @@ export default function WhyUsSection() {
           overline="Why MetaVision"
           title="Trusted by"
           titleGold="Industry Leaders"
-          subtitle="From solo practitioners to hospital chains, professionals across India rely on MetaVision."
+          subtitle="From solo practitioners to hospital chains, professionals across Pakistan rely on MetaVision."
         />
         <div className="grid grid-cols-1 md:grid-cols-3 gap-10 mt-16">
           {WHY_US.map((item, i) => (
@@ -1899,18 +1899,18 @@ const TIMELINE = [
   { year: '2019', title: 'Founded', description: 'MetaVision started as a medical software consultancy in Bangalore with a mission to bring AI to everyday healthcare.' },
   { year: '2020', title: 'First Product Launch', description: 'Launched our telemedicine platform, onboarding 50 clinics in the first 6 months.' },
   { year: '2022', title: 'CA Suite Launch', description: 'Expanded into financial software with AI-driven accounting tools for chartered accountants.' },
-  { year: '2024', title: 'Scale', description: 'Now serving 1,700+ professionals across India with 24/7 dedicated support.' },
+  { year: '2024', title: 'Scale', description: 'Now serving 1,700+ professionals across Pakistan with 24/7 dedicated support.' },
 ]
 
 const TEAM = [
-  { name: 'Arjun Nair', role: 'CEO & Co-Founder', avatar: 'https://placehold.co/80x80/d4af37/060609?text=AN' },
-  { name: 'Priya Krishnan', role: 'CTO & Co-Founder', avatar: 'https://placehold.co/80x80/d4af37/060609?text=PK' },
-  { name: 'Rahul Desai', role: 'Head of Product', avatar: 'https://placehold.co/80x80/d4af37/060609?text=RD' },
+  { name: 'Faisal Ayub', role: 'CEO & Co-Founder', avatar: 'https://placehold.co/80x80/d4af37/060609?text=AN' },
+  { name: 'Faisal Ayub', role: 'CTO & Co-Founder', avatar: 'https://placehold.co/80x80/d4af37/060609?text=PK' },
+  { name: 'Faisal Ayub', role: 'Head of Product', avatar: 'https://placehold.co/80x80/d4af37/060609?text=RD' },
 ]
 
 const UNIQUE = [
   { icon: '🧠', title: 'AI at the Core', body: "Our AI isn't a feature — it's the foundation every product is built on." },
-  { icon: '🇮🇳', title: 'India-First', body: 'Built for India\'s regulatory landscape: HIPAA, GST, and IT Act compliance out of the box.' },
+  { icon: '🇮🇳', title: 'Pakistan-First', body: 'Built for Pakistan\'s regulatory landscape: HIPAA, GST, and IT Act compliance out of the box.' },
   { icon: '⚡', title: 'Speed to Value', body: 'Most clients go live in under 48 hours. No 6-month implementations.' },
 ]
 
@@ -1944,7 +1944,7 @@ export default function AboutPage() {
             {
               tag: 'Our Mission',
               title: 'Democratise AI for Professionals',
-              body: 'Make enterprise-grade AI tools accessible to every doctor and CA in India — regardless of their practice size.',
+              body: 'Make enterprise-grade AI tools accessible to every doctor and CA in Pakistan — regardless of their practice size.',
             },
             {
               tag: 'Our Vision',
@@ -2388,7 +2388,7 @@ export default function ProductsPage() {
             <span className="bg-gradient-to-r from-gold to-gold-light bg-clip-text text-transparent">One Vision.</span>
           </h1>
           <p className="text-white/50 text-base leading-relaxed">
-            MetaVision builds AI-first software for two of India's most demanding professions. Both products share the same commitment: intelligence that works in the background, so you can focus on what matters.
+            MetaVision builds AI-first software for two of Pakistan's most demanding professions. Both products share the same commitment: intelligence that works in the background, so you can focus on what matters.
           </p>
         </div>
       </section>
@@ -2717,7 +2717,7 @@ import ContactForm from '@/components/contact/ContactForm'
 
 const INFO = [
   { Icon: Mail, label: 'Email', value: 'hello@metavision.in' },
-  { Icon: Phone, label: 'Phone', value: '+91 98765 43210' },
+  { Icon: Phone, label: 'Phone', value: '+92 300 1231234' },
   { Icon: MapPin, label: 'Address', value: 'Koramangala, Bangalore, Karnataka 560034' },
   { Icon: Clock, label: 'Hours', value: 'Mon–Fri, 9 AM – 7 PM IST' },
 ]
