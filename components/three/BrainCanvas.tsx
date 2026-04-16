@@ -20,20 +20,18 @@ function NeuralNode({ position, phase }: { position: [number, number, number]; p
 }
 
 function ConnectionLine({ start, end }: { start: [number, number, number]; end: [number, number, number] }) {
-  const points = useMemo(
-    () => [new THREE.Vector3(...start), new THREE.Vector3(...end)],
-    [start, end]
-  )
-  const geometry = useMemo(() => {
-    const g = new THREE.BufferGeometry().setFromPoints(points)
-    return g
-  }, [points])
+  const line = useMemo(() => {
+    const points = [new THREE.Vector3(...start), new THREE.Vector3(...end)]
+    const geometry = new THREE.BufferGeometry().setFromPoints(points)
+    const material = new THREE.LineBasicMaterial({
+      color: '#d4af37',
+      opacity: 0.18,
+      transparent: true,
+    })
+    return new THREE.Line(geometry, material)
+  }, [start, end])
 
-  return (
-    <line geometry={geometry}>
-      <lineBasicMaterial color="#d4af37" opacity={0.18} transparent />
-    </line>
-  )
+  return <primitive object={line} />
 }
 
 const NODE_POSITIONS: [number, number, number][] = [

@@ -44,13 +44,17 @@ function LineGraph() {
     return pts
   }, [])
 
-  const geometry = useMemo(() => new THREE.BufferGeometry().setFromPoints(points), [points])
+  const line = useMemo(() => {
+    const geometry = new THREE.BufferGeometry().setFromPoints(points)
+    const material = new THREE.LineBasicMaterial({
+      color: '#f5d060',
+      opacity: 0.6,
+      transparent: true,
+    })
+    return new THREE.Line(geometry, material)
+  }, [points])
 
-  return (
-    <line geometry={geometry}>
-      <lineBasicMaterial color="#f5d060" opacity={0.6} transparent />
-    </line>
-  )
+  return <primitive object={line} />
 }
 
 function DashboardScene() {
