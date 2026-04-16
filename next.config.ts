@@ -2,7 +2,8 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   output: 'export',
-  trailingSlash: true,
+  // false: emits about.html (better for static hosts). true: about/index.html (needs /about/ URL).
+  trailingSlash: false,
   images: {
     unoptimized: true,
   },
