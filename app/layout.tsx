@@ -26,7 +26,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={`${spaceGrotesk.variable} ${inter.variable}`} suppressHydrationWarning>
-      <body>
+      <body suppressHydrationWarning>
         {/* Apply saved theme before first paint to prevent flash of wrong theme */}
         <Script id="theme-init" strategy="beforeInteractive">
           {`(function(){try{var t=localStorage.getItem('mv-theme');if(t==='light')document.documentElement.classList.add('light')}catch(e){}})();`}

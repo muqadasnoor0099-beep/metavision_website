@@ -16,11 +16,11 @@ export const HERO_CONTENT: Record<ProductMode, HeroContent> = {
     ],
   },
   accounting: {
-    overline: 'Intelligent CA Workflow Suite',
+    overline: 'Professional CA Workflow Suite',
     headline1: 'Streamline Your Practice',
-    headline2: 'With AI-Driven Accounting',
+    headline2: 'For Chartered Accountants',
     description:
-      'End-to-end chartered accountant workflow: GST, ITR, balance sheets, and client management — all in one intelligent platform.',
+      'End-to-end workflow platform for chartered accountants — GST filing, ITR preparation, balance sheets, and client management all in one place.',
     ctaLabel: 'Explore CA Software',
     ctaHref: '/products/accounting',
     stats: [
@@ -28,6 +28,18 @@ export const HERO_CONTENT: Record<ProductMode, HeroContent> = {
       { value: '99.9%', label: 'Accuracy' },
       { value: '50M+', label: 'Records Processed' },
     ],
+  },
+}
+
+/** Demo modals — `public/demos/ha-engage-pro.mp4`; run `npm run sync-demo` after Remotion writes `remotion-videos/out/ha-engage-pro.mp4`. */
+export const PRODUCT_DEMO_BY_MODE: Record<ProductMode, { src: string; title: string }> = {
+  medical: {
+    src: '/demos/ha-engage-pro.mp4',
+    title: 'Medical platform — product demo',
+  },
+  accounting: {
+    src: '/demos/ha-engage-pro.mp4',
+    title: 'HA EngagePro — platform overview',
   },
 }
 
@@ -42,7 +54,7 @@ export const MEDICAL_FEATURES: Feature[] = [
 
 export const ACCOUNTING_FEATURES: Feature[] = [
   { icon: 'Receipt', title: 'GST Filing', description: 'Automated GST return preparation and e-filing.' },
-  { icon: 'FileCheck', title: 'ITR Preparation', description: 'Intelligent income tax return with error detection.' },
+  { icon: 'FileCheck', title: 'ITR Preparation', description: 'Accurate income tax return preparation with built-in validation and error checks.' },
   { icon: 'BarChart2', title: 'Balance Sheets', description: 'Auto-generated financial statements in one click.' },
   { icon: 'Users', title: 'Client Management', description: 'Centralised client database and communication hub.' },
   { icon: 'Shield', title: 'Audit Trail', description: 'Complete immutable log of every financial action.' },
@@ -121,7 +133,7 @@ export const HOW_IT_WORKS_ACCOUNTING: Step[] = [
   {
     number: '02',
     title: 'Review & Approve',
-    description: 'AI prepares GST returns, ITR drafts, and balance sheets. You review and approve in one click.',
+    description: 'The platform compiles GST returns, ITR drafts, and balance sheets from imported data. Review, make adjustments, and approve in one click.',
   },
   {
     number: '03',

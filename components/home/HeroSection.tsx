@@ -5,7 +5,8 @@ import { motion, AnimatePresence } from 'framer-motion'
 import dynamic from 'next/dynamic'
 import GoldButton from '@/components/ui/GoldButton'
 import GhostButton from '@/components/ui/GhostButton'
-import { HERO_CONTENT } from '@/lib/constants'
+import DemoModal from '@/components/ui/DemoModal'
+import { HERO_CONTENT, PRODUCT_DEMO_BY_MODE } from '@/lib/constants'
 import type { ProductMode } from '@/lib/types'
 
 const BrainCanvas = dynamic(() => import('@/components/three/BrainCanvas'), { ssr: false })
@@ -19,6 +20,8 @@ const MODE_LABELS: Record<ProductMode, string> = {
 
 export default function HeroSection() {
   const [mode, setMode] = useState<ProductMode>('medical')
+  const [demoOpen, setDemoOpen] = useState(false)
+  const demo = PRODUCT_DEMO_BY_MODE[mode]
 
   useEffect(() => {
     const id = setInterval(() => {
@@ -90,7 +93,7 @@ export default function HeroSection() {
               {/* CTAs */}
               <div className="flex gap-3 flex-wrap">
                 <GoldButton href={content.ctaHref}>{content.ctaLabel}</GoldButton>
-                <GhostButton>▶ Watch Demo</GhostButton>
+                <GhostButton onClick={() => setDemoOpen(true)}>▶ Watch Demo</GhostButton>
               </div>
 
               {/* Stats */}
@@ -183,6 +186,13 @@ export default function HeroSection() {
       </div>
 
       {/* Scroll indicator */}
+      <DemoModal
+        open={demoOpen}
+        onClose={() => setDemoOpen(false)}
+        videoSrc={demo.src}
+        title={demo.title}
+      />
+
       <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 z-10">
         <span className="text-white/25 text-[10px] tracking-widest uppercase">Scroll</span>
         <motion.div
