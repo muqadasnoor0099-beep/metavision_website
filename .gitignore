@@ -3,6 +3,7 @@
 # dependencies
 /node_modules
 remotion-videos/node_modules
+remotion-videos/out
 /.pnp
 .pnp.js
 .yarn/install-state.gz
