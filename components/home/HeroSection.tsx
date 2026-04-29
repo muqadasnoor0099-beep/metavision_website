@@ -9,8 +9,7 @@ import DemoModal from '@/components/ui/DemoModal'
 import { HERO_CONTENT, PRODUCT_DEMO_BY_MODE } from '@/lib/constants'
 import type { ProductMode } from '@/lib/types'
 
-const BrainCanvas = dynamic(() => import('@/components/three/BrainCanvas'), { ssr: false })
-const DashboardCanvas = dynamic(() => import('@/components/three/DashboardCanvas'), { ssr: false })
+const ParticleOrb = dynamic(() => import('@/components/three/ParticleOrb'), { ssr: false })
 
 const MODES: ProductMode[] = ['medical', 'accounting']
 const MODE_LABELS: Record<ProductMode, string> = {
@@ -35,7 +34,7 @@ export default function HeroSection() {
   return (
     <section className="relative min-h-screen flex flex-col overflow-hidden">
       {/* Global background radial */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_50%_-10%,rgba(212,175,55,0.06),transparent)]" />
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_50%_-10%,rgba(37,99,235,0.07),transparent)]" />
 
       <div className="relative z-10 flex-1 grid grid-cols-1 lg:grid-cols-2 min-h-screen pt-16">
         {/* ── LEFT COLUMN ── */}
@@ -109,26 +108,15 @@ export default function HeroSection() {
           </AnimatePresence>
         </div>
 
-        {/* ── RIGHT COLUMN: 3D ── */}
+        {/* ── RIGHT COLUMN: Particle Orb ── */}
         <div className="relative hidden lg:flex items-center justify-center overflow-hidden">
-          {/* Stage glow */}
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_55%_45%,rgba(212,175,55,0.1)_0%,transparent_65%)]" />
-          {/* Scan lines */}
-          <div className="absolute inset-0 bg-[repeating-linear-gradient(0deg,transparent,transparent_3px,rgba(212,175,55,0.012)_3px,rgba(212,175,55,0.012)_4px)] pointer-events-none" />
+          {/* Soft radial glow behind orb */}
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_70%_70%_at_55%_50%,rgba(37,99,235,0.09)_0%,transparent_70%)] pointer-events-none" />
 
-          {/* 3D canvas */}
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={mode}
-              initial={{ opacity: 0, scale: 0.94 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.94 }}
-              transition={{ duration: 0.55 }}
-              className="absolute inset-0"
-            >
-              {mode === 'medical' ? <BrainCanvas /> : <DashboardCanvas />}
-            </motion.div>
-          </AnimatePresence>
+          {/* Particle orb — full column */}
+          <div className="absolute inset-0">
+            <ParticleOrb modeKey={mode} />
+          </div>
 
           {/* Floating status card — bottom right */}
           <AnimatePresence mode="wait">
