@@ -25,8 +25,8 @@ function AnimatedBar({ position, targetHeight, delay }: { position: [number, num
     <mesh ref={ref} position={[position[0], position[1], position[2]]}>
       <boxGeometry args={[0.18, 1, 0.18]} />
       <meshStandardMaterial
-        color="#d4af37"
-        emissive="#d4af37"
+        color="#2563eb"
+        emissive="#2563eb"
         emissiveIntensity={0.5}
         metalness={0.3}
         roughness={0.4}
@@ -47,7 +47,7 @@ function LineGraph() {
   const line = useMemo(() => {
     const geometry = new THREE.BufferGeometry().setFromPoints(points)
     const material = new THREE.LineBasicMaterial({
-      color: '#f5d060',
+      color: '#60a5fa',
       opacity: 0.6,
       transparent: true,
     })
@@ -91,7 +91,7 @@ function DashboardScene() {
       <Float speed={1.8} rotationIntensity={1.2} floatIntensity={0.4}>
         <mesh position={[2.0, 1.1, 0.5]}>
           <boxGeometry args={[0.35, 0.35, 0.35]} />
-          <meshStandardMaterial color="#d4af37" wireframe opacity={0.65} transparent />
+          <meshStandardMaterial color="#2563eb" wireframe opacity={0.65} transparent />
         </mesh>
       </Float>
 
@@ -99,7 +99,7 @@ function DashboardScene() {
       <Float speed={1.2} rotationIntensity={0.8} floatIntensity={0.6}>
         <mesh position={[-2.1, 1.0, 0.3]}>
           <boxGeometry args={[0.25, 0.25, 0.25]} />
-          <meshStandardMaterial color="#f5d060" wireframe opacity={0.5} transparent />
+          <meshStandardMaterial color="#60a5fa" wireframe opacity={0.5} transparent />
         </mesh>
       </Float>
     </group>
@@ -110,7 +110,7 @@ export default function DashboardCanvas() {
   return (
     <Canvas camera={{ position: [0, 0.3, 5.5], fov: 46 }} dpr={[1, 2]} gl={{ alpha: true }} style={{ background: 'transparent' }}>
       <ambientLight intensity={0.35} />
-      <pointLight position={[0, 3, 4]} intensity={1.8} color="#d4af37" />
+      <pointLight position={[0, 3, 4]} intensity={1.8} color="#2563eb" />
       <pointLight position={[-3, -2, 2]} intensity={0.5} color="#ffffff" />
       <DashboardScene />
     </Canvas>

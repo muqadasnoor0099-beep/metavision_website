@@ -28,7 +28,7 @@ export default function MockupCard({ item, index }: Props) {
 
       {/* Hover overlay */}
       <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-5">
-        <button className="bg-gradient-to-r from-gold to-gold-light text-black text-xs font-bold px-4 py-2 rounded-lg translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
+        <button className="bg-gradient-to-r from-gold to-gold-light text-white text-xs font-bold px-4 py-2 rounded-lg translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
           View Demo
         </button>
       </div>

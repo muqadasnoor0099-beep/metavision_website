@@ -23,14 +23,14 @@ export default function Header() {
     <header
       style={{
         backgroundColor: scrolled ? 'var(--clr-header-bg-scrolled)' : 'var(--clr-header-bg)',
-        boxShadow: scrolled ? '0 1px 0 rgba(212,175,55,0.1)' : 'none',
+        boxShadow: scrolled ? '0 1px 0 rgba(37,99,235,0.15)' : 'none',
       }}
       className="fixed top-0 left-0 right-0 z-50 transition-all duration-300 backdrop-blur-[12px]"
     >
       <div className="max-w-7xl mx-auto px-6 lg:px-8 h-16 flex items-center justify-between">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2.5 shrink-0">
-          <div className="w-8 h-8 bg-gradient-to-br from-gold to-gold-light rounded-lg flex items-center justify-center font-black text-black text-sm font-heading">
+          <div className="w-8 h-8 bg-gradient-to-br from-gold to-gold-light rounded-lg flex items-center justify-center font-black text-white text-sm font-heading">
             MV
           </div>
           <span className="font-heading font-bold text-white tracking-tight">MetaVision</span>

@@ -42,7 +42,7 @@ export default function FeaturesSection({ fixedMode }: Props) {
                 key={m}
                 onClick={() => setMode(m)}
                 className={`px-5 py-2 rounded-full text-[11px] font-bold transition-all duration-300 ${
-                  mode === m ? 'bg-gradient-to-r from-gold to-gold-light text-black' : 'text-white/40 hover:text-white/65'
+                  mode === m ? 'bg-gradient-to-r from-gold to-gold-light text-white' : 'text-white/40 hover:text-white/65'
                 }`}
               >
                 {m === 'medical' ? 'Medical' : 'Accounting'}

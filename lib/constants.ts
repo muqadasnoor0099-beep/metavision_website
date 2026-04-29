@@ -203,12 +203,12 @@ export const ACCOUNTING_PRICING: PricingTier[] = [
 ]
 
 export const PORTFOLIO_ITEMS: PortfolioItem[] = [
-  { title: 'Patient Dashboard', tag: 'Medical', image: 'https://placehold.co/400x260/0e0e14/d4af37?text=Patient+Dashboard' },
-  { title: 'Video Consultation', tag: 'Medical', image: 'https://placehold.co/400x260/0e0e14/d4af37?text=Video+Consultation' },
-  { title: 'AI Prescription Panel', tag: 'Medical', image: 'https://placehold.co/400x260/0e0e14/d4af37?text=AI+Prescription' },
-  { title: 'GST Filing Interface', tag: 'Accounting', image: 'https://placehold.co/400x260/0e0e14/d4af37?text=GST+Filing' },
-  { title: 'Balance Sheet Generator', tag: 'Accounting', image: 'https://placehold.co/400x260/0e0e14/d4af37?text=Balance+Sheet' },
-  { title: 'Client Management Hub', tag: 'Accounting', image: 'https://placehold.co/400x260/0e0e14/d4af37?text=Client+Hub' },
-  { title: 'Analytics Dashboard', tag: 'Medical', image: 'https://placehold.co/400x260/0e0e14/d4af37?text=Analytics' },
-  { title: 'Multi-firm Overview', tag: 'Accounting', image: 'https://placehold.co/400x260/0e0e14/d4af37?text=Multi-firm' },
+  { title: 'Patient Dashboard', tag: 'Medical', image: 'https://placehold.co/400x260/0e0e14/2563eb?text=Patient+Dashboard' },
+  { title: 'Video Consultation', tag: 'Medical', image: 'https://placehold.co/400x260/0e0e14/2563eb?text=Video+Consultation' },
+  { title: 'AI Prescription Panel', tag: 'Medical', image: 'https://placehold.co/400x260/0e0e14/2563eb?text=AI+Prescription' },
+  { title: 'GST Filing Interface', tag: 'Accounting', image: 'https://placehold.co/400x260/0e0e14/2563eb?text=GST+Filing' },
+  { title: 'Balance Sheet Generator', tag: 'Accounting', image: 'https://placehold.co/400x260/0e0e14/2563eb?text=Balance+Sheet' },
+  { title: 'Client Management Hub', tag: 'Accounting', image: 'https://placehold.co/400x260/0e0e14/2563eb?text=Client+Hub' },
+  { title: 'Analytics Dashboard', tag: 'Medical', image: 'https://placehold.co/400x260/0e0e14/2563eb?text=Analytics' },
+  { title: 'Multi-firm Overview', tag: 'Accounting', image: 'https://placehold.co/400x260/0e0e14/2563eb?text=Multi-firm' },
 ]

@@ -1,8 +1,8 @@
 @import "tailwindcss";
 
 @theme {
-  --color-gold: #d4af37;
-  --color-gold-light: #f5d060;
+  --color-gold: #2563eb;
+  --color-gold-light: #60a5fa;
   --color-surface: #0e0e14;
   --color-surface-high: #16161f;
 
@@ -59,7 +59,7 @@ html.light {
   /* ── Dark mode glass card ── */
   .glass-card {
     background: rgba(14, 14, 20, 0.75);
-    border: 1px solid rgba(212, 175, 55, 0.18);
+    border: 1px solid rgba(37, 99, 235, 0.18);
     backdrop-filter: blur(14px);
     -webkit-backdrop-filter: blur(14px);
     border-radius: 0.75rem;
@@ -68,12 +68,12 @@ html.light {
   /* ── Light mode glass card override ── */
   html.light .glass-card {
     background: rgba(255, 249, 215, 0.88);
-    border: 1px solid rgba(180, 140, 0, 0.22);
-    box-shadow: 0 4px 20px rgba(180, 140, 0, 0.07), 0 1px 0 rgba(255, 255, 255, 0.75) inset;
+    border: 1px solid rgba(37, 99, 235, 0.22);
+    box-shadow: 0 4px 20px rgba(37, 99, 235, 0.07), 0 1px 0 rgba(255, 255, 255, 0.75) inset;
   }
 
   /* ── Light mode glass card hover shadow ── */
   html.light .glass-card:hover {
-    box-shadow: 0 8px 28px rgba(180, 140, 0, 0.13), 0 0 32px rgba(212, 175, 55, 0.08), 0 1px 0 rgba(255, 255, 255, 0.8) inset;
+    box-shadow: 0 8px 28px rgba(37, 99, 235, 0.13), 0 0 32px rgba(37, 99, 235, 0.08), 0 1px 0 rgba(255, 255, 255, 0.8) inset;
   }
 }

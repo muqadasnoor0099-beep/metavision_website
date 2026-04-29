@@ -11,7 +11,7 @@ interface Props {
 }
 
 export default function GoldButton({ children, href, onClick, size = 'md', className = '', type = 'button' }: Props) {
-  const base = `inline-flex items-center justify-center font-bold bg-gradient-to-r from-gold to-gold-light text-black rounded-[10px] transition-all duration-200 hover:opacity-90 hover:scale-[1.02] active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/50 ${
+  const base = `inline-flex items-center justify-center font-bold bg-gradient-to-r from-gold to-gold-light text-white rounded-[10px] transition-all duration-200 hover:opacity-90 hover:scale-[1.02] active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/50 ${
     size === 'sm' ? 'text-xs px-4 py-2' : 'text-sm px-6 py-3'
   } ${className}`
 

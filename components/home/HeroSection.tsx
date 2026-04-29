@@ -48,7 +48,7 @@ export default function HeroSection() {
                 onClick={() => setMode(m)}
                 className={`px-5 py-2 rounded-full text-[11px] font-bold transition-all duration-300 ${
                   mode === m
-                    ? 'bg-gradient-to-r from-gold to-gold-light text-black'
+                    ? 'bg-gradient-to-r from-gold to-gold-light text-white'
                     : 'text-white/40 hover:text-white/65'
                 }`}
               >
@@ -69,7 +69,7 @@ export default function HeroSection() {
             >
               {/* Overline */}
               <div className="flex items-center gap-2">
-                <span className="w-1.5 h-1.5 rounded-full bg-gold shadow-[0_0_6px_#d4af37]" />
+                <span className="w-1.5 h-1.5 rounded-full bg-gold shadow-[0_0_6px_#2563eb]" />
                 <span className="text-gold text-[11px] font-semibold tracking-widest uppercase">
                   {content.overline}
                 </span>

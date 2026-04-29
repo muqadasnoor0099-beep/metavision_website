@@ -24,11 +24,11 @@ export default function PricingCards({ tiers }: Props) {
             viewport={{ once: true }}
             transition={{ delay: i * 0.1 }}
             className={`glass-card p-6 flex flex-col ${
-              tier.highlighted ? 'border-gold/35 shadow-[0_0_40px_rgba(212,175,55,0.1)]' : ''
+              tier.highlighted ? 'border-gold/35 shadow-[0_0_40px_rgba(37,99,235,0.12)]' : ''
             }`}
           >
             {tier.highlighted && (
-              <div className="text-[10px] font-bold text-black bg-gradient-to-r from-gold to-gold-light rounded-full px-3 py-1 w-fit mb-4">
+              <div className="text-[10px] font-bold text-white bg-gradient-to-r from-gold to-gold-light rounded-full px-3 py-1 w-fit mb-4">
                 MOST POPULAR
               </div>
             )}

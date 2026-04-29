@@ -14,7 +14,7 @@ function NeuralNode({ position, phase }: { position: [number, number, number]; p
   return (
     <mesh ref={ref} position={position}>
       <sphereGeometry args={[0.045, 8, 8]} />
-      <meshStandardMaterial color="#d4af37" emissive="#d4af37" emissiveIntensity={2.5} />
+      <meshStandardMaterial color="#2563eb" emissive="#2563eb" emissiveIntensity={2.5} />
     </mesh>
   )
 }
@@ -24,7 +24,7 @@ function ConnectionLine({ start, end }: { start: [number, number, number]; end: 
     const points = [new THREE.Vector3(...start), new THREE.Vector3(...end)]
     const geometry = new THREE.BufferGeometry().setFromPoints(points)
     const material = new THREE.LineBasicMaterial({
-      color: '#d4af37',
+      color: '#2563eb',
       opacity: 0.18,
       transparent: true,
     })
@@ -63,21 +63,21 @@ function BrainScene() {
       {/* Left hemisphere */}
       <mesh position={[-0.28, 0, 0]}>
         <icosahedronGeometry args={[1.38, 4]} />
-        <meshStandardMaterial color="#d4af37" wireframe opacity={0.28} transparent />
+        <meshStandardMaterial color="#2563eb" wireframe opacity={0.28} transparent />
       </mesh>
 
       {/* Right hemisphere */}
       <mesh position={[0.28, 0, 0]}>
         <icosahedronGeometry args={[1.38, 4]} />
-        <meshStandardMaterial color="#d4af37" wireframe opacity={0.28} transparent />
+        <meshStandardMaterial color="#2563eb" wireframe opacity={0.28} transparent />
       </mesh>
 
       {/* Inner glow sphere */}
       <mesh>
         <sphereGeometry args={[0.75, 32, 32]} />
         <meshStandardMaterial
-          color="#d4af37"
-          emissive="#d4af37"
+          color="#2563eb"
+          emissive="#2563eb"
           emissiveIntensity={0.25}
           opacity={0.07}
           transparent
@@ -98,7 +98,7 @@ function BrainScene() {
       <Float speed={0.8} rotationIntensity={0.2} floatIntensity={0.3}>
         <mesh rotation={[Math.PI / 2.2, 0, 0]}>
           <torusGeometry args={[2.0, 0.008, 8, 80]} />
-          <meshStandardMaterial color="#d4af37" opacity={0.15} transparent />
+          <meshStandardMaterial color="#2563eb" opacity={0.15} transparent />
         </mesh>
       </Float>
     </group>
@@ -109,7 +109,7 @@ export default function BrainCanvas() {
   return (
     <Canvas camera={{ position: [0, 0, 4.8], fov: 48 }} dpr={[1, 2]} gl={{ alpha: true }} style={{ background: 'transparent' }}>
       <ambientLight intensity={0.25} />
-      <pointLight position={[-3, 3, 3]} intensity={2} color="#d4af37" />
+      <pointLight position={[-3, 3, 3]} intensity={2} color="#2563eb" />
       <pointLight position={[3, -2, -2]} intensity={0.6} color="#ffffff" />
       <BrainScene />
     </Canvas>

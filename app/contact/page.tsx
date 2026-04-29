@@ -13,7 +13,7 @@ export default function ContactPage() {
   return (
     <div className="pt-16">
       <section className="py-24 px-6 lg:px-8 relative overflow-hidden">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_50%_0%,rgba(212,175,55,0.07),transparent_60%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_50%_0%,rgba(37,99,235,0.07),transparent_60%)]" />
         <div className="max-w-7xl mx-auto relative z-10">
           <SectionHeader
             overline="Contact"
@@ -45,7 +45,7 @@ export default function ContactPage() {
               {/* Map placeholder */}
               <div className="glass-card overflow-hidden">
                 <img
-                  src="https://placehold.co/600x260/0e0e14/d4af37?text=Bangalore+Office+Map"
+                  src="https://placehold.co/600x260/0e0e14/2563eb?text=Bangalore+Office+Map"
                   alt="Office location map"
                   className="w-full h-52 object-cover"
                 />

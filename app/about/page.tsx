@@ -13,9 +13,9 @@ const TIMELINE = [
 ]
 
 const TEAM = [
-  { name: 'Faisal Ayub', role: 'CEO & Co-Founder', avatar: 'https://placehold.co/80x80/d4af37/060609?text=AN' },
-  { name: 'Faisal Ayub', role: 'CTO & Co-Founder', avatar: 'https://placehold.co/80x80/d4af37/060609?text=PK' },
-  { name: 'Faisal Ayub', role: 'Head of Product', avatar: 'https://placehold.co/80x80/d4af37/060609?text=RD' },
+  { name: 'Faisal Ayub', role: 'CEO & Co-Founder', avatar: 'https://placehold.co/80x80/2563eb/ffffff?text=AN' },
+  { name: 'Faisal Ayub', role: 'CTO & Co-Founder', avatar: 'https://placehold.co/80x80/2563eb/ffffff?text=PK' },
+  { name: 'Faisal Ayub', role: 'Head of Product', avatar: 'https://placehold.co/80x80/2563eb/ffffff?text=RD' },
 ]
 
 const UNIQUE = [
