@@ -26,17 +26,17 @@ html.light {
    * color-mix(in oklab, var(--color-white) N%, transparent), overriding
    * this one variable adapts every white-based utility across the site.
    */
-  --color-white: #1c1608;
+  --color-white: #0f172a;
 
   /* Override surface colors defined in @theme above */
-  --color-surface: #fff3c4;
-  --color-surface-high: #fffae0;
+  --color-surface: #e8f1ff;
+  --color-surface-high: #dbeafe;
 
   /* Layout-specific tokens */
-  --clr-bg: #fef9ec;
-  --clr-header-bg: rgba(254, 249, 236, 0.82);
-  --clr-header-bg-scrolled: rgba(254, 249, 236, 0.96);
-  --clr-mobile-menu: rgba(254, 249, 236, 0.98);
+  --clr-bg: #f0f7ff;
+  --clr-header-bg: rgba(240, 247, 255, 0.82);
+  --clr-header-bg-scrolled: rgba(240, 247, 255, 0.96);
+  --clr-mobile-menu: rgba(240, 247, 255, 0.98);
 }
 
 @layer base {
@@ -48,7 +48,7 @@ html.light {
     color: #ffffff;
   }
   html.light body {
-    color: #1c1608;
+    color: #0f172a;
   }
   * {
     box-sizing: border-box;
@@ -67,7 +67,7 @@ html.light {
 
   /* ── Light mode glass card override ── */
   html.light .glass-card {
-    background: rgba(255, 249, 215, 0.88);
+    background: rgba(224, 239, 255, 0.88);
     border: 1px solid rgba(37, 99, 235, 0.22);
     box-shadow: 0 4px 20px rgba(37, 99, 235, 0.07), 0 1px 0 rgba(255, 255, 255, 0.75) inset;
   }
