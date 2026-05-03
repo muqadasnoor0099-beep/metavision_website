@@ -4,10 +4,11 @@
   "main": "index.js",
   "scripts": {
     "studio": "npx remotion studio src/index.tsx",
+    "render:consultation": "npx remotion render src/index.tsx MedicalConsultationVideo out/medical-consultation.mp4",
     "render:medical": "npx remotion render src/index.tsx MedicalExplainer out/medical-explainer.mp4",
     "render:accounting": "npx remotion render src/index.tsx AccountingExplainer out/accounting-explainer.mp4",
     "render:ha-engage": "npx remotion render src/index.tsx HAEngageProExplainer out/ha-engage-pro.mp4",
-    "render:all": "npm run render:medical && npm run render:accounting && npm run render:ha-engage"
+    "render:all": "npm run render:consultation && npm run render:medical && npm run render:accounting && npm run render:ha-engage"
   },
   "keywords": [],
   "author": "",

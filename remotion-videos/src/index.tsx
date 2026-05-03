@@ -3,6 +3,7 @@ import { Composition, registerRoot } from 'remotion'
 import { MedicalExplainer } from './MedicalExplainer'
 import { AccountingExplainer } from './AccountingExplainer'
 import { HAEngageProExplainer } from './HAEngageProExplainer'
+import { MedicalConsultationVideo } from './MedicalConsultationVideo'
 
 const FPS = 30
 const WIDTH = 1920
@@ -11,6 +12,14 @@ const HEIGHT = 1080
 const RemotionRoot: React.FC = () => {
   return (
     <>
+      <Composition
+        id="MedicalConsultationVideo"
+        component={MedicalConsultationVideo}
+        durationInFrames={1200}
+        fps={FPS}
+        width={WIDTH}
+        height={HEIGHT}
+      />
       <Composition
         id="MedicalExplainer"
         component={MedicalExplainer}
