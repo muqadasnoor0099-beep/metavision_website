@@ -97,9 +97,9 @@ function Waveform({ frame, color = BLUE_L, bars = 28, height = 40 }: {
   frame: number; color?: string; bars?: number; height?: number
 }) {
   const phases = React.useMemo(() =>
-    Array.from({ length: bars }, (_, i) => Math.random() * Math.PI * 2), [bars])
+    Array.from({ length: bars }, () => Math.random() * Math.PI * 2), [bars])
   const freqs = React.useMemo(() =>
-    Array.from({ length: bars }, (_, i) => 0.08 + Math.random() * 0.12), [bars])
+    Array.from({ length: bars }, () => 0.08 + Math.random() * 0.12), [bars])
 
   return (
     <div style={{ display: 'flex', alignItems: 'center', gap: 3, height }}>
@@ -123,37 +123,6 @@ function Waveform({ frame, color = BLUE_L, bars = 28, height = 40 }: {
   )
 }
 
-// ─── Phone mockup ─────────────────────────────────────────────────────────────
-
-function Phone({ children, style }: { children: React.ReactNode; style?: React.CSSProperties }) {
-  return (
-    <div style={{
-      width: 240,
-      height: 490,
-      background: '#0a0e1a',
-      borderRadius: 36,
-      border: '2px solid rgba(255,255,255,0.12)',
-      boxShadow: `0 0 60px rgba(37,99,235,0.25), 0 40px 80px rgba(0,0,0,0.6)`,
-      position: 'relative',
-      overflow: 'hidden',
-      ...style,
-    }}>
-      {/* Notch */}
-      <div style={{
-        position: 'absolute', top: 0, left: '50%', transform: 'translateX(-50%)',
-        width: 80, height: 24, background: '#0a0e1a',
-        borderBottomLeftRadius: 14, borderBottomRightRadius: 14,
-        zIndex: 10,
-        border: '2px solid rgba(255,255,255,0.07)',
-        borderTop: 'none',
-      }} />
-      {/* Screen */}
-      <div style={{ position: 'absolute', inset: 0, overflow: 'hidden', borderRadius: 34 }}>
-        {children}
-      </div>
-    </div>
-  )
-}
 
 // ─── SCENE 0: Brand Reveal (frames 0–120, 4s) ─────────────────────────────────
 
@@ -239,129 +208,195 @@ function Scene0() {
   )
 }
 
-// ─── SCENE 1: Live Consultation + Waveform (frames 120–330, 7s) ──────────────
+// ─── SCENE 1: Physical Hospital Examination (frames 120–330, 7s) ─────────────
+
+const VITALS = [
+  { label: 'Temp',     value: '38.7 °C', color: RED,    icon: '🌡', delay: 12 },
+  { label: 'BP',       value: '128/84',  color: BLUE_L, icon: '💉', delay: 20 },
+  { label: 'SpO₂',    value: '96%',     color: CYAN,   icon: '🫁', delay: 28 },
+  { label: 'Pulse',    value: '94 bpm',  color: PURPLE, icon: '❤', delay: 36 },
+]
 
 function Scene1() {
   const frame = useCurrentFrame()
 
-  const seconds = Math.floor(frame / 30) + 7
-  const timeStr = `00:0${seconds > 9 ? '' : '0'}${seconds}`
-
   return (
     <Scene glow={CYAN}>
       <AbsoluteFill style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', padding: '60px 100px', gap: 60 }}>
-        {/* Left: Video call */}
-        <div style={{ ...su(frame, 0), display: 'flex', flexDirection: 'column', gap: 20 }}>
-          <Pill label="Live Session" color={RED} />
+
+        {/* ── LEFT: Text + AI voice capture ── */}
+        <div style={{ ...su(frame, 0), display: 'flex', flexDirection: 'column', gap: 22 }}>
+          <Pill label="In-Clinic Examination" color={CYAN} />
           <div style={{ fontSize: 42, fontWeight: 800, lineHeight: 1.08, letterSpacing: '-0.02em' }}>
-            Doctor–Patient<br />
+            Doctor Examines.<br />
             <span style={{
               background: `linear-gradient(90deg, ${BLUE_L}, ${CYAN})`,
               WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent',
             }}>
-              Video Consultation
+              AI Records Everything.
             </span>
           </div>
           <div style={{ fontSize: 16, color: W60, lineHeight: 1.75, maxWidth: 360 }}>
-            End-to-end encrypted HD video connects doctor and patient in real time.
-            The AI listens, transcribes, and analyses symptoms throughout the session.
+            While the doctor conducts the physical examination, the AI listens — capturing spoken
+            findings, vitals, and observations in real time. No typing. No delays.
           </div>
 
-          {/* Waveform panel */}
-          <Glass style={{ padding: '16px 20px' }}>
-            <div style={{ fontSize: 11, color: CYAN, fontWeight: 700, letterSpacing: '0.14em', marginBottom: 12 }}>
-              VOICE ACTIVITY · PATIENT
+          {/* Doctor voice capture panel */}
+          <Glass style={{ padding: '18px 20px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 14 }}>
+              <div style={{
+                width: 28, height: 28, borderRadius: '50%',
+                background: `${RED}22`, border: `1px solid ${RED}55`,
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+              }}>
+                <div style={{
+                  width: 8, height: 8, borderRadius: '50%', background: RED,
+                  boxShadow: `0 0 8px ${RED}`,
+                  opacity: 0.6 + Math.sin(frame * 0.18) * 0.4,
+                }} />
+              </div>
+              <span style={{ fontSize: 11, color: RED, fontWeight: 700, letterSpacing: '0.14em' }}>
+                AI LISTENING · DOCTOR'S VOICE
+              </span>
             </div>
-            <Waveform frame={frame} color={CYAN} bars={30} height={44} />
-            <div style={{ fontSize: 11, color: BLUE_L, fontWeight: 700, letterSpacing: '0.14em', margin: '16px 0 10px' }}>
-              VOICE ACTIVITY · DOCTOR
+            <Waveform frame={frame} color={BLUE_L} bars={32} height={42} />
+            <div style={{
+              marginTop: 14, padding: '10px 14px',
+              background: `${BLUE}12`, borderRadius: 10,
+              border: `1px solid ${BLUE}33`,
+              fontSize: 13, color: W60, lineHeight: 1.7, fontStyle: 'italic' as const,
+            }}>
+              "Patient presents with fever of 38.7, dry persistent cough for three days,
+              moderate fatigue and frontal headache..."
             </div>
-            <Waveform frame={frame + 15} color={BLUE_L} bars={30} height={36} />
           </Glass>
         </div>
 
-        {/* Right: Video frames */}
-        <div style={{ ...su(frame, 8), position: 'relative' }}>
-          {/* Main doctor frame */}
+        {/* ── RIGHT: Hospital room + vitals ── */}
+        <div style={{ ...su(frame, 6), display: 'flex', flexDirection: 'column', gap: 16 }}>
+
+          {/* Hospital room mockup */}
           <div style={{
-            width: '100%', height: 280,
-            background: 'linear-gradient(135deg, #0d1a2e, #111827)',
+            background: 'linear-gradient(160deg, #071220, #0c1e35)',
             borderRadius: 20,
-            border: `1px solid ${BLUE}44`,
-            boxShadow: `0 0 40px ${BLUE}22`,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
+            border: `1px solid ${BLUE}33`,
+            boxShadow: `0 0 50px ${BLUE}18`,
+            padding: '28px 28px 20px',
             position: 'relative',
             overflow: 'hidden',
           }}>
-            {/* Doctor avatar */}
-            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12 }}>
-              <div style={{
-                width: 80, height: 80, borderRadius: '50%',
-                background: `linear-gradient(135deg, ${BLUE}44, #1e3a5f)`,
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                fontSize: 36,
-              }}>
-                👨‍⚕️
+            {/* Room number badge */}
+            <div style={{
+              position: 'absolute', top: 14, right: 14,
+              background: `${BLUE}22`, border: `1px solid ${BLUE_L}44`,
+              borderRadius: 8, padding: '4px 12px',
+              fontSize: 11, color: BLUE_L, fontWeight: 700,
+            }}>
+              ROOM 07 · OPD
+            </div>
+
+            {/* Patient bed illustration */}
+            <div style={{ display: 'flex', alignItems: 'flex-end', gap: 24, marginBottom: 20 }}>
+              {/* Bed */}
+              <div style={{ position: 'relative', flex: 1 }}>
+                {/* Pillow */}
+                <div style={{
+                  width: 70, height: 28,
+                  background: 'rgba(255,255,255,0.07)',
+                  borderRadius: 8, border: '1px solid rgba(255,255,255,0.10)',
+                  marginBottom: 4, marginLeft: 8,
+                }} />
+                {/* Patient silhouette */}
+                <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 6 }}>
+                  <div style={{ fontSize: 36 }}>🤒</div>
+                  <div>
+                    <div style={{ fontSize: 13, fontWeight: 600 }}>Zain Ahmed, 29M</div>
+                    <div style={{ fontSize: 11, color: W35 }}>Admitted · Ward B</div>
+                  </div>
+                </div>
+                {/* Bed frame */}
+                <div style={{
+                  height: 12, background: 'rgba(255,255,255,0.06)',
+                  borderRadius: 4, border: '1px solid rgba(255,255,255,0.08)',
+                }} />
               </div>
-              <div style={{ fontSize: 13, color: W60 }}>Dr. Aisha Rahman</div>
-              <div style={{ fontSize: 11, color: GREEN, fontWeight: 700, letterSpacing: '0.1em' }}>MBBS · Cardiologist</div>
+
+              {/* Doctor with tablet */}
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6 }}>
+                <div style={{ fontSize: 38 }}>👨‍⚕️</div>
+                {/* Tablet */}
+                <div style={{
+                  width: 44, height: 56,
+                  background: '#0a1628',
+                  border: `1px solid ${BLUE_L}55`,
+                  borderRadius: 6,
+                  boxShadow: `0 0 16px ${BLUE}44`,
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  flexDirection: 'column' as const, gap: 3, padding: 4,
+                }}>
+                  {[80, 60, 70, 45].map((w, i) => (
+                    <div key={i} style={{ width: `${w}%`, height: 3, background: BLUE_L, borderRadius: 2, opacity: 0.6 }} />
+                  ))}
+                </div>
+                <div style={{ fontSize: 10, color: W35 }}>Dr. Aisha</div>
+              </div>
+
+              {/* Monitor / equipment */}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 6, alignItems: 'center' }}>
+                <div style={{
+                  width: 52, height: 40,
+                  background: '#050e1c',
+                  border: `1px solid ${GREEN}44`,
+                  borderRadius: 6,
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                }}>
+                  <svg width={38} height={24} viewBox="0 0 38 24">
+                    <polyline
+                      points={`0,12 6,12 9,4 12,20 15,8 18,16 21,12 38,12`}
+                      stroke={GREEN}
+                      strokeWidth={1.5}
+                      fill="none"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      opacity={0.7 + Math.sin(frame * 0.2) * 0.3}
+                    />
+                  </svg>
+                </div>
+                <div style={{ fontSize: 10, color: GREEN, fontWeight: 700 }}>ECG</div>
+                {/* IV stand dots */}
+                <div style={{ width: 4, height: 40, background: 'rgba(255,255,255,0.07)', borderRadius: 2 }} />
+              </div>
             </div>
 
-            {/* Recording indicator */}
+            {/* AI status bar at bottom of room */}
             <div style={{
-              position: 'absolute', top: 14, left: 14,
-              display: 'flex', alignItems: 'center', gap: 8,
-              background: 'rgba(0,0,0,0.55)', borderRadius: 999, padding: '4px 12px',
+              ...sf(frame, 18),
+              background: `${BLUE}14`, borderRadius: 10, padding: '8px 14px',
+              border: `1px solid ${BLUE}33`,
+              display: 'flex', alignItems: 'center', gap: 10,
             }}>
-              <div style={{
-                width: 8, height: 8, borderRadius: '50%', background: RED,
-                boxShadow: `0 0 10px ${RED}`,
-                opacity: 0.6 + Math.sin(frame * 0.15) * 0.4,
-              }} />
-              <span style={{ fontSize: 11, color: WHITE, fontWeight: 700 }}>REC {timeStr}</span>
-            </div>
-
-            {/* AI caption bar */}
-            <div style={{
-              position: 'absolute', bottom: 0, left: 0, right: 0,
-              background: 'linear-gradient(to top, rgba(0,0,0,0.8), transparent)',
-              padding: '20px 16px 12px',
-              fontSize: 12, color: BLUE_L, fontStyle: 'italic' as const,
-            }}>
-              "AI is analysing symptoms in real-time..."
+              <div style={{ width: 6, height: 6, borderRadius: '50%', background: GREEN, boxShadow: `0 0 8px ${GREEN}` }} />
+              <span style={{ fontSize: 11, color: BLUE_L, fontWeight: 700 }}>AI ACTIVE</span>
+              <span style={{ fontSize: 11, color: W35, marginLeft: 4 }}>Capturing examination notes...</span>
             </div>
           </div>
 
-          {/* Patient PIP */}
-          <div style={{
-            position: 'absolute', bottom: -16, right: 0,
-            width: 130, height: 100,
-            background: 'linear-gradient(135deg, #0a1628, #0d2044)',
-            borderRadius: 14,
-            border: `1px solid ${CYAN}44`,
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            boxShadow: `0 0 30px ${CYAN}22`,
-          }}>
-            <div style={{ textAlign: 'center' }}>
-              <div style={{ fontSize: 28 }}>👤</div>
-              <div style={{ fontSize: 10, color: W35, marginTop: 4 }}>Patient · Room 3</div>
-            </div>
-          </div>
-
-          {/* AI status chip */}
-          <div style={{
-            ...sf(frame, 20),
-            position: 'absolute', top: -14, right: 0,
-            background: `${BLUE}22`, border: `1px solid ${BLUE_L}55`,
-            borderRadius: 999, padding: '6px 14px',
-            display: 'flex', alignItems: 'center', gap: 8,
-          }}>
-            <div style={{ width: 6, height: 6, borderRadius: '50%', background: GREEN, boxShadow: `0 0 8px ${GREEN}` }} />
-            <span style={{ fontSize: 11, color: BLUE_L, fontWeight: 700 }}>AI ACTIVE</span>
+          {/* Vitals grid */}
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+            {VITALS.map((v, i) => (
+              <div key={i} style={su(frame, v.delay)}>
+                <Glass style={{ padding: '12px 16px', display: 'flex', alignItems: 'center', gap: 12 }}>
+                  <span style={{ fontSize: 20 }}>{v.icon}</span>
+                  <div>
+                    <div style={{ fontSize: 16, fontWeight: 800, color: v.color }}>{v.value}</div>
+                    <div style={{ fontSize: 10, color: W35, marginTop: 2 }}>{v.label}</div>
+                  </div>
+                </Glass>
+              </div>
+            ))}
           </div>
         </div>
+
       </AbsoluteFill>
     </Scene>
   )
