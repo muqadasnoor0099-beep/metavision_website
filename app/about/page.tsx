@@ -6,7 +6,7 @@ import GlassCard from '@/components/ui/GlassCard'
 import CTABanner from '@/components/home/CTABanner'
 
 const TIMELINE = [
-  { year: '2019', title: 'Founded', description: 'MetaVision started as a medical software consultancy in Bangalore with a mission to bring AI to everyday healthcare.' },
+  { year: '2019', title: 'Founded', description: 'MetaVision started as a medical software consultancy in Islamabad with a mission to bring AI to everyday healthcare.' },
   { year: '2020', title: 'First Product Launch', description: 'Launched our telemedicine platform, onboarding 50 clinics in the first 6 months.' },
   { year: '2022', title: 'CA Suite Launch', description: 'Expanded into financial software with AI-driven accounting tools for chartered accountants.' },
   { year: '2024', title: 'Scale', description: 'Now serving 1,700+ professionals across Pakistan with 24/7 dedicated support.' },

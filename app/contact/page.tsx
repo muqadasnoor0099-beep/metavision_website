@@ -3,10 +3,10 @@ import SectionHeader from '@/components/ui/SectionHeader'
 import ContactForm from '@/components/contact/ContactForm'
 
 const INFO = [
-  { Icon: Mail, label: 'Email', value: 'hello@metavision.in' },
+  { Icon: Mail, label: 'Email', value: 'hello@metavision.pk' },
   { Icon: Phone, label: 'Phone', value: '+92 300 1231234' },
-  { Icon: MapPin, label: 'Address', value: ' , Bangalore, Karnataka 560034' },
-  { Icon: Clock, label: 'Hours', value: 'Mon–Fri, 9 AM – 7 PM IST' },
+  { Icon: MapPin, label: 'Address', value: 'Blue Area, Islamabad, 44000, Pakistan' },
+  { Icon: Clock, label: 'Hours', value: 'Mon–Fri, 9 AM – 6 PM PKT' },
 ]
 
 export default function ContactPage() {
@@ -42,15 +42,18 @@ export default function ContactPage() {
                 ))}
               </div>
 
-              {/* Map placeholder */}
+              {/* Map — Islamabad, Blue Area */}
               <div className="glass-card overflow-hidden">
-                <img
-                  src="https://placehold.co/600x260/0e0e14/2563eb?text=Bangalore+Office+Map"
-                  alt="Office location map"
-                  className="w-full h-52 object-cover"
+                <iframe
+                  title="MetaVision Islamabad Office"
+                  src="https://www.openstreetmap.org/export/embed.html?bbox=73.0133%2C33.7015%2C73.0933%2C33.7415&layer=mapnik&marker=33.7215%2C73.0533"
+                  className="w-full h-52 border-0"
+                  loading="lazy"
+                  allowFullScreen
                 />
-                <div className="p-4">
-                  <p className="text-white/40 text-xs">MetaVision Technologies Pvt. Ltd. —  , Bangalore</p>
+                <div className="p-4 flex items-center gap-2">
+                  <MapPin size={12} className="text-gold shrink-0" />
+                  <p className="text-white/40 text-xs">MetaVision Technologies Pvt. Ltd. — Blue Area, Islamabad, Pakistan</p>
                 </div>
               </div>
             </div>
