@@ -34,12 +34,12 @@ export const HERO_CONTENT: Record<ProductMode, HeroContent> = {
 /** Demo modals — `public/demos/ha-engage-pro.mp4`; run `npm run sync-demo` after Remotion writes `remotion-videos/out/ha-engage-pro.mp4`. */
 export const PRODUCT_DEMO_BY_MODE: Record<ProductMode, { src: string; title: string }> = {
   medical: {
-    src: '/demos/ha-engage-pro.mp4',
-    title: 'Medical platform — product demo',
+    src: '/demos/medical-consultation.mp4',
+    title: 'AI Medical Consultation — platform demo',
   },
   accounting: {
-    src: '/demos/ha-engage-pro.mp4',
-    title: 'HA EngagePro — platform overview',
+    src: '/demos/accounting-explainer.mp4',
+    title: 'CA Software — platform overview',
   },
 }
 
