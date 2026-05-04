@@ -145,7 +145,7 @@ export const HOW_IT_WORKS_ACCOUNTING: Step[] = [
 export const MEDICAL_PRICING: PricingTier[] = [
   {
     name: 'Starter',
-    price: '₹2,999',
+    price: 'PKR2,999',
     period: '/month',
     description: 'For small clinics and solo practitioners.',
     features: ['Up to 5 doctors', '500 consultations/month', 'AI prescriptions', 'Patient portal', 'Email support'],
@@ -154,7 +154,7 @@ export const MEDICAL_PRICING: PricingTier[] = [
   },
   {
     name: 'Professional',
-    price: '₹7,999',
+    price: 'PKR7,999',
     period: '/month',
     description: 'For growing multi-specialty clinics.',
     features: ['Up to 25 doctors', 'Unlimited consultations', 'Lab integration', 'Custom branding', 'Priority support'],
@@ -175,7 +175,7 @@ export const MEDICAL_PRICING: PricingTier[] = [
 export const ACCOUNTING_PRICING: PricingTier[] = [
   {
     name: 'Solo',
-    price: '₹1,999',
+    price: 'PKR1,999',
     period: '/month',
     description: 'For individual chartered accountants.',
     features: ['Up to 50 clients', 'GST + ITR filing', 'Balance sheet automation', 'Audit trail', 'Email support'],
@@ -184,7 +184,7 @@ export const ACCOUNTING_PRICING: PricingTier[] = [
   },
   {
     name: 'Firm',
-    price: '₹5,499',
+    price: 'PKR5,499',
     period: '/month',
     description: 'For CA firms with multiple partners.',
     features: ['Up to 300 clients', 'Multi-user access', 'Advanced GST analytics', 'Client portal', 'Phone + chat support'],

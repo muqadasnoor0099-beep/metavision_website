@@ -222,10 +222,10 @@ function SceneFeatureGST() {
   const frame = useCurrentFrame()
 
   const clients = [
-    { name: 'Mehta Traders', turnover: '₹42L', status: 'Filed', color: '#22c55e' },
-    { name: 'Khan Enterprises', turnover: '₹18L', status: 'Ready', color: GOLD },
-    { name: 'Raza & Co.', turnover: '₹91L', status: 'Draft', color: '#f97316' },
-    { name: 'Singh Logistics', turnover: '₹55L', status: 'Filed', color: '#22c55e' },
+    { name: 'Mehta Traders', turnover: 'PKR 42L', status: 'Filed', color: '#22c55e' },
+    { name: 'Khan Enterprises', turnover: 'PKR 18L', status: 'Ready', color: GOLD },
+    { name: 'Raza & Co.', turnover: 'PKR 91L', status: 'Draft', color: '#f97316' },
+    { name: 'Singh Logistics', turnover: 'PKR 55L', status: 'Filed', color: '#22c55e' },
   ]
 
   return (
@@ -319,8 +319,8 @@ function SceneFeatureITR() {
               { label: 'Client Name', val: 'Rajesh Kumar Mehta' },
               { label: 'PAN', val: 'ABCPM1234R' },
               { label: 'Assessment Year', val: '2025–26' },
-              { label: 'Gross Total Income', val: '₹18,42,500' },
-              { label: 'Total Tax Liability', val: '₹2,84,300' },
+              { label: 'Gross Total Income', val: 'PKR 18,42,500' },
+              { label: 'Total Tax Liability', val: 'PKR 2,84,300' },
             ].map((row, i) => (
               <div key={i} style={{
                 ...slideUp(frame, 10 + i * 5),
@@ -356,7 +356,7 @@ function SceneFeatureBalanceSheet() {
             <div style={{ fontSize: 11, color: GOLD, fontWeight: 700, letterSpacing: '0.14em', marginBottom: 18 }}>BALANCE SHEET — FY 2025–26</div>
 
             <div style={{ fontSize: 13, color: GOLD, fontWeight: 700, marginBottom: 10 }}>ASSETS</div>
-            {[['Fixed Assets', '₹38,00,000'], ['Current Assets', '₹21,40,000'], ['Cash & Bank', '₹4,80,000']].map(([k, v], i) => (
+            {[['Fixed Assets', 'PKR 38,00,000'], ['Current Assets', 'PKR 21,40,000'], ['Cash & Bank', 'PKR 4,80,000']].map(([k, v], i) => (
               <div key={i} style={{ ...slideUp(frame, 8 + i * 5), display: 'flex', justifyContent: 'space-between', padding: '8px 0', borderBottom: '1px solid rgba(255,255,255,0.04)' }}>
                 <span style={{ fontSize: 13, color: TEXT_MUTED }}>{k}</span>
                 <span style={{ fontSize: 13, fontWeight: 600, color: TEXT }}>{v}</span>
@@ -364,7 +364,7 @@ function SceneFeatureBalanceSheet() {
             ))}
 
             <div style={{ fontSize: 13, color: GOLD, fontWeight: 700, marginTop: 16, marginBottom: 10 }}>LIABILITIES</div>
-            {[['Share Capital', '₹25,00,000'], ['Reserves & Surplus', '₹28,20,000'], ['Current Liabilities', '₹11,00,000']].map(([k, v], i) => (
+            {[['Share Capital', 'PKR 25,00,000'], ['Reserves & Surplus', 'PKR 28,20,000'], ['Current Liabilities', 'PKR 11,00,000']].map(([k, v], i) => (
               <div key={i} style={{ ...slideUp(frame, 20 + i * 5), display: 'flex', justifyContent: 'space-between', padding: '8px 0', borderBottom: '1px solid rgba(255,255,255,0.04)' }}>
                 <span style={{ fontSize: 13, color: TEXT_MUTED }}>{k}</span>
                 <span style={{ fontSize: 13, fontWeight: 600, color: TEXT }}>{v}</span>
@@ -542,8 +542,8 @@ function ScenePricing() {
   const frame = useCurrentFrame()
 
   const tiers = [
-    { name: 'Solo', price: '₹1,999', period: '/mo', features: ['50 clients', 'GST + ITR filing', 'Balance sheet automation', 'Audit trail'], highlight: false },
-    { name: 'Firm', price: '₹5,499', period: '/mo', features: ['300 clients', 'Multi-user access', 'Advanced GST analytics', 'Client portal'], highlight: true },
+    { name: 'Solo', price: 'PKR 1,999', period: '/mo', features: ['50 clients', 'GST + ITR filing', 'Balance sheet automation', 'Audit trail'], highlight: false },
+    { name: 'Firm', price: 'PKR 5,499', period: '/mo', features: ['300 clients', 'Multi-user access', 'Advanced GST analytics', 'Client portal'], highlight: true },
     { name: 'Enterprise', price: 'Custom', period: '', features: ['Unlimited clients', 'Custom workflows', 'API access', 'White-labeling'], highlight: false },
   ]
 

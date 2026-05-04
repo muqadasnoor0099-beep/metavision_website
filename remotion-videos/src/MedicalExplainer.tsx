@@ -476,8 +476,8 @@ function ScenePricing() {
   const frame = useCurrentFrame()
 
   const tiers = [
-    { name: 'Starter', price: '₹2,999', period: '/mo', features: ['5 doctors', '500 consults/mo', 'AI prescriptions', 'Patient portal'], highlight: false },
-    { name: 'Professional', price: '₹7,999', period: '/mo', features: ['25 doctors', 'Unlimited consults', 'Lab integration', 'Priority support'], highlight: true },
+    { name: 'Starter', price: 'PKR 2,999', period: '/mo', features: ['5 doctors', '500 consults/mo', 'AI prescriptions', 'Patient portal'], highlight: false },
+    { name: 'Professional', price: 'PKR 7,999', period: '/mo', features: ['25 doctors', 'Unlimited consults', 'Lab integration', 'Priority support'], highlight: true },
     { name: 'Enterprise', price: 'Custom', period: '', features: ['Unlimited doctors', 'Dedicated infra', 'HIPAA audit', '24/7 support'], highlight: false },
   ]
 
