@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import dynamic from 'next/dynamic'
 import GoldButton from '@/components/ui/GoldButton'
@@ -20,18 +20,26 @@ const MODE_LABELS: Record<ProductMode, string> = {
 export default function HeroSection() {
   const [mode, setMode] = useState<ProductMode>('medical')
   const [demoOpen, setDemoOpen] = useState(false)
+  // Use a ref so openDemo always reads the latest mode without stale closure issues
+  const modeRef = useRef<ProductMode>('medical')
   const [demoSrc, setDemoSrc] = useState('')
   const [demoTitle, setDemoTitle] = useState('')
 
+  // Keep ref in sync with state
+  useEffect(() => { modeRef.current = mode }, [mode])
+
+  // Pause auto-switch while modal is open
   useEffect(() => {
+    if (demoOpen) return
     const id = setInterval(() => {
       setMode((m) => (m === 'medical' ? 'accounting' : 'medical'))
     }, 5000)
     return () => clearInterval(id)
-  }, [])
+  }, [demoOpen])
 
   const openDemo = () => {
-    const demo = PRODUCT_DEMO_BY_MODE[mode]
+    // Read from ref — always the latest mode, never stale
+    const demo = PRODUCT_DEMO_BY_MODE[modeRef.current]
     setDemoSrc(demo.src)
     setDemoTitle(demo.title)
     setDemoOpen(true)
