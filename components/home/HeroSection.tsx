@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import dynamic from 'next/dynamic'
 import GoldButton from '@/components/ui/GoldButton'
@@ -20,15 +20,8 @@ const MODE_LABELS: Record<ProductMode, string> = {
 export default function HeroSection() {
   const [mode, setMode] = useState<ProductMode>('medical')
   const [demoOpen, setDemoOpen] = useState(false)
-  // Use a ref so openDemo always reads the latest mode without stale closure issues
-  const modeRef = useRef<ProductMode>('medical')
-  const [demoSrc, setDemoSrc] = useState('')
-  const [demoTitle, setDemoTitle] = useState('')
 
-  // Keep ref in sync with state
-  useEffect(() => { modeRef.current = mode }, [mode])
-
-  // Pause auto-switch while modal is open
+  // Auto-switch pauses while modal is open so mode can't change mid-watch
   useEffect(() => {
     if (demoOpen) return
     const id = setInterval(() => {
@@ -36,14 +29,6 @@ export default function HeroSection() {
     }, 5000)
     return () => clearInterval(id)
   }, [demoOpen])
-
-  const openDemo = () => {
-    // Read from ref — always the latest mode, never stale
-    const demo = PRODUCT_DEMO_BY_MODE[modeRef.current]
-    setDemoSrc(demo.src)
-    setDemoTitle(demo.title)
-    setDemoOpen(true)
-  }
 
   const content = HERO_CONTENT[mode]
 
@@ -109,7 +94,7 @@ export default function HeroSection() {
               {/* CTAs */}
               <div className="flex gap-3 flex-wrap">
                 <GoldButton href={content.ctaHref}>{content.ctaLabel}</GoldButton>
-                <GhostButton onClick={openDemo}>▶ Watch Demo</GhostButton>
+                <GhostButton onClick={() => setDemoOpen(true)}>▶ Watch Demo</GhostButton>
               </div>
 
               {/* Stats */}
@@ -194,8 +179,8 @@ export default function HeroSection() {
       <DemoModal
         open={demoOpen}
         onClose={() => setDemoOpen(false)}
-        videoSrc={demoSrc}
-        title={demoTitle}
+        videoSrc={PRODUCT_DEMO_BY_MODE[mode].src}
+        title={PRODUCT_DEMO_BY_MODE[mode].title}
       />
 
       <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 z-10">
