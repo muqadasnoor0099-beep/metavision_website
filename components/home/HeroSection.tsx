@@ -20,7 +20,8 @@ const MODE_LABELS: Record<ProductMode, string> = {
 export default function HeroSection() {
   const [mode, setMode] = useState<ProductMode>('medical')
   const [demoOpen, setDemoOpen] = useState(false)
-  const demo = PRODUCT_DEMO_BY_MODE[mode]
+  const [demoSrc, setDemoSrc] = useState('')
+  const [demoTitle, setDemoTitle] = useState('')
 
   useEffect(() => {
     const id = setInterval(() => {
@@ -29,7 +30,15 @@ export default function HeroSection() {
     return () => clearInterval(id)
   }, [])
 
+  const openDemo = () => {
+    const demo = PRODUCT_DEMO_BY_MODE[mode]
+    setDemoSrc(demo.src)
+    setDemoTitle(demo.title)
+    setDemoOpen(true)
+  }
+
   const content = HERO_CONTENT[mode]
+
 
   return (
     <section className="relative min-h-screen flex flex-col overflow-hidden">
@@ -92,7 +101,7 @@ export default function HeroSection() {
               {/* CTAs */}
               <div className="flex gap-3 flex-wrap">
                 <GoldButton href={content.ctaHref}>{content.ctaLabel}</GoldButton>
-                <GhostButton onClick={() => setDemoOpen(true)}>▶ Watch Demo</GhostButton>
+                <GhostButton onClick={openDemo}>▶ Watch Demo</GhostButton>
               </div>
 
               {/* Stats */}
@@ -177,8 +186,8 @@ export default function HeroSection() {
       <DemoModal
         open={demoOpen}
         onClose={() => setDemoOpen(false)}
-        videoSrc={demo.src}
-        title={demo.title}
+        videoSrc={demoSrc}
+        title={demoTitle}
       />
 
       <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 z-10">
