@@ -1,8 +1,10 @@
 import React from 'react'
 import {
   AbsoluteFill,
+  Html5Audio,
   interpolate,
   spring,
+  staticFile,
   useCurrentFrame,
   useVideoConfig,
   Sequence,
@@ -968,16 +970,30 @@ function Scene6() {
 
 // ─── Root composition ─────────────────────────────────────────────────────────
 
+// Scene timing for 72s total (2160 frames @ 30fps):
+// Scene0:  0  – 180   (6s)  Brand Reveal
+// Scene1:  180 – 570  (13s) Physical Examination
+// Scene2:  570 – 870  (10s) AI Extraction
+// Scene3:  870 – 1170 (10s) Holographic Cards
+// Scene4: 1170 – 1470 (10s) Digital Prescription
+// Scene5: 1470 – 1770 (10s) Dashboard
+// Scene6: 1770 – 2160 (13s) CTA Outro
+
 export const MedicalConsultationVideo: React.FC = () => {
   return (
     <>
-      <Sequence from={0}    durationInFrames={120}><Scene0 /></Sequence>
-      <Sequence from={120}  durationInFrames={210}><Scene1 /></Sequence>
-      <Sequence from={330}  durationInFrames={180}><Scene2 /></Sequence>
-      <Sequence from={510}  durationInFrames={180}><Scene3 /></Sequence>
-      <Sequence from={690}  durationInFrames={180}><Scene4 /></Sequence>
-      <Sequence from={870}  durationInFrames={180}><Scene5 /></Sequence>
-      <Sequence from={1050} durationInFrames={150}><Scene6 /></Sequence>
+      <Html5Audio
+        src={staticFile('audio/medical-consultation-vo.mp3')}
+        volume={1.0}
+        pauseWhenBuffering={false}
+      />
+      <Sequence from={0}    durationInFrames={180}><Scene0 /></Sequence>
+      <Sequence from={180}  durationInFrames={390}><Scene1 /></Sequence>
+      <Sequence from={570}  durationInFrames={300}><Scene2 /></Sequence>
+      <Sequence from={870}  durationInFrames={300}><Scene3 /></Sequence>
+      <Sequence from={1170} durationInFrames={300}><Scene4 /></Sequence>
+      <Sequence from={1470} durationInFrames={300}><Scene5 /></Sequence>
+      <Sequence from={1770} durationInFrames={390}><Scene6 /></Sequence>
     </>
   )
 }

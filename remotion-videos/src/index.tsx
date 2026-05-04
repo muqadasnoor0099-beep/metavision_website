@@ -15,7 +15,7 @@ const RemotionRoot: React.FC = () => {
       <Composition
         id="MedicalConsultationVideo"
         component={MedicalConsultationVideo}
-        durationInFrames={1200}
+        durationInFrames={2160}
         fps={FPS}
         width={WIDTH}
         height={HEIGHT}
