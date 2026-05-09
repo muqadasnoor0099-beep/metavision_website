@@ -25,6 +25,20 @@ const C = {
 
 const ease = [0.25, 0.46, 0.45, 0.94] as const
 
+// Deterministic pseudo-random — same value every render (no hydration mismatch)
+function sr(seed: number) { const x = Math.sin(seed + 1) * 10000; return x - Math.floor(x) }
+
+const PARTICLES = Array.from({ length: 28 }, (_, i) => ({
+  duration:    3 + sr(i * 6)     * 2,
+  repeatDelay: sr(i * 6 + 1)     * 2,
+  left:        sr(i * 6 + 2)     * 100,
+  top:         40 + sr(i * 6 + 3) * 50,
+  width:       2 + sr(i * 6 + 4) * 2,
+  height:      2 + sr(i * 6 + 5) * 2,
+}))
+
+const QR_CELLS = Array.from({ length: 16 }, (_, i) => sr(i + 200) > 0.5)
+
 // ─── Scene meta — right-column copy ──────────────────────────────────────────
 const SCENES = [
   {
@@ -241,17 +255,17 @@ function Scene0() {
     <div style={{ position: 'relative', width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
       {/* Particle field */}
       <div style={{ position: 'absolute', inset: 0, overflow: 'hidden' }}>
-        {Array.from({ length: 28 }).map((_, i) => (
+        {PARTICLES.map((p, i) => (
           <motion.div key={i}
             initial={{ opacity: 0 }}
             animate={{ opacity: [0, 0.7, 0], y: [0, -80] }}
-            transition={{ delay: i * 0.18, duration: 3 + Math.random() * 2, repeat: Infinity, repeatDelay: Math.random() * 2 }}
+            transition={{ delay: i * 0.18, duration: p.duration, repeat: Infinity, repeatDelay: p.repeatDelay }}
             style={{
               position: 'absolute',
-              left: `${Math.random() * 100}%`,
-              top: `${40 + Math.random() * 50}%`,
-              width: 2 + Math.random() * 2,
-              height: 2 + Math.random() * 2,
+              left: `${p.left}%`,
+              top: `${p.top}%`,
+              width: p.width,
+              height: p.height,
               borderRadius: '50%',
               background: i % 3 === 0 ? C.cyan : i % 3 === 1 ? C.purple : C.blue,
             }}
@@ -526,11 +540,11 @@ function Scene4() {
           style={{ borderTop: `1px dashed ${C.blue}33`, paddingTop: 8, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <div>
             <div style={{ fontSize: 9, color: C.blue, fontFamily: 'Georgia, serif', fontStyle: 'italic' }}>Dr. A. Malik</div>
-            <div style={{ fontSize: 7, color: C.dim }}>E-Signed · {new Date().toLocaleDateString()}</div>
+            <div suppressHydrationWarning style={{ fontSize: 7, color: C.dim }}>E-Signed · {new Date().toLocaleDateString()}</div>
           </div>
           {/* QR placeholder */}
           <div style={{ width: 28, height: 28, borderRadius: 4, border: `1px solid ${C.blue}44`, display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 1, padding: 2 }}>
-            {Array.from({length:16}).map((_,i) => <div key={i} style={{ background: Math.random() > 0.5 ? C.blue : 'transparent', borderRadius: 1 }} />)}
+            {QR_CELLS.map((on, i) => <div key={i} style={{ background: on ? C.blue : 'transparent', borderRadius: 1 }} />)}
           </div>
         </motion.div>
       </motion.div>
