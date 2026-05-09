@@ -4,6 +4,13 @@ import { useEffect, useRef, useState } from 'react'
 
 declare global { interface Window { Hands: any } }
 
+// ── Particle type (module-level — avoids interface-inside-function-body parse error) ──
+interface Pt {
+  x: number; y: number; tx: number; ty: number
+  vx: number; vy: number; size: number; alpha: number
+  noise: number; ns: number; colorIdx: number
+}
+
 // ── Brand ────────────────────────────────────────────────────────────────────
 const C0 = '#2563eb'   // blue
 const C1 = '#60a5fa'   // light blue
@@ -24,7 +31,7 @@ function loadScript(src: string): Promise<void> {
 
 // ── Component ─────────────────────────────────────────────────────────────────
 export default function GestureFXSection() {
-  const containerRef   = useRef<HTMLDivElement>(null)
+  const containerRef   = useRef<HTMLElement>(null)
   const canvasRef      = useRef<HTMLCanvasElement>(null)
   const videoRef       = useRef<HTMLVideoElement>(null)
   const [activeIdx,    setActiveIdx]    = useState(0)
@@ -62,11 +69,6 @@ export default function GestureFXSection() {
     }
     window.addEventListener('resize', resize)
     resize()
-
-    // ── Particle types ────────────────────────────────────────────────────
-    interface Pt { x: number; y: number; tx: number; ty: number
-                   vx: number; vy: number; size: number; alpha: number
-                   noise: number; ns: number; colorIdx: number }
 
     let particles: Pt[]  = []
     let targets: {x:number;y:number}[] = []
@@ -168,14 +170,12 @@ export default function GestureFXSection() {
       const colors = [C0, C1, C2]
       const col = colors[p.colorIdx]
       if (fast) {
+        ctx.globalAlpha = Math.min(p.alpha * 0.38, 0.38)
+        ctx.strokeStyle = col
+        ctx.lineWidth   = sz * 0.6
         ctx.beginPath()
         ctx.moveTo(p.x, p.y)
         ctx.lineTo(p.x - p.vx * 2.5, p.y - p.vy * 2.5)
-        ctx.strokeStyle = col.replace(')', `,${Math.min(p.alpha * 0.38, 0.38)})`
-          .replace('rgb', 'rgba').replace('#', '')
-        // simple trail with globalAlpha
-        ctx.globalAlpha = Math.min(p.alpha * 0.38, 0.38)
-        ctx.lineWidth   = sz * 0.6
         ctx.stroke()
       }
       ctx.globalAlpha = p.alpha
@@ -299,11 +299,11 @@ export default function GestureFXSection() {
     }
 
     // ── Camera ────────────────────────────────────────────────────────────
-    let mpReady   = false
+    let mpReady  = false
     let mpHands: any = null
-    let statusHidden = false
 
     async function startCamera() {
+      if (!video) return
       setCamStatus('asking')
       try {
         const stream = await navigator.mediaDevices.getUserMedia({
@@ -317,13 +317,13 @@ export default function GestureFXSection() {
         video.setAttribute('autoplay', '')
         video.srcObject = stream
         await new Promise<void>((resolve) => {
-          video.onloadedmetadata = () => resolve()
+          video!.onloadedmetadata = () => resolve()
           setTimeout(resolve, 3000)
         })
         try { await video.play() } catch(_) {}
         setCamStatus('active')
         initMP()
-      } catch (e: any) {
+      } catch (_) {
         setCamStatus('denied')
       }
     }
@@ -358,7 +358,7 @@ export default function GestureFXSection() {
       pumping = true
       const loop = async () => {
         if (stopped) return
-        if (video.readyState >= 2 && !video.paused && mpHands) {
+        if (video && video.readyState >= 2 && !video.paused && mpHands) {
           try { await mpHands.send({ image: video }) } catch(_) {}
         }
         setTimeout(loop, 50)
@@ -415,6 +415,7 @@ export default function GestureFXSection() {
 
   return (
     <section
+      ref={containerRef}
       style={{
         position: 'relative',
         height: '100vh',
