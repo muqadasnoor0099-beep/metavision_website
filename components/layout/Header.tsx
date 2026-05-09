@@ -6,8 +6,10 @@ import { Menu, X, ChevronDown } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 import GoldButton from '@/components/ui/GoldButton'
 import ThemeToggle from '@/components/ui/ThemeToggle'
-import AirMouse from '@/components/ui/AirMouse'
+import dynamic from 'next/dynamic'
 import { NAV_LINKS } from '@/lib/constants'
+
+const AirMouse = dynamic(() => import('@/components/ui/AirMouse'), { ssr: false })
 
 export default function Header() {
   const [scrolled, setScrolled] = useState(false)
