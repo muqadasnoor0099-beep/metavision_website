@@ -2,6 +2,7 @@ import HeroSection from '@/components/home/HeroSection'
 import FeaturesSection from '@/components/home/FeaturesSection'
 import MedicalShowcaseSection from '@/components/home/MedicalShowcaseSection'
 import WhyUsSection from '@/components/home/WhyUsSection'
+import GestureFXSection from '@/components/home/GestureFXSection'
 import TestimonialsSection from '@/components/home/TestimonialsSection'
 import CTABanner from '@/components/home/CTABanner'
 
@@ -12,6 +13,7 @@ export default function HomePage() {
       <FeaturesSection />
       <MedicalShowcaseSection />
       <WhyUsSection />
+      <GestureFXSection />
       <TestimonialsSection />
       <CTABanner />
     </>
