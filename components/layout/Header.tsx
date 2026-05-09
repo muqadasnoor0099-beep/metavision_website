@@ -6,6 +6,7 @@ import { Menu, X, ChevronDown } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 import GoldButton from '@/components/ui/GoldButton'
 import ThemeToggle from '@/components/ui/ThemeToggle'
+import AirMouse from '@/components/ui/AirMouse'
 import { NAV_LINKS } from '@/lib/constants'
 
 export default function Header() {
@@ -81,6 +82,7 @@ export default function Header() {
         </nav>
 
         <div className="hidden lg:flex items-center gap-3">
+          <AirMouse />
           <ThemeToggle />
           <GoldButton href="/contact" size="sm">Get Demo</GoldButton>
         </div>
