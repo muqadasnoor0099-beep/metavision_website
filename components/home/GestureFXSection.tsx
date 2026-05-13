@@ -58,10 +58,17 @@ export default function GestureFXSection() {
     let rafId = 0
     let stopped = false
 
+    let particles: Pt[]  = []
+    let targets: {x:number;y:number}[] = []
+    let handLandmarks: any[] = []
+    let transitioning = false
+    let lastHandTime  = 0
+
     // ── resize ────────────────────────────────────────────────────────────
     function resize() {
       W = container!.offsetWidth
       H = container!.offsetHeight
+      if (W <= 0 || H <= 0) { requestAnimationFrame(resize); return }
       canvas!.width  = W
       canvas!.height = H
       buildTargets(activeWordRef.current)
@@ -70,14 +77,9 @@ export default function GestureFXSection() {
     window.addEventListener('resize', resize)
     resize()
 
-    let particles: Pt[]  = []
-    let targets: {x:number;y:number}[] = []
-    let handLandmarks: any[] = []
-    let transitioning = false
-    let lastHandTime  = 0
-
     // ── buildTargets ──────────────────────────────────────────────────────
     function buildTargets(word: string) {
+      if (W <= 0 || H <= 0) return
       const off = document.createElement('canvas')
       off.width = W; off.height = H
       const oc  = off.getContext('2d')!

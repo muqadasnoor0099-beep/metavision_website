@@ -25,8 +25,13 @@ const C = {
 
 const ease = [0.25, 0.46, 0.45, 0.94] as const
 
-// Deterministic pseudo-random — same value every render (no hydration mismatch)
-function sr(seed: number) { const x = Math.sin(seed + 1) * 10000; return x - Math.floor(x) }
+// Deterministic pseudo-random using 32-bit integer math only (Math.imul is
+// spec-mandated identical across all JS engines — no cross-engine float divergence)
+function sr(seed: number): number {
+  let h = Math.imul(seed + 1, 2654435761)
+  h ^= h >>> 16
+  return (h >>> 0) / 0xffffffff
+}
 
 const PARTICLES = Array.from({ length: 28 }, (_, i) => ({
   duration:    3 + sr(i * 6)     * 2,
