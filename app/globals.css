@@ -77,3 +77,15 @@ html.light {
     box-shadow: 0 8px 28px rgba(37, 99, 235, 0.13), 0 0 32px rgba(37, 99, 235, 0.08), 0 1px 0 rgba(255, 255, 255, 0.8) inset;
   }
 }
+
+/* ── Team section animations ── */
+@property --team-ba {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}
+@keyframes team-border  { to { --team-ba: 360deg; } }
+@keyframes team-orbit   { to { transform: rotate(360deg); } }
+@keyframes team-breathe { 0%,100% { opacity:.5; transform:scale(1) } 50% { opacity:1; transform:scale(1.04) } }
+@keyframes team-scan    { from { left:-60% } to { left:160% } }
+@keyframes team-blink   { 0%,100% { opacity:1 } 50% { opacity:.2 } }
