@@ -46,7 +46,7 @@ const TEAM = [
 
 const UNIQUE = [
   { icon: '🧠', title: 'AI at the Core', body: "Our AI isn't a feature — it's the foundation every product is built on." },
-  { icon: '🇵🇰', title: 'Pakistan-First', body: 'Built for Pakistan\'s regulatory landscape: HIPAA, GST, and IT Act compliance out of the box.' },
+  { icon: '🇵🇰', title: 'Pakistan-First', body: 'Built for Pakistan\'s regulatory landscape: PDPA, GST, and IT Act compliance out of the box.' },
   { icon: '⚡', title: 'Speed to Value', body: 'Most clients go live in under 48 hours. No 6-month implementations.' },
 ]
 

@@ -1,13 +1,15 @@
 @import "tailwindcss";
 
 @theme {
-  --color-gold: #2563eb;
-  --color-gold-light: #60a5fa;
+  --default-font-family: var(--font-sora), sans-serif;
+  --color-gold: #3b82f6;
+  --color-gold-light: #93c5fd;
   --color-surface: #0e0e14;
   --color-surface-high: #16161f;
 
-  --font-heading: var(--font-space-grotesk), sans-serif;
-  --font-body: var(--font-inter), sans-serif;
+  --font-heading: var(--font-sora), sans-serif;
+  --font-body: var(--font-sora), sans-serif;
+  --font-display: var(--font-sora), sans-serif;
 }
 
 /* ── Theme tokens for values not managed by Tailwind ── */
@@ -28,6 +30,10 @@ html.light {
    */
   --color-white: #0f172a;
 
+  /* Deep blues for proper contrast on light (#f0f7ff) backgrounds */
+  --color-gold: #1d4ed8;
+  --color-gold-light: #2563eb;
+
   /* Override surface colors defined in @theme above */
   --color-surface: #e8f1ff;
   --color-surface-high: #dbeafe;
@@ -46,6 +52,7 @@ html.light {
   body {
     background-color: var(--clr-bg);
     color: #ffffff;
+    font-family: var(--font-sora), sans-serif;
   }
   html.light body {
     color: #0f172a;
@@ -53,6 +60,14 @@ html.light {
   * {
     box-sizing: border-box;
   }
+}
+
+/* ── Gradient-clipped text (reliable cross-browser) ── */
+.gradient-text {
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
 }
 
 @layer components {

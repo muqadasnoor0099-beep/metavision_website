@@ -424,8 +424,8 @@ function SceneStats() {
             <div style={{ fontSize: 17, color: TEXT_MUTED, lineHeight: 1.8, fontStyle: 'italic' }}>
               "MetaVision's medical platform cut our prescription errors by 80%. The AI suggestions are remarkably accurate."
             </div>
-            <div style={{ marginTop: 16, fontSize: 14, fontWeight: 700, color: GOLD }}>Dr. Priya Sharma</div>
-            <div style={{ fontSize: 12, color: TEXT_MUTED, marginTop: 2 }}>Senior Physician, Apollo Clinics</div>
+            <div style={{ marginTop: 16, fontSize: 14, fontWeight: 700, color: GOLD }}>Dr. Fatima Malik</div>
+            <div style={{ fontSize: 12, color: TEXT_MUTED, marginTop: 2 }}>Senior Physician, Shifa International Hospital, Islamabad</div>
           </GlassCard>
         </div>
       </AbsoluteFill>
@@ -478,7 +478,7 @@ function ScenePricing() {
   const tiers = [
     { name: 'Starter', price: 'PKR 2,999', period: '/mo', features: ['5 doctors', '500 consults/mo', 'AI prescriptions', 'Patient portal'], highlight: false },
     { name: 'Professional', price: 'PKR 7,999', period: '/mo', features: ['25 doctors', 'Unlimited consults', 'Lab integration', 'Priority support'], highlight: true },
-    { name: 'Enterprise', price: 'Custom', period: '', features: ['Unlimited doctors', 'Dedicated infra', 'HIPAA audit', '24/7 support'], highlight: false },
+    { name: 'Enterprise', price: 'Custom', period: '', features: ['Unlimited doctors', 'Dedicated infra', 'Data security audit', '24/7 support'], highlight: false },
   ]
 
   return (

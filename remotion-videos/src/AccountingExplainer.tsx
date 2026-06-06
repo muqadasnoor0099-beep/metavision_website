@@ -222,10 +222,10 @@ function SceneFeatureGST() {
   const frame = useCurrentFrame()
 
   const clients = [
-    { name: 'Mehta Traders', turnover: 'PKR 42L', status: 'Filed', color: '#22c55e' },
+    { name: 'Qureshi Traders', turnover: 'PKR 42L', status: 'Filed', color: '#22c55e' },
     { name: 'Khan Enterprises', turnover: 'PKR 18L', status: 'Ready', color: GOLD },
     { name: 'Raza & Co.', turnover: 'PKR 91L', status: 'Draft', color: '#f97316' },
-    { name: 'Singh Logistics', turnover: 'PKR 55L', status: 'Filed', color: '#22c55e' },
+    { name: 'Ansari Logistics', turnover: 'PKR 55L', status: 'Filed', color: '#22c55e' },
   ]
 
   return (
@@ -316,7 +316,7 @@ function SceneFeatureITR() {
           <GlassCard>
             <div style={{ fontSize: 11, color: GOLD, fontWeight: 700, letterSpacing: '0.14em', marginBottom: 18 }}>ITR PREPARATION — CLIENT DETAIL</div>
             {[
-              { label: 'Client Name', val: 'Rajesh Kumar Mehta' },
+              { label: 'Client Name', val: 'Bilal Ahmed Qureshi' },
               { label: 'PAN', val: 'ABCPM1234R' },
               { label: 'Assessment Year', val: '2025–26' },
               { label: 'Gross Total Income', val: 'PKR 18,42,500' },
@@ -403,10 +403,10 @@ function SceneFeatureClients() {
   const frame = useCurrentFrame()
 
   const clients = [
-    { name: 'Mehta & Sons', type: 'Pvt. Ltd.', tasks: 4, next: 'GST · Apr 30' },
+    { name: 'Qureshi & Sons', type: 'Pvt. Ltd.', tasks: 4, next: 'GST · Apr 30' },
     { name: 'Khan Enterprises', type: 'Partnership', tasks: 2, next: 'ITR · Jul 31' },
     { name: 'Raza Traders', type: 'Sole Prop.', tasks: 6, next: 'Audit · May 15' },
-    { name: 'Singh & Co.', type: 'LLP', tasks: 1, next: 'GST · Apr 30' },
+    { name: 'Ansari & Co.', type: 'LLP', tasks: 1, next: 'GST · Apr 30' },
   ]
 
   return (
@@ -490,8 +490,8 @@ function SceneStats() {
             <div style={{ fontSize: 17, color: TEXT_MUTED, lineHeight: 1.8, fontStyle: 'italic' }}>
               "Filing 200+ GST returns used to take a week. Now it takes a day. MetaVision is a game-changer for our firm."
             </div>
-            <div style={{ marginTop: 16, fontSize: 14, fontWeight: 700, color: GOLD }}>CA Rajesh Mehta</div>
-            <div style={{ fontSize: 12, color: TEXT_MUTED, marginTop: 2 }}>Founding Partner, Mehta & Associates, Delhi</div>
+            <div style={{ marginTop: 16, fontSize: 14, fontWeight: 700, color: GOLD }}>CA Bilal Ahmed</div>
+            <div style={{ fontSize: 12, color: TEXT_MUTED, marginTop: 2 }}>Founding Partner, Ahmed & Partners, Lahore</div>
           </GlassCard>
         </div>
       </AbsoluteFill>

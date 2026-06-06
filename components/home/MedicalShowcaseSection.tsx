@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { motion, AnimatePresence, useInView } from 'framer-motion'
 import Link from 'next/link'
+import { useTheme } from '@/components/providers/ThemeProvider'
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 const SCENE_DURATION = 5000
@@ -74,13 +75,13 @@ const SCENES = [
     label: 'DIGITAL PRESCRIPTION',
     title: 'Auto-Generated.\nDoctor-Verified.',
     body:  'A formatted digital prescription is generated the moment the consultation ends — ready to sign, send, or print in one tap.',
-    bullets: ['Prescription auto-populated', 'Dosage & frequency structured', 'Doctor e-signature support', 'Pharmacy-ready digital Rx'],
+    bullets: ['Prescription auto-populated', 'Dosage & frequency structured', 'Doctor e-signature support', 'Pharmacy-ready digital Prescription'],
   },
   {
     label: 'HEALTH RECORDS',
     title: 'Complete Digital\nHealth Ecosystem',
     body:  'Every consultation feeds a living patient record — searchable, shareable, and accessible across your entire practice.',
-    bullets: ['Consultation history timeline', 'AI-powered trend analysis', 'Cross-clinic record sharing', 'HIPAA-compliant storage'],
+    bullets: ['Consultation history timeline', 'AI-powered trend analysis', 'Cross-clinic record sharing', 'Encrypted secure storage'],
   },
   {
     label: 'TRANSFORM HEALTHCARE',
@@ -432,7 +433,7 @@ function Scene2() {
             </div>
             <WaveformCanvas active={true} color={C.blue} height={28} bars={18} />
             <div style={{ flex: 1, overflow: 'hidden' }}>
-              {['Symptoms: Fever, Cough', 'Duration: 3-5 days', 'Dx: Acute Bronchitis', 'Rx: Amoxicillin 500mg', 'Lab: CBC + CRP'].map((line, i) => (
+              {['Symptoms: Fever, Cough', 'Duration: 3-5 days', 'Dx: Acute Bronchitis', 'Prescription: Amoxicillin 500mg', 'Lab: CBC + CRP'].map((line, i) => (
                 <motion.div key={i} initial={{ opacity: 0, x: 10 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.3 + i * 0.25 }}
                   style={{ fontSize: 8, color: i < 2 ? C.muted : i === 2 ? C.cyan : i === 3 ? C.green : C.purple, marginBottom: 4, display: 'flex', alignItems: 'center', gap: 4 }}>
                   <div style={{ width: 3, height: 3, borderRadius: '50%', background: 'currentColor', flexShrink: 0 }} />
@@ -496,14 +497,14 @@ function Scene4() {
           padding: '16px', boxShadow: `0 24px 60px rgba(14,165,233,0.18), 0 0 0 1px ${C.blue}22`,
         }}
       >
-        {/* Rx header */}
+        {/* Prescription header */}
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
             <div style={{ width: 28, height: 28, borderRadius: 7, background: `linear-gradient(135deg, ${C.blue}, ${C.cyan})`, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               <svg width="14" height="14" viewBox="0 0 24 24" fill="white"><path d="M12 2L2 7v10l10 5 10-5V7L12 2z"/></svg>
             </div>
             <div>
-              <div style={{ fontSize: 11, fontWeight: 800, color: C.white }}>Digital Rx</div>
+              <div style={{ fontSize: 11, fontWeight: 800, color: C.white }}>Digital Prescription</div>
               <div style={{ fontSize: 8, color: C.cyan }}>MediScribe AI</div>
             </div>
           </div>
@@ -629,7 +630,7 @@ function Scene6() {
   const features = [
     'Live consultation transcription', 'Automatic diagnosis extraction',
     'Digital prescription generation', 'Smart health record management',
-    'Multi-doctor clinic support',     'HIPAA-compliant AI infrastructure',
+    'Multi-doctor clinic support',     'Secure, encrypted AI infrastructure',
   ]
 
   return (
@@ -702,6 +703,21 @@ export default function MedicalShowcaseSection() {
   const sectionRef = useRef<HTMLElement>(null)
   const timerRef   = useRef<ReturnType<typeof setInterval> | null>(null)
   const isInView   = useInView(sectionRef, { once: true, margin: '-15%' })
+  const { theme, mounted } = useTheme()
+  const isDark = !mounted || theme === 'dark'
+
+  // Outer-section theme colors — animation stage always stays dark (it's a self-contained demo)
+  const outerBg         = isDark
+    ? 'linear-gradient(180deg, #020c1b 0%, #030e1f 60%, #020c1b 100%)'
+    : 'linear-gradient(180deg, #f0f9ff 0%, #e5f4ff 60%, #f0f9ff 100%)'
+  const outerBlue       = isDark ? C.blue   : '#0369a1'
+  const outerCyan       = isDark ? C.cyan   : '#0891b2'
+  const outerWhite      = isDark ? C.white  : '#0f172a'
+  const outerMuted      = isDark ? C.muted  : 'rgba(15,23,42,0.60)'
+  const outerDim        = isDark ? C.dim    : 'rgba(15,23,42,0.42)'
+  const outerCardBg     = isDark ? 'rgba(14,165,233,0.04)' : 'rgba(255,255,255,0.82)'
+  const outerCardBorder = isDark ? `${C.blue}22`           : 'rgba(3,105,161,0.14)'
+  const outerCardShadow = isDark ? 'none' : '0 2px 12px rgba(3,105,161,0.07), 0 1px 3px rgba(0,0,0,0.04)'
 
   const nextScene = useCallback(() => {
     setScene(s => (s + 1) % TOTAL_SCENES)
@@ -727,22 +743,22 @@ export default function MedicalShowcaseSection() {
     <section
       ref={sectionRef}
       style={{
-        background: `linear-gradient(180deg, #020c1b 0%, #030e1f 60%, #020c1b 100%)`,
+        background: outerBg,
         position: 'relative', overflow: 'hidden',
         padding: '80px 0',
       }}
     >
       {/* Background grid */}
       <div style={{
-        position: 'absolute', inset: 0, opacity: 0.04,
-        backgroundImage: `linear-gradient(${C.blue} 1px, transparent 1px), linear-gradient(90deg, ${C.blue} 1px, transparent 1px)`,
+        position: 'absolute', inset: 0, opacity: isDark ? 0.04 : 0.03,
+        backgroundImage: `linear-gradient(${outerBlue} 1px, transparent 1px), linear-gradient(90deg, ${outerBlue} 1px, transparent 1px)`,
         backgroundSize: '48px 48px',
         pointerEvents: 'none',
       }} />
 
-      {/* Top edge glow */}
-      <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 1, background: `linear-gradient(to right, transparent, ${C.blue}55, transparent)` }} />
-      <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: 1, background: `linear-gradient(to right, transparent, ${C.blue}33, transparent)` }} />
+      {/* Top / bottom edge glows */}
+      <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 1, background: `linear-gradient(to right, transparent, ${outerBlue}55, transparent)` }} />
+      <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: 1, background: `linear-gradient(to right, transparent, ${outerBlue}33, transparent)` }} />
 
       <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 24px' }}>
 
@@ -753,19 +769,19 @@ export default function MedicalShowcaseSection() {
           transition={{ duration: 0.7 }}
           style={{ textAlign: 'center', marginBottom: 56 }}
         >
-          <div style={{ display: 'inline-flex', alignItems: 'center', gap: 7, padding: '5px 16px', borderRadius: 20, background: 'rgba(14,165,233,0.08)', border: `1px solid ${C.blue}33`, marginBottom: 18 }}>
+          <div style={{ display: 'inline-flex', alignItems: 'center', gap: 7, padding: '5px 16px', borderRadius: 20, background: isDark ? 'rgba(14,165,233,0.08)' : 'rgba(3,105,161,0.07)', border: `1px solid ${outerBlue}33`, marginBottom: 18 }}>
             <motion.div animate={{ scale: [1, 1.3, 1] }} transition={{ duration: 1.8, repeat: Infinity }}>
-              <div style={{ width: 6, height: 6, borderRadius: '50%', background: C.cyan, boxShadow: `0 0 8px ${C.cyan}` }} />
+              <div style={{ width: 6, height: 6, borderRadius: '50%', background: outerCyan, boxShadow: `0 0 8px ${outerCyan}` }} />
             </motion.div>
-            <span style={{ fontSize: 10, fontWeight: 700, color: C.cyan, letterSpacing: '0.15em', textTransform: 'uppercase' }}>New Product</span>
+            <span style={{ fontSize: 10, fontWeight: 700, color: outerCyan, letterSpacing: '0.15em', textTransform: 'uppercase' }}>New Product</span>
           </div>
-          <h2 style={{ fontSize: 'clamp(28px, 4vw, 44px)', fontWeight: 800, color: C.white, lineHeight: 1.1, letterSpacing: '-0.02em', margin: '0 0 14px' }}>
+          <h2 style={{ fontSize: 'clamp(28px, 4vw, 44px)', fontWeight: 800, color: outerWhite, lineHeight: 1.1, letterSpacing: '-0.02em', margin: '0 0 14px' }}>
             AI Medical Consultation{' '}
-            <span style={{ background: `linear-gradient(90deg, ${C.blue}, ${C.cyan})`, WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
+            <span style={{ backgroundImage: `linear-gradient(90deg, ${outerBlue}, ${outerCyan})`, WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>
               Intelligence
             </span>
           </h2>
-          <p style={{ fontSize: 16, color: C.muted, maxWidth: 560, margin: '0 auto', lineHeight: 1.7 }}>
+          <p style={{ fontSize: 16, color: outerMuted, maxWidth: 560, margin: '0 auto', lineHeight: 1.7 }}>
             A smart mobile platform that listens to doctor-patient consultations and converts every conversation into structured clinical records — instantly.
           </p>
         </motion.div>
@@ -778,7 +794,7 @@ export default function MedicalShowcaseSection() {
           style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 32, alignItems: 'center', minHeight: 460 }}
           className="medical-showcase-grid"
         >
-          {/* LEFT: Animation stage */}
+          {/* LEFT: Animation stage — always dark regardless of theme */}
           <div style={{
             position: 'relative', height: 440,
             background: 'linear-gradient(145deg, #030f20, #020c1b)',
@@ -839,7 +855,7 @@ export default function MedicalShowcaseSection() {
             </div>
           </div>
 
-          {/* RIGHT: Scene copy */}
+          {/* RIGHT: Scene copy — theme-aware */}
           <div style={{ padding: '0 8px' }}>
             <AnimatePresence mode="wait">
               <motion.div
@@ -850,18 +866,18 @@ export default function MedicalShowcaseSection() {
                 transition={{ duration: 0.45, ease }}
               >
                 {/* Scene label */}
-                <div style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '3px 10px', borderRadius: 20, background: `rgba(14,165,233,0.08)`, border: `1px solid ${C.blue}33`, marginBottom: 16 }}>
-                  <div style={{ width: 5, height: 5, borderRadius: '50%', background: C.cyan }} />
-                  <span style={{ fontSize: 9, fontWeight: 700, color: C.cyan, letterSpacing: '0.14em' }}>{meta.label}</span>
+                <div style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '3px 10px', borderRadius: 20, background: isDark ? `rgba(14,165,233,0.08)` : 'rgba(3,105,161,0.07)', border: `1px solid ${outerBlue}33`, marginBottom: 16 }}>
+                  <div style={{ width: 5, height: 5, borderRadius: '50%', background: outerCyan }} />
+                  <span style={{ fontSize: 9, fontWeight: 700, color: outerCyan, letterSpacing: '0.14em' }}>{meta.label}</span>
                 </div>
 
                 {/* Title */}
-                <h3 style={{ fontSize: 'clamp(20px,2.8vw,30px)', fontWeight: 800, color: C.white, lineHeight: 1.15, letterSpacing: '-0.02em', margin: '0 0 14px', whiteSpace: 'pre-line' }}>
+                <h3 style={{ fontSize: 'clamp(20px,2.8vw,30px)', fontWeight: 800, color: outerWhite, lineHeight: 1.15, letterSpacing: '-0.02em', margin: '0 0 14px', whiteSpace: 'pre-line' }}>
                   {meta.title}
                 </h3>
 
                 {/* Body */}
-                <p style={{ fontSize: 14, color: C.muted, lineHeight: 1.75, margin: '0 0 22px' }}>
+                <p style={{ fontSize: 14, color: outerMuted, lineHeight: 1.75, margin: '0 0 22px' }}>
                   {meta.body}
                 </p>
 
@@ -876,10 +892,10 @@ export default function MedicalShowcaseSection() {
                         transition={{ delay: i * 0.1, duration: 0.4 }}
                         style={{ display: 'flex', alignItems: 'center', gap: 10 }}
                       >
-                        <div style={{ width: 20, height: 20, borderRadius: 6, background: `rgba(14,165,233,0.1)`, border: `1px solid ${C.blue}44`, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                          <svg width="10" height="10" viewBox="0 0 24 24" fill={C.cyan}><path d="M5 13l4 4L19 7"/></svg>
+                        <div style={{ width: 20, height: 20, borderRadius: 6, background: isDark ? `rgba(14,165,233,0.1)` : 'rgba(3,105,161,0.08)', border: `1px solid ${outerBlue}44`, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                          <svg width="10" height="10" viewBox="0 0 24 24" fill={outerCyan}><path d="M5 13l4 4L19 7"/></svg>
                         </div>
-                        <span style={{ fontSize: 13, color: C.muted }}>{b}</span>
+                        <span style={{ fontSize: 13, color: outerMuted }}>{b}</span>
                       </motion.div>
                     ))}
                   </div>
@@ -892,9 +908,9 @@ export default function MedicalShowcaseSection() {
                     <Link href="/products/medical" style={{
                       display: 'inline-flex', alignItems: 'center', gap: 8,
                       padding: '11px 24px', borderRadius: 10, fontWeight: 700, fontSize: 13,
-                      background: `linear-gradient(90deg, ${C.blue}, ${C.cyan})`,
+                      background: `linear-gradient(90deg, ${outerBlue}, ${outerCyan})`,
                       color: '#fff', textDecoration: 'none',
-                      boxShadow: `0 8px 28px rgba(14,165,233,0.35)`,
+                      boxShadow: `0 8px 28px ${outerBlue}55`,
                     }}>
                       Explore Platform
                       <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
@@ -902,7 +918,7 @@ export default function MedicalShowcaseSection() {
                     <Link href="/contact" style={{
                       display: 'inline-flex', alignItems: 'center', gap: 8,
                       padding: '11px 24px', borderRadius: 10, fontWeight: 700, fontSize: 13,
-                      border: `1.5px solid ${C.blue}55`, color: C.muted, textDecoration: 'none',
+                      border: `1.5px solid ${outerBlue}55`, color: outerMuted, textDecoration: 'none',
                     }}>
                       Book a Demo
                     </Link>
@@ -924,8 +940,8 @@ export default function MedicalShowcaseSection() {
           {[
             { icon: '🎙️', label: 'Voice-to-Record', desc: 'Real-time AI transcription' },
             { icon: '🧠', label: 'Clinical NLP',    desc: 'ICD-10 diagnostic mapping'  },
-            { icon: '📋', label: 'Smart Rx',        desc: 'Auto-prescription builder'  },
-            { icon: '🔐', label: 'HIPAA Secure',    desc: 'End-to-end encrypted vault' },
+            { icon: '📋', label: 'Smart Prescription', desc: 'Auto-prescription builder'  },
+            { icon: '🔐', label: 'Data Secure',      desc: 'End-to-end encrypted vault' },
           ].map((item, i) => (
             <motion.div key={i}
               initial={{ opacity: 0, y: 16 }}
@@ -933,13 +949,14 @@ export default function MedicalShowcaseSection() {
               transition={{ delay: 0.6 + i * 0.1, duration: 0.5 }}
               style={{
                 padding: '16px', borderRadius: 12, textAlign: 'center',
-                background: 'rgba(14,165,233,0.04)',
-                border: `1px solid ${C.blue}22`,
+                background: outerCardBg,
+                border: `1px solid ${outerCardBorder}`,
+                boxShadow: outerCardShadow,
               }}
             >
               <div style={{ fontSize: 22, marginBottom: 8 }}>{item.icon}</div>
-              <div style={{ fontSize: 12, fontWeight: 700, color: C.white, marginBottom: 4 }}>{item.label}</div>
-              <div style={{ fontSize: 11, color: C.dim, lineHeight: 1.4 }}>{item.desc}</div>
+              <div style={{ fontSize: 12, fontWeight: 700, color: outerWhite, marginBottom: 4 }}>{item.label}</div>
+              <div style={{ fontSize: 11, color: outerDim, lineHeight: 1.4 }}>{item.desc}</div>
             </motion.div>
           ))}
         </motion.div>

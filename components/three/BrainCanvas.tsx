@@ -2,8 +2,21 @@
 
 import { useRef, useMemo } from 'react'
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
-import { Float } from '@react-three/drei'
 import * as THREE from 'three'
+
+function Float({ children, speed = 1, floatIntensity = 1, rotationIntensity = 1 }: {
+  children: React.ReactNode; speed?: number; floatIntensity?: number; rotationIntensity?: number
+}) {
+  const ref = useRef<THREE.Group>(null)
+  useFrame(({ clock }) => {
+    if (!ref.current) return
+    const t = clock.elapsedTime * speed
+    ref.current.position.y  = Math.sin(t * 0.5)  * 0.1 * floatIntensity
+    ref.current.rotation.x  = Math.sin(t * 0.31) * 0.05 * rotationIntensity
+    ref.current.rotation.z  = Math.sin(t * 0.22) * 0.05 * rotationIntensity
+  })
+  return <group ref={ref}>{children}</group>
+}
 
 function NeuralNode({ position, phase }: { position: [number, number, number]; phase: number }) {
   const ref = useRef<THREE.Mesh>(null)

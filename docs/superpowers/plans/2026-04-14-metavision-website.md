@@ -931,7 +931,7 @@ export default function Footer() {
             <ul className="flex flex-col gap-3">
               <li className="flex items-start gap-2.5 text-white/40 text-sm">
                 <Mail size={14} className="text-gold mt-0.5 shrink-0" />
-                hello@metavision.in
+                metavision786@gmail.com
               </li>
               <li className="flex items-start gap-2.5 text-white/40 text-sm">
                 <Phone size={14} className="text-gold mt-0.5 shrink-0" />
@@ -2716,7 +2716,7 @@ import SectionHeader from '@/components/ui/SectionHeader'
 import ContactForm from '@/components/contact/ContactForm'
 
 const INFO = [
-  { Icon: Mail, label: 'Email', value: 'hello@metavision.in' },
+  { Icon: Mail, label: 'Email', value: 'metavision786@gmail.com' },
   { Icon: Phone, label: 'Phone', value: '+92 300 1231234' },
   { Icon: MapPin, label: 'Address', value: ' , Bangalore, Karnataka 560034' },
   { Icon: Clock, label: 'Hours', value: 'Mon–Fri, 9 AM – 7 PM IST' },

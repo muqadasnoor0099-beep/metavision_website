@@ -4,7 +4,7 @@ export const HERO_CONTENT: Record<ProductMode, HeroContent> = {
   medical: {
     overline: 'AI-Powered Healthcare Platform',
     headline1: 'Real-Time Doctor–Patient',
-    headline2: 'Consultation & AI Rx',
+    headline2: 'Consultation & AI Prescription',
     description:
       'Seamless live video consultations with intelligent AI prescription suggestions — built for modern healthcare workflows.',
     ctaLabel: 'Explore Medical Software',
@@ -64,29 +64,29 @@ export const ACCOUNTING_FEATURES: Feature[] = [
 export const WHY_US = [
   { value: '1,700+', label: 'Professionals', description: 'Trusted by doctors and CAs across Pakistan.' },
   { value: 'AI-First', label: 'Philosophy', description: 'Not bolted on — AI is core to every workflow.' },
-  { value: '100%', label: 'Compliance', description: "Built for Pakistan's regulatory landscape — HIPAA, GST, IT Act." },
+  { value: '100%', label: 'Compliance', description: "Built for Pakistan's regulatory landscape — PDPA, GST, IT Act." },
 ]
 
 export const TESTIMONIALS: Testimonial[] = [
   {
     quote: "MetaVision's medical platform cut our prescription errors by 80%. The AI suggestions are remarkably accurate.",
-    name: 'Dr. Priya Sharma',
+    name: 'Dr. Fatima Malik',
     role: 'Senior Physician',
-    company: 'Apollo Clinics, Mumbai',
+    company: 'Shifa International Hospital, Islamabad',
     rating: 5,
   },
   {
-    quote: 'Filing 200+ GST returns used to take a week. Now it takes a day. MetaVision is a game-changer for our firm.',
-    name: 'CA Rajesh Mehta',
+    quote: 'Filing 200+ tax returns used to take a week. Now it takes a day. MetaVision is a game-changer for our firm.',
+    name: 'CA Bilal Ahmed',
     role: 'Founding Partner',
-    company: 'Mehta & Associates, Delhi',
+    company: 'Ahmed & Partners, Lahore',
     rating: 5,
   },
   {
     quote: 'The telemedicine portal was live in 48 hours. Patient satisfaction scores went up 30% in the first month.',
-    name: 'Dr. Anil Verma',
+    name: 'Dr. Tariq Hussain',
     role: 'Hospital Director',
-    company: 'Verma Multispeciality, Pune',
+    company: 'Aga Khan Hospital, Karachi',
     rating: 5,
   },
 ]
@@ -166,7 +166,7 @@ export const MEDICAL_PRICING: PricingTier[] = [
     price: 'Custom',
     period: '',
     description: 'For hospital chains and large networks.',
-    features: ['Unlimited doctors', 'Dedicated infrastructure', 'HIPAA compliance audit', 'Custom integrations', '24/7 dedicated support'],
+    features: ['Unlimited doctors', 'Dedicated infrastructure', 'Data security audit', 'Custom integrations', '24/7 dedicated support'],
     cta: 'Contact Sales',
     highlighted: false,
   },

@@ -65,7 +65,7 @@ export default function Footer() {
             <ul className="flex flex-col gap-3">
               <li className="flex items-start gap-2.5 text-white/40 text-sm">
                 <Mail size={14} className="text-gold mt-0.5 shrink-0" />
-                hello@metavision.in
+                metavision786@gmail.com
               </li>
               <li className="flex items-start gap-2.5 text-white/40 text-sm">
                 <Phone size={14} className="text-gold mt-0.5 shrink-0" />
