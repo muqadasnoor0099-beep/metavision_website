@@ -1,7 +1,8 @@
 'use client'
 
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
+import { ChevronLeft, ChevronRight } from 'lucide-react'
 import DemoModal from '@/components/ui/DemoModal'
 import { PRODUCT_DEMO_BY_MODE } from '@/lib/constants'
 import type { ProductMode } from '@/lib/types'
@@ -102,38 +103,44 @@ function Typewriter({ words, color }: { words: string[]; color: string }) {
 }
 
 /* ─────────────────────────────────────────
-   PROGRESS BAR
-───────────────────────────────────────── */
-function ProgressBar({ color, duration }: { color: string; duration: number }) {
-  return (
-    <div className="flex-1 h-[2px] rounded-full overflow-hidden" style={{ background: 'rgba(255,255,255,0.12)' }}>
-      <div
-        className="h-full rounded-full"
-        style={{
-          background: color,
-          animation: `progress-fill ${duration}ms linear forwards`,
-        }}
-      />
-    </div>
-  )
-}
-
-/* ─────────────────────────────────────────
    HERO SECTION
 ───────────────────────────────────────── */
 export default function HeroSection() {
   const [current,  setCurrent]  = useState(0)
   const [demoOpen, setDemoOpen] = useState(false)
   const [demoMode, setDemoMode] = useState<ProductMode>('medical')
-  const videoRefs = useRef<(HTMLVideoElement | null)[]>([null, null, null])
+  const videoRefs  = useRef<(HTMLVideoElement | null)[]>([null, null, null])
+  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null)
+  const touchStartX = useRef(0)
+
+  const startAutoPlay = useCallback(() => {
+    if (intervalRef.current) clearInterval(intervalRef.current)
+    intervalRef.current = setInterval(() => {
+      setCurrent(c => (c + 1) % SLIDES.length)
+    }, DURATION)
+  }, [])
+
+  const [direction, setDirection] = useState(1) // 1 = forward (right→left), -1 = backward (left→right)
+
+  const goTo = useCallback((index: number, dir?: number) => {
+    setDirection(dir ?? 1)
+    setCurrent(index)
+    startAutoPlay()
+  }, [startAutoPlay])
+
+  const goPrev = useCallback(() => {
+    goTo((current - 1 + SLIDES.length) % SLIDES.length, -1)
+  }, [current, goTo])
+
+  const goNext = useCallback(() => {
+    goTo((current + 1) % SLIDES.length, 1)
+  }, [current, goTo])
 
   /* auto-advance */
   useEffect(() => {
-    const id = setInterval(() => {
-      setCurrent(c => (c + 1) % SLIDES.length)
-    }, DURATION)
-    return () => clearInterval(id)
-  }, [])
+    startAutoPlay()
+    return () => { if (intervalRef.current) clearInterval(intervalRef.current) }
+  }, [startAutoPlay])
 
   /* play active video, pause others */
   useEffect(() => {
@@ -155,12 +162,18 @@ export default function HeroSection() {
     <>
       <style>{`
         /* Sora loaded via next/font — no extra import needed */
-        @keyframes bdot        { 0%,100%{opacity:1}  50%{opacity:.2}  }
-        @keyframes cblink      { 0%,100%{opacity:1}  50%{opacity:0}   }
-        @keyframes progress-fill { from{width:0%} to{width:100%} }
+        @keyframes bdot   { 0%,100%{opacity:1} 50%{opacity:.2} }
+        @keyframes cblink { 0%,100%{opacity:1} 50%{opacity:0}  }
       `}</style>
 
-      <section className="relative w-full h-screen min-h-[600px] overflow-hidden bg-black">
+      <section
+        className="relative w-full h-screen min-h-[600px] overflow-hidden bg-black"
+        onTouchStart={e => { touchStartX.current = e.touches[0].clientX }}
+        onTouchEnd={e => {
+          const diff = touchStartX.current - e.changedTouches[0].clientX
+          if (Math.abs(diff) > 50) diff > 0 ? goNext() : goPrev()
+        }}
+      >
 
         {/* ── VIDEOS: always mounted so they preload, opacity-switched ── */}
         {SLIDES.map((s, i) => (
@@ -177,14 +190,14 @@ export default function HeroSection() {
           />
         ))}
 
-        {/* ── ANIMATED CONTENT: right-to-left slide ── */}
-        <AnimatePresence initial={false}>
+        {/* ── ANIMATED CONTENT: direction-aware slide ── */}
+        <AnimatePresence initial={false} mode="popLayout">
           <motion.div
             key={current}
             className="absolute inset-0 z-10"
-            initial={{ x: '100%' }}
+            initial={{ x: direction > 0 ? '100%' : '-100%' }}
             animate={{ x: 0 }}
-            exit={{ x: '-100%' }}
+            exit={{ x: direction > 0 ? '-100%' : '100%' }}
             transition={{ duration: 0.75, ease: [0.76, 0, 0.24, 1] }}
           >
             {/* Overlays */}
@@ -288,13 +301,33 @@ export default function HeroSection() {
           </motion.div>
         </AnimatePresence>
 
-        {/* ── FOOTER: dots + progress + counter ── */}
+        {/* ── LEFT ARROW ── */}
+        <button
+          onClick={goPrev}
+          className="absolute left-4 top-1/2 -translate-y-1/2 z-50 w-10 h-10 rounded-full flex items-center justify-center transition-all duration-200 hover:scale-110 active:scale-95"
+          style={{ background: 'rgba(0,0,0,0.35)', border: '1px solid rgba(255,255,255,0.18)', backdropFilter: 'blur(6px)' }}
+          aria-label="Previous slide"
+        >
+          <ChevronLeft size={20} color="rgba(255,255,255,0.85)" />
+        </button>
+
+        {/* ── RIGHT ARROW ── */}
+        <button
+          onClick={goNext}
+          className="absolute right-4 top-1/2 -translate-y-1/2 z-50 w-10 h-10 rounded-full flex items-center justify-center transition-all duration-200 hover:scale-110 active:scale-95"
+          style={{ background: 'rgba(0,0,0,0.35)', border: '1px solid rgba(255,255,255,0.18)', backdropFilter: 'blur(6px)' }}
+          aria-label="Next slide"
+        >
+          <ChevronRight size={20} color="rgba(255,255,255,0.85)" />
+        </button>
+
+        {/* ── FOOTER: dots + counter (no progress bar) ── */}
         <div className="absolute bottom-8 inset-x-[80px] z-50 flex items-center gap-4">
           <div className="flex gap-1.5">
             {SLIDES.map((_, i) => (
               <button
                 key={i}
-                onClick={() => setCurrent(i)}
+                onClick={() => goTo(i, i > current ? 1 : -1)}
                 className="h-[3px] rounded-full border-none p-0 cursor-pointer transition-all duration-300"
                 style={{
                   width:      current === i ? 40 : 18,
@@ -304,9 +337,7 @@ export default function HeroSection() {
             ))}
           </div>
 
-          <ProgressBar key={current} color={slide.accent} duration={DURATION} />
-
-          <span className="text-[11px] tracking-[.12em] tabular-nums" style={{ color: 'rgba(255,255,255,0.30)' }}>
+          <span className="text-[11px] tracking-[.12em] tabular-nums ml-auto" style={{ color: 'rgba(255,255,255,0.30)' }}>
             0{current + 1}&nbsp;/&nbsp;0{SLIDES.length}
           </span>
         </div>

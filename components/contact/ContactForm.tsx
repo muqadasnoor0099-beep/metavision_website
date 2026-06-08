@@ -20,6 +20,8 @@ export default function ContactForm() {
   const [form, setForm] = useState<FormState>(EMPTY)
   const [errors, setErrors] = useState<Partial<FormState>>({})
   const [submitted, setSubmitted] = useState(false)
+  const [sending, setSending] = useState(false)
+  const [sendError, setSendError] = useState<string | null>(null)
 
   const set = (key: keyof FormState) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) =>
     setForm((f) => ({ ...f, [key]: e.target.value }))
@@ -33,11 +35,24 @@ export default function ContactForm() {
     return Object.keys(e).length === 0
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!validate()) return
-    console.log('Form submitted:', form)
-    setSubmitted(true)
+    setSending(true)
+    setSendError(null)
+    try {
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(form),
+      })
+      if (!res.ok) throw new Error('Send failed')
+      setSubmitted(true)
+    } catch {
+      setSendError('Failed to send. Please email us directly at admin@metavision.world')
+    } finally {
+      setSending(false)
+    }
   }
 
   if (submitted) {
@@ -92,7 +107,10 @@ export default function ContactForm() {
         />
         {errors.message && <p className="text-red-400 text-xs mt-1">{errors.message}</p>}
       </div>
-      <GoldButton type="submit" className="w-full justify-center">Send Message</GoldButton>
+      {sendError && <p className="text-red-400 text-xs text-center">{sendError}</p>}
+      <GoldButton type="submit" className="w-full justify-center" disabled={sending}>
+        {sending ? 'Sending…' : 'Send Message'}
+      </GoldButton>
     </form>
   )
 }

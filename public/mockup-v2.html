@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Hero V2 — Font Options</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Bebas+Neue&family=Oswald:wght@600;700&family=Inter:wght@300;400;500&family=Space+Grotesk:wght@500;600&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:#050816;color:#f8fafc;font-family:'Inter',sans-serif;overflow-x:hidden}
+
+/* ── HERO SHELL ── */
+.hero{
+  position:relative; height:100vh; min-height:700px;
+  display:flex; align-items:center;
+  overflow:hidden;
+}
+
+/* ── VIDEO LAYER ── */
+.video-wrap{
+  position:absolute; inset:0; z-index:0;
+  overflow:hidden;
+}
+.video-wrap iframe,
+.video-wrap video{
+  position:absolute;
+  /* 16:9 fill — keeps aspect ratio and fills viewport */
+  width:100%; height:100%;
+  object-fit:cover;
+  pointer-events:none;
+  border:none;
+}
+/* Cinematic overlays on top of video */
+.overlay-dark{
+  position:absolute;inset:0;z-index:1;
+  background:rgba(5,8,22,.72);
+}
+.overlay-grad{
+  position:absolute;inset:0;z-index:2;
+  background:
+    linear-gradient(90deg,rgba(5,8,22,.9) 0%,rgba(5,8,22,.5) 55%,transparent 100%),
+    linear-gradient(0deg,rgba(5,8,22,.8) 0%,transparent 50%);
+}
+
+/* Grid lines */
+.grid-lines{
+  position:absolute;inset:0;z-index:3;pointer-events:none;
+  background-image:
+    linear-gradient(rgba(59,130,246,.035) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(59,130,246,.035) 1px,transparent 1px);
+  background-size:64px 64px;
+}
+
+/* ── NAV ── */
+.nav{
+  position:absolute;top:0;left:0;right:0;z-index:20;
+  padding:20px 72px;
+  display:flex;align-items:center;justify-content:space-between;
+  background:rgba(5,8,22,.45);backdrop-filter:blur(18px);
+  border-bottom:1px solid rgba(255,255,255,.06);
+}
+.logo{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:22px;letter-spacing:.04em;color:#fff}
+.logo b{color:#3b82f6}
+.nav-links{display:flex;gap:30px}
+.nav-link{font-size:13px;color:rgba(255,255,255,.55);text-decoration:none;letter-spacing:.02em}
+.nav-cta{
+  padding:8px 22px;border-radius:6px;
+  background:rgba(59,130,246,.18);border:1px solid rgba(59,130,246,.35);
+  color:#93c5fd;font-size:12px;font-weight:600;letter-spacing:.04em;
+  font-family:'Space Grotesk',sans-serif;
+}
+
+/* ── SLIDE CONTENT ── */
+.hero-content{
+  position:relative;z-index:10;
+  max-width:720px; padding:0 72px; padding-top:72px;
+}
+
+.badge{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:6px 16px;border-radius:20px;
+  border:1px solid rgba(59,130,246,.3);
+  background:rgba(59,130,246,.1);
+  font-size:11px;letter-spacing:.16em;text-transform:uppercase;
+  color:#93c5fd;font-family:'Space Grotesk',sans-serif;
+  margin-bottom:22px;
+}
+.badge-dot{
+  width:7px;height:7px;border-radius:50%;background:#3b82f6;
+  box-shadow:0 0 8px #3b82f6;
+  animation:blink-dot 1.4s ease-in-out infinite;
+}
+@keyframes blink-dot{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.6)}}
+
+/* ── FONT CHOICE IS HERE ── */
+.headline-font{
+  /* Try swapping this: Barlow Condensed | Bebas Neue | Oswald */
+  font-family:'Barlow Condensed',sans-serif;
+  font-weight:800;
+}
+
+.headline{
+  font-size:clamp(52px,8vw,110px);
+  line-height:.95;
+  letter-spacing:-.01em;
+  color:#fff;
+  margin-bottom:22px;
+}
+.headline .blue{color:#3b82f6}
+.headline .typed-word{
+  display:inline-block;
+  border-right:4px solid #3b82f6;
+  padding-right:4px;
+  animation:cursor-blink .8s step-end infinite;
+}
+@keyframes cursor-blink{0%,100%{border-color:#3b82f6}50%{border-color:transparent}}
+
+.subheadline{
+  font-size:15px;line-height:1.75;font-weight:300;
+  color:rgba(248,250,252,.5);
+  max-width:520px; margin-bottom:28px;
+}
+/* Typewriter subheadline */
+.sub-typed{
+  border-right:2px solid rgba(59,130,246,.7);
+  padding-right:2px;
+  white-space:pre-wrap;
+}
+
+.benefits{
+  display:flex;flex-wrap:wrap;gap:8px;margin-bottom:34px;
+}
+.benefit-tag{
+  display:inline-flex;align-items:center;gap:5px;
+  padding:5px 13px;border-radius:6px;
+  background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.09);
+  font-size:11.5px;color:rgba(248,250,252,.6);
+}
+.benefit-tag::before{content:'▸';color:#3b82f6;font-size:9px}
+
+.cta-row{display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+
+.btn-primary{
+  padding:14px 30px;border-radius:8px;
+  background:linear-gradient(135deg,#1d4ed8,#3b82f6);
+  color:#fff;font-size:13px;font-weight:600;letter-spacing:.04em;
+  border:none;cursor:pointer;text-decoration:none;display:inline-block;
+  font-family:'Space Grotesk',sans-serif;
+  box-shadow:0 0 32px rgba(59,130,246,.45),0 4px 20px rgba(29,78,216,.35);
+  transition:transform .15s,box-shadow .15s;
+}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 0 40px rgba(59,130,246,.6)}
+
+.btn-ghost{
+  padding:13px 26px;border-radius:8px;
+  background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.18);
+  color:rgba(255,255,255,.78);font-size:13px;font-weight:500;
+  cursor:pointer;text-decoration:none;display:inline-block;
+  font-family:'Space Grotesk',sans-serif;
+  transition:background .15s,border-color .15s;
+}
+.btn-ghost:hover{background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.3)}
+
+/* ── SLIDE INDICATOR + PROGRESS ── */
+.hero-footer{
+  position:absolute;bottom:36px;left:72px;right:72px;z-index:10;
+  display:flex;align-items:center;gap:20px;
+}
+.dots{display:flex;gap:6px;align-items:center}
+.dot{
+  height:3px;border-radius:2px;cursor:pointer;
+  transition:width .3s,background .3s;
+  background:rgba(255,255,255,.2);width:20px;
+}
+.dot.on{background:#3b82f6;width:44px}
+
+.prog-track{
+  flex:1;height:2px;border-radius:2px;
+  background:rgba(255,255,255,.08);overflow:hidden;
+}
+.prog-fill{
+  height:100%;border-radius:2px;width:0%;
+  background:linear-gradient(90deg,#1d4ed8,#60a5fa);
+  animation:fill-prog 7s linear infinite;
+}
+@keyframes fill-prog{from{width:0%}to{width:100%}}
+
+.slide-num{
+  font-size:11px;color:rgba(255,255,255,.28);
+  font-family:'Space Grotesk',sans-serif;letter-spacing:.12em;
+}
+.nav-arrows{display:flex;gap:8px}
+.arr-btn{
+  width:38px;height:38px;border-radius:50%;
+  background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.13);
+  color:rgba(255,255,255,.55);cursor:pointer;
+  display:flex;align-items:center;justify-content:center;font-size:15px;
+}
+
+/* Scroll hint */
+.scroll-hint{
+  position:absolute;bottom:38px;left:50%;transform:translateX(-50%);z-index:10;
+  display:flex;flex-direction:column;align-items:center;gap:5px;
+}
+.sh-text{font-size:9px;color:rgba(255,255,255,.22);letter-spacing:.2em;text-transform:uppercase}
+.sh-line{
+  width:1px;height:28px;
+  background:linear-gradient(to bottom,rgba(59,130,246,.5),transparent);
+  animation:bob 1.6s ease-in-out infinite;
+}
+@keyframes bob{0%,100%{transform:scaleY(1)}50%{transform:scaleY(.55)}}
+
+/* ── section label ── */
+.sec-label{
+  padding:28px;text-align:center;
+  font-size:10px;letter-spacing:.2em;text-transform:uppercase;
+  color:rgba(255,255,255,.18);font-family:'Space Grotesk',sans-serif;
+  background:rgba(255,255,255,.02);border-top:1px solid rgba(255,255,255,.05);
+  border-bottom:1px solid rgba(255,255,255,.05);
+}
+
+/* ── FONT COMPARISON (top section) ── */
+.font-compare{
+  padding:60px 72px;
+  background:#050816;
+  border-bottom:1px solid rgba(255,255,255,.06);
+}
+.compare-title{
+  font-size:11px;letter-spacing:.2em;text-transform:uppercase;
+  color:rgba(59,130,246,.7);font-family:'Space Grotesk',sans-serif;
+  margin-bottom:40px;
+}
+.compare-row{
+  display:grid;grid-template-columns:1fr 1fr 1fr;gap:32px;
+  margin-bottom:32px;
+}
+.compare-item{
+  padding:24px;border-radius:12px;
+  background:rgba(15,23,42,.6);border:1px solid rgba(255,255,255,.07);
+}
+.compare-item.chosen{
+  border-color:rgba(59,130,246,.4);
+  box-shadow:0 0 0 1px rgba(59,130,246,.2);
+}
+.ci-label{
+  font-size:10px;color:rgba(255,255,255,.35);letter-spacing:.12em;text-transform:uppercase;
+  font-family:'Space Grotesk',sans-serif; margin-bottom:12px;
+}
+.ci-recommended{
+  display:inline-block;padding:2px 8px;border-radius:3px;
+  background:rgba(59,130,246,.2);color:#93c5fd;font-size:9px;
+  letter-spacing:.08em;text-transform:uppercase;margin-left:8px;
+}
+.ci-font-barlow{
+  font-family:'Barlow Condensed',sans-serif;font-weight:800;
+  font-size:clamp(36px,5vw,64px);line-height:.95;color:#fff;letter-spacing:-.01em;
+}
+.ci-font-bebas{
+  font-family:'Bebas Neue',cursive;font-weight:400;
+  font-size:clamp(36px,5vw,64px);line-height:.95;color:#fff;letter-spacing:.04em;
+}
+.ci-font-oswald{
+  font-family:'Oswald',sans-serif;font-weight:700;
+  font-size:clamp(32px,4.5vw,58px);line-height:.95;color:#fff;letter-spacing:-.01em;
+}
+.ci-blue{color:#3b82f6}
+</style>
+</head>
+<body>
+
+<!-- ════════════════════════════════
+     FONT COMPARISON
+════════════════════════════════ -->
+<div class="font-compare">
+  <div class="compare-title">Font Options — Pick your favourite</div>
+  <div class="compare-row">
+
+    <div class="compare-item chosen">
+      <div class="ci-label">Option A <span class="ci-recommended">Recommended</span></div>
+      <div class="ci-font-barlow">Smarter<br>Healthcare<br><span class="ci-blue">Through AI</span></div>
+      <div style="margin-top:10px;font-size:11px;color:rgba(255,255,255,.35);font-family:'Space Grotesk',sans-serif">Barlow Condensed 800 — Cinematic & Powerful</div>
+    </div>
+
+    <div class="compare-item">
+      <div class="ci-label">Option B</div>
+      <div class="ci-font-bebas">Smarter<br>Healthcare<br><span class="ci-blue">Through AI</span></div>
+      <div style="margin-top:10px;font-size:11px;color:rgba(255,255,255,.35);font-family:'Space Grotesk',sans-serif">Bebas Neue — Bold Editorial Condensed</div>
+    </div>
+
+    <div class="compare-item">
+      <div class="ci-label">Option C</div>
+      <div class="ci-font-oswald">Smarter<br>Healthcare<br><span class="ci-blue">Through AI</span></div>
+      <div style="margin-top:10px;font-size:11px;color:rgba(255,255,255,.35);font-family:'Space Grotesk',sans-serif">Oswald 700 — Strong & Clean</div>
+    </div>
+
+  </div>
+</div>
+
+<div class="sec-label">↓ Hero with Barlow Condensed (Option A) — Full slide preview with typewriter + video background</div>
+
+<!-- ════════════════════════════════
+     SLIDE 1: MEDICAL (active)
+════════════════════════════════ -->
+<section class="hero" id="hero1">
+
+  <!-- VIDEO BACKGROUND: Pexels free stock medical footage -->
+  <div class="video-wrap">
+    <iframe
+      src="https://player.vimeo.com/video/853823087?autoplay=1&muted=1&loop=1&background=1&quality=720p"
+      allow="autoplay; fullscreen"
+    ></iframe>
+  </div>
+
+  <div class="overlay-dark"></div>
+  <div class="overlay-grad"></div>
+  <div class="grid-lines"></div>
+
+  <nav class="nav">
+    <div class="logo"><b>Meta</b>Vision</div>
+    <div class="nav-links">
+      <a href="#" class="nav-link">Home</a>
+      <a href="#" class="nav-link">Products</a>
+      <a href="#" class="nav-link">Services</a>
+      <a href="#" class="nav-link">About</a>
+    </div>
+    <a href="#" class="nav-cta">Get Demo</a>
+  </nav>
+
+  <div class="hero-content">
+    <div class="badge"><span class="badge-dot"></span>Healthcare AI Platform</div>
+    <h1 class="headline headline-font">
+      Smarter Healthcare<br>Through <span class="blue">AI-Powered</span><br>
+      <span class="typed-word" id="type1">Medical Systems</span>
+    </h1>
+    <p class="subheadline">
+      <span id="sub1"></span>
+    </p>
+    <div class="benefits">
+      <span class="benefit-tag">Smart Prescription Management</span>
+      <span class="benefit-tag">AI-Assisted Workflows</span>
+      <span class="benefit-tag">Faster Record Organization</span>
+      <span class="benefit-tag">Reduced Paperwork</span>
+      <span class="benefit-tag">Improved Doctor-Patient Communication</span>
+    </div>
+    <div class="cta-row">
+      <a href="#" class="btn-primary">Explore Healthcare Solution</a>
+      <a href="#" class="btn-ghost">▶ Watch Demo</a>
+    </div>
+  </div>
+
+  <div class="hero-footer">
+    <div class="dots">
+      <div class="dot on"></div>
+      <div class="dot"></div>
+      <div class="dot"></div>
+    </div>
+    <div class="prog-track"><div class="prog-fill"></div></div>
+    <span class="slide-num">01 / 03</span>
+    <div class="nav-arrows">
+      <div class="arr-btn">‹</div>
+      <div class="arr-btn">›</div>
+    </div>
+  </div>
+
+  <div class="scroll-hint">
+    <span class="sh-text">Scroll</span>
+    <div class="sh-line"></div>
+  </div>
+</section>
+
+<div class="sec-label">Slide 1 — Medical AI &nbsp;|&nbsp; Slide 2 below</div>
+
+<!-- ════════════════════════════════
+     SLIDE 2: FINANCE
+════════════════════════════════ -->
+<section class="hero" id="hero2" style="--accent:#8b5cf6">
+
+  <div class="video-wrap">
+    <iframe
+      src="https://player.vimeo.com/video/867295046?autoplay=1&muted=1&loop=1&background=1&quality=720p"
+      allow="autoplay; fullscreen"
+    ></iframe>
+  </div>
+  <div class="overlay-dark" style="background:rgba(5,4,20,.75)"></div>
+  <div class="overlay-grad" style="background:linear-gradient(90deg,rgba(5,4,20,.92) 0%,rgba(5,4,20,.5) 55%,transparent 100%),linear-gradient(0deg,rgba(5,4,20,.8) 0%,transparent 50%)"></div>
+  <div class="grid-lines"></div>
+
+  <nav class="nav">
+    <div class="logo"><b>Meta</b>Vision</div>
+    <div class="nav-links">
+      <a href="#" class="nav-link">Home</a><a href="#" class="nav-link">Products</a>
+      <a href="#" class="nav-link">Services</a><a href="#" class="nav-link">About</a>
+    </div>
+    <a href="#" class="nav-cta">Get Demo</a>
+  </nav>
+
+  <div class="hero-content">
+    <div class="badge" style="border-color:rgba(139,92,246,.3);background:rgba(139,92,246,.1);color:#c4b5fd">
+      <span class="badge-dot" style="background:#8b5cf6;box-shadow:0 0 8px #8b5cf6"></span>CA Finance Platform
+    </div>
+    <h1 class="headline headline-font">
+      Modern Financial<br>Management for<br>
+      <span style="color:#8b5cf6">Chartered Accountants</span>
+    </h1>
+    <p class="subheadline">Our accounting platform simplifies financial operations, taxation workflows, and client management through secure and intelligent digital systems for modern accounting firms.</p>
+    <div class="benefits">
+      <span class="benefit-tag">Smart Accounting Workflows</span>
+      <span class="benefit-tag">Secure Financial Reporting</span>
+      <span class="benefit-tag">Tax & Compliance Management</span>
+      <span class="benefit-tag">Client Data Organization</span>
+      <span class="benefit-tag">Real-time Analytics</span>
+    </div>
+    <div class="cta-row">
+      <a href="#" class="btn-primary" style="background:linear-gradient(135deg,#6d28d9,#8b5cf6);box-shadow:0 0 32px rgba(139,92,246,.45)">Explore Finance Platform</a>
+      <a href="#" class="btn-ghost">View Features</a>
+    </div>
+  </div>
+  <div class="hero-footer">
+    <div class="dots">
+      <div class="dot"></div><div class="dot on" style="background:#8b5cf6"></div><div class="dot"></div>
+    </div>
+    <div class="prog-track"><div class="prog-fill" style="background:linear-gradient(90deg,#6d28d9,#a78bfa)"></div></div>
+    <span class="slide-num">02 / 03</span>
+    <div class="nav-arrows"><div class="arr-btn">‹</div><div class="arr-btn">›</div></div>
+  </div>
+</section>
+
+<div class="sec-label">Slide 2 — Finance &nbsp;|&nbsp; Slide 3 below</div>
+
+<!-- ════════════════════════════════
+     SLIDE 3: OIL & GAS
+════════════════════════════════ -->
+<section class="hero" id="hero3">
+
+  <div class="video-wrap">
+    <iframe
+      src="https://player.vimeo.com/video/923060049?autoplay=1&muted=1&loop=1&background=1&quality=720p"
+      allow="autoplay; fullscreen"
+    ></iframe>
+  </div>
+  <div class="overlay-dark" style="background:rgba(10,7,3,.75)"></div>
+  <div class="overlay-grad" style="background:linear-gradient(90deg,rgba(10,7,3,.92) 0%,rgba(10,7,3,.5) 55%,transparent 100%),linear-gradient(0deg,rgba(10,7,3,.8) 0%,transparent 50%)"></div>
+  <div class="grid-lines"></div>
+
+  <nav class="nav">
+    <div class="logo"><b>Meta</b>Vision</div>
+    <div class="nav-links">
+      <a href="#" class="nav-link">Home</a><a href="#" class="nav-link">Products</a>
+      <a href="#" class="nav-link">Services</a><a href="#" class="nav-link">About</a>
+    </div>
+    <a href="#" class="nav-cta">Get Demo</a>
+  </nav>
+
+  <div class="hero-content">
+    <div class="badge" style="border-color:rgba(234,88,12,.3);background:rgba(234,88,12,.1);color:#fdba74">
+      <span class="badge-dot" style="background:#f97316;box-shadow:0 0 8px #f97316"></span>Industrial Intelligence
+    </div>
+    <h1 class="headline headline-font">
+      Advanced <span style="color:#f97316">Oil & Gas</span><br>Intelligence<br>Dashboards
+    </h1>
+    <p class="subheadline">We develop powerful real-time dashboards for oil and gas companies that help monitor operations, visualize production data, and optimize industrial performance.</p>
+    <div class="benefits">
+      <span class="benefit-tag">Real-time Operational Monitoring</span>
+      <span class="benefit-tag">Production Analytics</span>
+      <span class="benefit-tag">Industrial KPI Dashboards</span>
+      <span class="benefit-tag">Predictive Maintenance</span>
+      <span class="benefit-tag">Enterprise Visualization</span>
+    </div>
+    <div class="cta-row">
+      <a href="#" class="btn-primary" style="background:linear-gradient(135deg,#c2410c,#f97316);box-shadow:0 0 32px rgba(249,115,22,.45)">Explore Dashboard Solutions</a>
+      <a href="#" class="btn-ghost">Request Consultation</a>
+    </div>
+  </div>
+  <div class="hero-footer">
+    <div class="dots">
+      <div class="dot"></div><div class="dot"></div><div class="dot on" style="background:#f97316"></div>
+    </div>
+    <div class="prog-track"><div class="prog-fill" style="background:linear-gradient(90deg,#c2410c,#fb923c)"></div></div>
+    <span class="slide-num">03 / 03</span>
+    <div class="nav-arrows"><div class="arr-btn">‹</div><div class="arr-btn">›</div></div>
+  </div>
+</section>
+
+<script>
+// Typewriter for headline word
+const tw1 = document.getElementById('type1');
+const sub1El = document.getElementById('sub1');
+
+const subtext = "Our intelligent healthcare software helps doctors and patients manage prescriptions, diseases, and medical records more efficiently — reducing manual work and improving workflows.";
+let si = 0;
+function typeSub(){
+  if(si <= subtext.length){
+    sub1El.textContent = subtext.slice(0, si);
+    si++;
+    setTimeout(typeSub, si < 5 ? 400 : 28);
+  }
+}
+// Headline already shows — only subtext types on load
+setTimeout(typeSub, 900);
+</script>
+</body>
+</html>
