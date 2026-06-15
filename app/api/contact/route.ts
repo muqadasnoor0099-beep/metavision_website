@@ -26,7 +26,7 @@ export async function POST(req: NextRequest) {
       : `📬 Contact Form — ${name} (${company || email})`
 
     const interestLabel: Record<string, string> = {
-      medical:    'Medical Software',
+      medical:    'NexLink MedAI',
       accounting: 'CA Accounting Software',
       both:       'Both Products',
     }

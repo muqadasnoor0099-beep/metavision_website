@@ -24,9 +24,9 @@ export default function AccountingProductPage() {
         demoVideoSrc={PRODUCT_DEMO_BY_MODE.accounting.src}
         demoTitle={PRODUCT_DEMO_BY_MODE.accounting.title}
       />
-      <FeatureGrid features={ACCOUNTING_FEATURES} title="CA Software" titleGold="Features" />
+      <FeatureGrid features={ACCOUNTING_FEATURES} title="Workflow Management System" titleGold="Features" />
       <HowItWorks steps={HOW_IT_WORKS_ACCOUNTING} />
-      <PricingCards tiers={ACCOUNTING_PRICING} />
+      <PricingCards plan={ACCOUNTING_PRICING} />
       <CTABanner />
     </div>
   )

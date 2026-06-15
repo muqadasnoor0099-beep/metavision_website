@@ -314,7 +314,7 @@ function Scene0() {
               </svg>
             </motion.div>
             <div style={{ textAlign: 'center' }}>
-              <div style={{ fontSize: 11, fontWeight: 800, color: C.white, lineHeight: 1.3 }}>MediScribe AI</div>
+              <div style={{ fontSize: 11, fontWeight: 800, color: C.white, lineHeight: 1.3 }}>NexLink MedAI</div>
               <div style={{ fontSize: 9, color: C.cyan, marginTop: 3, letterSpacing: '0.08em' }}>Ready to Listen</div>
             </div>
             <motion.div
@@ -505,7 +505,7 @@ function Scene4() {
             </div>
             <div>
               <div style={{ fontSize: 11, fontWeight: 800, color: C.white }}>Digital Prescription</div>
-              <div style={{ fontSize: 8, color: C.cyan }}>MediScribe AI</div>
+              <div style={{ fontSize: 8, color: C.cyan }}>NexLink MedAI</div>
             </div>
           </div>
           <div style={{ fontSize: 8, color: C.green, fontWeight: 700, padding: '2px 7px', borderRadius: 4, background: 'rgba(16,185,129,0.12)', border: '1px solid rgba(16,185,129,0.3)' }}>VERIFIED</div>
@@ -654,7 +654,7 @@ function Scene6() {
 
       <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3, duration: 0.6 }}
         style={{ textAlign: 'center', lineHeight: 1.2 }}>
-        <div style={{ fontSize: 14, fontWeight: 800, color: C.white, lineHeight: 1.25 }}>MediScribe AI</div>
+        <div style={{ fontSize: 14, fontWeight: 800, color: C.white, lineHeight: 1.25 }}>NexLink MedAI</div>
         <div style={{ fontSize: 10, color: C.cyan, marginTop: 3 }}>Intelligent Care Platform</div>
       </motion.div>
 
@@ -776,13 +776,13 @@ export default function MedicalShowcaseSection() {
             <span style={{ fontSize: 10, fontWeight: 700, color: outerCyan, letterSpacing: '0.15em', textTransform: 'uppercase' }}>New Product</span>
           </div>
           <h2 style={{ fontSize: 'clamp(28px, 4vw, 44px)', fontWeight: 800, color: outerWhite, lineHeight: 1.1, letterSpacing: '-0.02em', margin: '0 0 14px' }}>
-            AI Medical Consultation{' '}
+            NexLink{' '}
             <span style={{ backgroundImage: `linear-gradient(90deg, ${outerBlue}, ${outerCyan})`, WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>
-              Intelligence
+              MedAI
             </span>
           </h2>
           <p style={{ fontSize: 16, color: outerMuted, maxWidth: 560, margin: '0 auto', lineHeight: 1.7 }}>
-            A smart mobile platform that listens to doctor-patient consultations and converts every conversation into structured clinical records — instantly.
+            Human Care. Machine Intelligence. One Ecosystem. A smart mobile platform that listens to doctor-patient consultations and converts every conversation into structured clinical records — instantly.
           </p>
         </motion.div>
 

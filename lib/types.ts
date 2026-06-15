@@ -13,6 +13,7 @@ export interface HeroContent {
 export interface Feature {
   icon: string
   title: string
+  subtitle?: string
   description: string
 }
 
@@ -33,21 +34,20 @@ export interface NavLink {
 export interface Step {
   number: string
   title: string
+  subtitle?: string
   description: string
 }
 
-export interface PricingTier {
+export interface ServiceItem {
+  icon: string
+  title: string
+  tags?: string[]
+  description?: string
+}
+
+export interface PricingPlan {
   name: string
-  price: string
-  period: string
   description: string
   features: string[]
   cta: string
-  highlighted: boolean
-}
-
-export interface PortfolioItem {
-  title: string
-  tag: string
-  image: string
 }

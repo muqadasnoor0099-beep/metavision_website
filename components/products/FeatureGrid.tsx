@@ -2,7 +2,7 @@
 
 import { motion } from 'framer-motion'
 import {
-  Video, Brain, FileText, Calendar, Microscope, Globe,
+  Mic, FileEdit, Zap, HeartHandshake, ScanLine, ShieldCheck, Search, Landmark, Rocket, ClipboardCheck, ListChecks, MessagesSquare,
   Receipt, FileCheck, BarChart2, Users, Shield, LayoutDashboard,
 } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
@@ -11,7 +11,7 @@ import GlassCard from '@/components/ui/GlassCard'
 import type { Feature } from '@/lib/types'
 
 const ICON_MAP: Record<string, LucideIcon> = {
-  Video, Brain, FileText, Calendar, Microscope, Globe,
+  Mic, FileEdit, Zap, HeartHandshake, ScanLine, ShieldCheck, Search, Landmark, Rocket, ClipboardCheck, ListChecks, MessagesSquare,
   Receipt, FileCheck, BarChart2, Users, Shield, LayoutDashboard,
 }
 
@@ -40,7 +40,10 @@ export default function FeatureGrid({ features, title, titleGold }: Props) {
                 <div className="w-10 h-10 rounded-lg bg-gold/10 border border-gold/20 flex items-center justify-center mb-4">
                   <Icon size={18} className="text-gold" />
                 </div>
-                <h3 className="font-heading font-semibold text-white mb-1.5">{feature.title}</h3>
+                <h3 className="font-heading font-semibold text-white mb-1">{feature.title}</h3>
+                {feature.subtitle && (
+                  <div className="text-gold text-[11px] font-semibold uppercase tracking-wider mb-2">{feature.subtitle}</div>
+                )}
                 <p className="text-white/45 text-sm leading-relaxed">{feature.description}</p>
               </GlassCard>
             </motion.div>

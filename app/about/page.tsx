@@ -8,10 +8,10 @@ import CTABanner from '@/components/home/CTABanner'
 import { useTheme } from '@/components/providers/ThemeProvider'
 
 const TIMELINE = [
-  { year: '2019', title: 'Founded', description: 'MetaVision started as a medical software consultancy in Islamabad with a mission to bring AI to everyday healthcare.' },
-  { year: '2020', title: 'First Product Launch', description: 'Launched our telemedicine platform, onboarding 50 clinics in the first 6 months.' },
-  { year: '2022', title: 'CA Suite Launch', description: 'Expanded into financial software with AI-driven accounting tools for chartered accountants.' },
-  { year: '2024', title: 'Scale', description: 'Now serving 1,700+ professionals across Pakistan with 24/7 dedicated support.' },
+  { year: '2024', title: 'HA EngagePro', description: 'Delivered HA EngagePro, an end-to-end client lifecycle platform — from project initiation to secure, authenticated engagement tracking.' },
+  { year: '2025', title: 'NexLink MedAI', description: 'Launched NexLink MedAI, our AI-powered telemedicine and prescription platform, onboarding 50+ clinics in the first 6 months.' },
+  { year: '2025', title: 'NexLink Clinical Intelligence', description: 'Introduced NexLink Clinical Intelligence, transforming messy EHR records into a structured, FHIR-ready clinical data backbone.' },
+  { year: '2026', title: 'Oil & Gas Dashboards', description: 'Expanded into industrial intelligence with real-time Oil & Gas dashboards for production monitoring and enterprise analytics.' },
 ]
 
 const TEAM = [
@@ -20,7 +20,7 @@ const TEAM = [
     name: 'Mustafa Nawaz Khokher',
     role: 'CEO & Founder',
     badge: 'Founder',
-    desc: 'Visionary leader driving MetaVision\'s mission to democratise AI across Pakistan\'s healthcare and finance sectors.',
+    desc: 'Visionary leader driving MetaVision\'s mission to democratise AI across the healthcare and finance sectors.',
     featured: true,
     ai: false,
   },
@@ -46,7 +46,7 @@ const TEAM = [
 
 const UNIQUE = [
   { icon: '🧠', title: 'AI at the Core', body: "Our AI isn't a feature — it's the foundation every product is built on." },
-  { icon: '🇵🇰', title: 'Pakistan-First', body: 'Built for Pakistan\'s regulatory landscape: PDPA, GST, and IT Act compliance out of the box.' },
+  { icon: '🛡️', title: 'Compliance-Ready', body: 'Built for evolving data protection and regulatory standards — compliance out of the box.' },
   { icon: '⚡', title: 'Speed to Value', body: 'Most clients go live in under 48 hours. No 6-month implementations.' },
 ]
 
@@ -316,20 +316,17 @@ export default function AboutPage() {
           {[
             {
               tag: 'Our Mission',
-              title: 'Democratise AI for Professionals',
-              body: 'Make enterprise-grade AI tools accessible to every doctor and CA in Pakistan — regardless of their practice size.',
+              body: 'To empower organizations with cutting-edge IT solutions and intelligent AI systems that solve real-world challenges — delivering measurable impact through innovation, security, and excellence.',
             },
             {
               tag: 'Our Vision',
-              title: 'The Intelligent Practice',
-              body: 'A future where every clinical and financial decision is informed by real-time AI — reducing errors, saving time, and delivering better outcomes.',
+              body: 'To be the most trusted technology partner in the region, shaping a future where AI-driven transformation enables governments, enterprises, and communities to reach their full potential.',
             },
           ].map((card, i) => (
             <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1 }}>
               <GlassCard>
                 <div className="text-gold text-[10px] font-bold tracking-widest uppercase mb-3">{card.tag}</div>
-                <h3 className="text-white font-heading font-bold text-xl mb-3">{card.title}</h3>
-                <p className="text-white/50 text-sm leading-relaxed">{card.body}</p>
+                <p className="text-white/70 text-base leading-relaxed">{card.body}</p>
               </GlassCard>
             </motion.div>
           ))}

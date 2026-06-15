@@ -93,7 +93,7 @@ export default function ContactForm() {
       </div>
       <select className={inputClass('interest')} value={form.interest} onChange={set('interest')}>
         <option value="" disabled>I'm interested in...</option>
-        <option value="medical">Medical Software</option>
+        <option value="medical">NexLink MedAI</option>
         <option value="accounting">Accounting Software</option>
         <option value="both">Both Products</option>
       </select>

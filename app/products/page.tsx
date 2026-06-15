@@ -6,14 +6,14 @@ import GoldButton from '@/components/ui/GoldButton'
 import GhostButton from '@/components/ui/GhostButton'
 import { MEDICAL_FEATURES, ACCOUNTING_FEATURES } from '@/lib/constants'
 import {
-  Video, Brain, FileText, Calendar, Microscope, Globe,
+  Mic, FileEdit, Zap, HeartHandshake, ScanLine, ShieldCheck, Search, Landmark, Rocket, ClipboardCheck, ListChecks, MessagesSquare,
   Receipt, FileCheck, BarChart2, Users, Shield, LayoutDashboard,
 } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
 import type { Feature } from '@/lib/types'
 
 const ICON_MAP: Record<string, LucideIcon> = {
-  Video, Brain, FileText, Calendar, Microscope, Globe,
+  Mic, FileEdit, Zap, HeartHandshake, ScanLine, ShieldCheck, Search, Landmark, Rocket, ClipboardCheck, ListChecks, MessagesSquare,
   Receipt, FileCheck, BarChart2, Users, Shield, LayoutDashboard,
 }
 
@@ -75,18 +75,21 @@ export default function ProductsPage() {
             <span className="w-1.5 h-1.5 rounded-full bg-gold" />
             <span className="text-gold text-[11px] font-semibold tracking-widest uppercase">Our Products</span>
           </div>
-          <h1 className="text-4xl lg:text-5xl font-extrabold font-heading tracking-tight mb-5">
-            <span className="text-white">Two Products. </span>
-            <span className="bg-gradient-to-r from-gold to-gold-light bg-clip-text text-transparent">One Vision.</span>
+          <h1
+            className="font-extrabold font-heading leading-[.96] tracking-[-0.01em] mb-5"
+            style={{ fontSize: 'clamp(38px,5.5vw,70px)' }}
+          >
+            <span className="block text-white">Two Products.</span>
+            <span className="block bg-gradient-to-r from-gold to-gold-light bg-clip-text text-transparent">One Vision.</span>
           </h1>
           <p className="text-white/50 text-base leading-relaxed">
-            MetaVision builds AI-first software for two of Pakistan's most demanding professions. Both products share the same commitment: intelligence that works in the background, so you can focus on what matters.
+            MetaVision builds AI-first software for two of the most demanding professions. Both products share the same commitment: intelligence that works in the background, so you can focus on what matters.
           </p>
         </div>
       </section>
 
       <ProductSection
-        tag="Medical Software"
+        tag="NexLink MedAI"
         headline1="Real-Time Consultation"
         headline2="& AI Prescription"
         description="Seamless live video consultations with intelligent AI prescription suggestions, patient records, and lab integration — all in one platform."
@@ -96,7 +99,7 @@ export default function ProductsPage() {
       />
 
       <ProductSection
-        tag="CA Workflow Software"
+        tag="Workflow Management System"
         headline1="Intelligent Accounting"
         headline2="For Modern CAs"
         description="End-to-end workflow automation for chartered accountants — GST, ITR, balance sheets, and client management powered by AI."

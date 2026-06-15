@@ -9,7 +9,7 @@ import DemoModal from '@/components/ui/DemoModal'
 import type { ProductMode } from '@/lib/types'
 
 const BrainCanvas = dynamic(() => import('@/components/three/BrainCanvas'), { ssr: false })
-const DashboardCanvas = dynamic(() => import('@/components/three/DashboardCanvas'), { ssr: false })
+const WorkflowCanvas = dynamic(() => import('@/components/three/WorkflowCanvas'), { ssr: false })
 
 interface Props {
   mode: ProductMode
@@ -42,8 +42,18 @@ export default function ProductHero({
               <span className="text-gold text-[11px] font-semibold tracking-widest uppercase">{overline}</span>
             </div>
             <div>
-              <h1 className="text-4xl lg:text-5xl font-extrabold font-heading text-white leading-[1.06] tracking-tight">{headline1}</h1>
-              <h1 className="text-4xl lg:text-5xl font-extrabold font-heading leading-[1.06] tracking-tight bg-gradient-to-r from-gold to-gold-light bg-clip-text text-transparent">{headline2}</h1>
+              <h1
+                className="font-extrabold font-heading text-white leading-[.96] tracking-[-0.01em]"
+                style={{ fontSize: 'clamp(38px,5.5vw,70px)' }}
+              >
+                {headline1}
+              </h1>
+              <h1
+                className="font-extrabold font-heading leading-[.96] tracking-[-0.01em] bg-gradient-to-r from-gold to-gold-light bg-clip-text text-transparent"
+                style={{ fontSize: 'clamp(38px,5.5vw,70px)' }}
+              >
+                {headline2}
+              </h1>
             </div>
             <p className="text-white/55 text-sm leading-relaxed max-w-[380px]">{description}</p>
             <div className="flex gap-3 flex-wrap">
@@ -60,7 +70,7 @@ export default function ProductHero({
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_55%_45%,rgba(212,175,55,0.1),transparent_65%)]" />
           <div className="absolute inset-0 bg-[repeating-linear-gradient(0deg,transparent,transparent_3px,rgba(212,175,55,0.012)_3px,rgba(212,175,55,0.012)_4px)] pointer-events-none" />
           <div className="absolute inset-0">
-            {mode === 'medical' ? <BrainCanvas /> : <DashboardCanvas />}
+            {mode === 'medical' ? <BrainCanvas /> : <WorkflowCanvas />}
           </div>
         </div>
       </section>

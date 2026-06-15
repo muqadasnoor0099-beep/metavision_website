@@ -6,6 +6,7 @@ import { Menu, X, ChevronDown } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 import GoldButton from '@/components/ui/GoldButton'
 import ThemeToggle from '@/components/ui/ThemeToggle'
+import Logo from '@/components/ui/Logo'
 import { NAV_LINKS } from '@/lib/constants'
 
 export default function Header() {
@@ -29,11 +30,8 @@ export default function Header() {
     >
       <div className="max-w-7xl mx-auto px-6 lg:px-8 h-16 flex items-center justify-between">
         {/* Logo */}
-        <Link href="/" className="flex items-center gap-2.5 shrink-0">
-          <div className="w-8 h-8 bg-gradient-to-br from-gold to-gold-light rounded-lg flex items-center justify-center font-black text-white text-sm font-heading">
-            MV
-          </div>
-          <span className="font-heading font-bold text-white tracking-tight">MetaVision</span>
+        <Link href="/" className="flex items-center shrink-0">
+          <Logo className="h-8 sm:h-9 w-auto" />
         </Link>
 
         {/* Desktop nav */}
@@ -57,7 +55,7 @@ export default function Header() {
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: -6 }}
                       transition={{ duration: 0.15 }}
-                      className="absolute top-full left-0 mt-2 w-52 glass-card py-2"
+                      className="absolute top-full left-0 mt-2 w-64 glass-card py-2"
                     >
                       {link.children.map((child) => (
                         <Link
