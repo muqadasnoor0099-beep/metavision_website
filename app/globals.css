@@ -1,0 +1,106 @@
+@import "tailwindcss";
+
+@theme {
+  --default-font-family: var(--font-sora), sans-serif;
+  --color-gold: #3b82f6;
+  --color-gold-light: #93c5fd;
+  --color-surface: #0e0e14;
+  --color-surface-high: #16161f;
+
+  --font-heading: var(--font-sora), sans-serif;
+  --font-body: var(--font-sora), sans-serif;
+  --font-display: var(--font-sora), sans-serif;
+}
+
+/* ── Theme tokens for values not managed by Tailwind ── */
+:root {
+  --clr-bg: #060609;
+  --clr-header-bg: rgba(6, 6, 9, 0.60);
+  --clr-header-bg-scrolled: rgba(6, 6, 9, 0.95);
+  --clr-mobile-menu: rgba(6, 6, 9, 0.98);
+}
+
+/* ── Light mode overrides ── */
+html.light {
+  /*
+   * Override Tailwind v4's built-in --color-white.
+   * Since text-white/XX, border-white/XX, bg-white/XX all resolve via
+   * color-mix(in oklab, var(--color-white) N%, transparent), overriding
+   * this one variable adapts every white-based utility across the site.
+   */
+  --color-white: #0f172a;
+
+  /* Deep blues for proper contrast on light (#f0f7ff) backgrounds */
+  --color-gold: #1d4ed8;
+  --color-gold-light: #2563eb;
+
+  /* Override surface colors defined in @theme above */
+  --color-surface: #e8f1ff;
+  --color-surface-high: #dbeafe;
+
+  /* Layout-specific tokens */
+  --clr-bg: #f0f7ff;
+  --clr-header-bg: rgba(240, 247, 255, 0.82);
+  --clr-header-bg-scrolled: rgba(240, 247, 255, 0.96);
+  --clr-mobile-menu: rgba(240, 247, 255, 0.98);
+}
+
+@layer base {
+  html {
+    /* scroll-behavior handled by Lenis smooth scroll */
+  }
+  body {
+    background-color: var(--clr-bg);
+    color: #ffffff;
+    font-family: var(--font-sora), sans-serif;
+  }
+  html.light body {
+    color: #0f172a;
+  }
+  * {
+    box-sizing: border-box;
+  }
+}
+
+/* ── Gradient-clipped text (reliable cross-browser) ── */
+.gradient-text {
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+@layer components {
+  /* ── Dark mode glass card ── */
+  .glass-card {
+    background: rgba(14, 14, 20, 0.75);
+    border: 1px solid rgba(37, 99, 235, 0.18);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border-radius: 0.75rem;
+  }
+
+  /* ── Light mode glass card override ── */
+  html.light .glass-card {
+    background: rgba(224, 239, 255, 0.88);
+    border: 1px solid rgba(37, 99, 235, 0.22);
+    box-shadow: 0 4px 20px rgba(37, 99, 235, 0.07), 0 1px 0 rgba(255, 255, 255, 0.75) inset;
+  }
+
+  /* ── Light mode glass card hover shadow ── */
+  html.light .glass-card:hover {
+    box-shadow: 0 8px 28px rgba(37, 99, 235, 0.13), 0 0 32px rgba(37, 99, 235, 0.08), 0 1px 0 rgba(255, 255, 255, 0.8) inset;
+  }
+}
+
+/* ── Team section animations ── */
+@property --team-ba {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}
+@keyframes team-border  { to { --team-ba: 360deg; } }
+@keyframes team-orbit   { to { transform: rotate(360deg); } }
+@keyframes team-breathe { 0%,100% { opacity:.5; transform:scale(1) } 50% { opacity:1; transform:scale(1.04) } }
+@keyframes team-scan    { from { left:-60% } to { left:160% } }
+@keyframes team-blink   { 0%,100% { opacity:1 } 50% { opacity:.2 } }

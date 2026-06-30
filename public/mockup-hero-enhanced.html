@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>MetaVision — Hero, Enhanced Animation Pass</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#000;font-family:'Sora',sans-serif;overflow:hidden}
+
+.note-bar{
+  position:fixed; top:0; left:0; right:0; z-index:1000;
+  padding:13px 24px; text-align:center;
+  background:rgba(0,0,0,.78); backdrop-filter:blur(14px);
+  border-bottom:1px solid rgba(255,255,255,.08);
+  font-size:11.5px; color:rgba(255,255,255,.55); line-height:1.6;
+}
+.note-bar b{color:#fff}
+
+.hero{
+  position:relative; width:100%; height:100vh; min-height:600px;
+  overflow:hidden; background:#000;
+}
+
+/* ── BG VIDEO STAND-IN (Ken Burns drift) ── */
+.bg-slide{
+  position:absolute; inset:0; overflow:hidden;
+}
+.bg-slide img{
+  position:absolute; inset:-4%; width:108%; height:108%; object-fit:cover;
+  opacity:0; transition:opacity .7s ease;
+  animation:kenburns 22s ease-in-out infinite alternate;
+}
+.bg-slide.active img{ opacity:1 }
+@keyframes kenburns{
+  0%{ transform:scale(1) translate(0,0) }
+  100%{ transform:scale(1.12) translate(-1.5%, 1%) }
+}
+
+/* ── Cursor-reactive glow ── */
+.cursor-glow{
+  position:absolute; inset:0; z-index:4; pointer-events:none; mix-blend-mode:screen;
+  background:radial-gradient(420px circle at var(--mx,50%) var(--my,40%), var(--accent,#60a5fa) 0%, transparent 70%);
+  opacity:.16;
+}
+
+/* ── Overlays (same as current) ── */
+.ov1{position:absolute;inset:0;background:rgba(0,0,0,0.44);z-index:5}
+.ov2{position:absolute;inset:0;z-index:5}
+.ov3{position:absolute;inset:0;z-index:5;background:linear-gradient(105deg,rgba(0,0,0,0.70) 0%,rgba(0,0,0,0.18) 52%,transparent 100%),linear-gradient(to top,rgba(0,0,0,0.52) 0%,transparent 44%)}
+
+/* ── Content ── */
+.content{
+  position:absolute; inset:0; z-index:10;
+  display:flex; flex-direction:column; justify-content:center;
+  padding:100px 80px 80px;
+}
+
+/* Badge with shimmer sweep */
+.badge{
+  position:relative; overflow:hidden;
+  display:inline-flex; align-items:center; gap:8px; align-self:flex-start;
+  padding:7px 16px; border-radius:999px; margin-bottom:16px;
+  font-size:11px; font-weight:600; letter-spacing:.14em; text-transform:uppercase;
+  border:1px solid var(--accent-22); background:var(--accent-1a); color:var(--accent);
+  opacity:0; animation:fadeUp .5s .1s ease forwards;
+}
+.badge::after{
+  content:''; position:absolute; top:0; bottom:0; left:-60%; width:40%;
+  background:linear-gradient(100deg, transparent, rgba(255,255,255,.35), transparent);
+  animation:shimmer 3.2s ease-in-out infinite;
+}
+@keyframes shimmer{ 0%{left:-60%} 45%,100%{left:130%} }
+.badge-dot{ width:6px;height:6px;border-radius:50%; background:var(--accent); animation:bdot 1.4s ease-in-out infinite }
+@keyframes bdot{0%,100%{opacity:1}50%{opacity:.2}}
+
+/* Headline — char-level rise with rotation/blur */
+.headline{
+  font-weight:800; line-height:.98; letter-spacing:-.01em; color:#fff; margin-bottom:14px;
+  font-size:clamp(38px,5.5vw,70px);
+}
+.char{
+  display:inline-block; opacity:0; filter:blur(6px);
+  transform:translateY(60%) rotate(8deg);
+  animation:charRise .68s cubic-bezier(.16,1,.3,1) forwards;
+}
+@keyframes charRise{ to{ opacity:1; filter:blur(0); transform:translateY(0) rotate(0) } }
+
+/* Animated glowing underline */
+.underline-wrap{ position:relative; display:inline-block; }
+.underline{
+  position:absolute; left:0; bottom:-6px; height:3px; width:0; border-radius:2px;
+  background:linear-gradient(90deg, var(--accent), transparent);
+  box-shadow:0 0 16px var(--accent);
+  animation:drawLine 1s .85s cubic-bezier(.16,1,.3,1) forwards;
+}
+@keyframes drawLine{ to{ width:100% } }
+
+.sub{
+  font-size:15px; line-height:1.65; font-weight:300; color:rgba(255,255,255,.65);
+  max-width:430px; margin-bottom:20px;
+  opacity:0; animation:fadeUp .55s .95s ease forwards;
+}
+.tags{ display:flex; flex-wrap:wrap; gap:8px; margin-bottom:24px; opacity:0; animation:fadeUp .55s 1.05s ease forwards }
+.tag{
+  display:inline-flex; align-items:center; gap:6px; padding:6px 12px; border-radius:7px;
+  font-size:12px; font-weight:500; color:rgba(255,255,255,.65);
+  background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.14);
+}
+.tag b{ color:var(--accent); font-size:10px }
+
+@keyframes fadeUp{ from{opacity:0; transform:translateY(12px)} to{opacity:1; transform:translateY(0)} }
+
+/* CTA — magnetic + ripple */
+.cta-row{ display:flex; gap:12px; opacity:0; animation:fadeUp .55s 1.2s ease forwards }
+.cta-primary{
+  position:relative; overflow:hidden; isolation:isolate;
+  padding:13px 26px; border-radius:8px; border:none; cursor:pointer;
+  font-size:13px; font-weight:600; color:#fff; background:var(--btn-bg);
+  box-shadow:0 4px 20px var(--btn-shadow);
+  transition:transform .25s cubic-bezier(.16,1,.3,1);
+}
+.ripple{
+  position:absolute; border-radius:50%; background:rgba(255,255,255,.5);
+  transform:scale(0); animation:rippleAnim .6s ease-out forwards; pointer-events:none; z-index:-1;
+}
+@keyframes rippleAnim{ to{ transform:scale(3); opacity:0 } }
+.cta-secondary{
+  padding:13px 22px; border-radius:8px; cursor:pointer; font-size:13px; font-weight:500;
+  color:rgba(255,255,255,.75); background:rgba(255,255,255,.08); border:1.5px solid rgba(255,255,255,.20);
+  transition:background .2s ease, border-color .2s ease, transform .2s cubic-bezier(.16,1,.3,1);
+}
+.cta-secondary:hover{ background:rgba(255,255,255,.13); border-color:rgba(255,255,255,.32); transform:translateY(-2px) }
+
+/* Arrows — halo on hover */
+.nav-arrow{
+  position:absolute; top:50%; transform:translateY(-50%); z-index:50;
+  width:42px; height:42px; border-radius:50%; cursor:pointer;
+  display:flex; align-items:center; justify-content:center;
+  background:rgba(0,0,0,.35); border:1px solid rgba(255,255,255,.18);
+  backdrop-filter:blur(6px); color:rgba(255,255,255,.85);
+  transition:transform .25s cubic-bezier(.16,1,.3,1), background .25s ease, box-shadow .35s ease;
+}
+.nav-arrow.left{ left:18px }
+.nav-arrow.right{ right:18px }
+.nav-arrow:hover{
+  transform:translateY(-50%) scale(1.1);
+  background:rgba(0,0,0,.5);
+  box-shadow:0 0 0 8px var(--accent-22), 0 0 30px var(--accent-22);
+}
+.nav-arrow:active{ transform:translateY(-50%) scale(.95) }
+
+/* Dots — gradient sweep fill + tooltip */
+.footer{ position:absolute; bottom:32px; left:80px; right:80px; z-index:50; display:flex; align-items:center; gap:16px }
+.dots{ display:flex; gap:7px }
+.dot-wrap{ position:relative }
+.dot{
+  position:relative; height:4px; border-radius:3px; overflow:hidden; cursor:pointer;
+  background:rgba(255,255,255,.22); transition:width .35s cubic-bezier(.16,1,.3,1);
+}
+.dot.active{ width:42px }
+.dot:not(.active){ width:18px }
+.dot-fill{
+  position:absolute; inset:0; border-radius:3px; transform:translateX(-100%);
+  background:linear-gradient(90deg, var(--accent), color-mix(in srgb, var(--accent) 60%, white));
+  transition:transform .5s cubic-bezier(.16,1,.3,1);
+}
+.dot.active .dot-fill{ transform:translateX(0) }
+.tooltip{
+  position:absolute; bottom:16px; left:50%; transform:translateX(-50%) translateY(6px);
+  padding:5px 10px; border-radius:6px; background:rgba(0,0,0,.85); color:#fff;
+  font-size:10.5px; white-space:nowrap; opacity:0; pointer-events:none;
+  transition:opacity .2s ease, transform .2s ease; border:1px solid rgba(255,255,255,.12);
+}
+.dot-wrap:hover .tooltip{ opacity:1; transform:translateX(-50%) translateY(0) }
+.counter{ margin-left:auto; font-size:11px; letter-spacing:.12em; color:rgba(255,255,255,.3) }
+</style>
+</head>
+<body>
+
+<div class="note-bar">
+  <b>Same hero — richer motion layer.</b> Char-by-char headline reveal · Ken Burns video drift · animated glowing underline · shimmering badge · cursor-tracked glow · magnetic/ripple CTA · halo hover on arrows · gradient-fill active dot with tooltip preview. Click arrows / dots / swipe — all original behavior intact.
+</div>
+
+<section class="hero" id="hero">
+  <!-- BG slides (image stand-ins for video) -->
+  <div class="bg-slide active" data-i="0"><img src="https://placehold.co/1600x900/13243f/60a5fa?text=Medical+AI+Video"></div>
+  <div class="bg-slide" data-i="1"><img src="https://placehold.co/1600x900/241a3f/a78bfa?text=CA+Finance+Video"></div>
+  <div class="bg-slide" data-i="2"><img src="https://placehold.co/1600x900/3f2a13/fb923c?text=Oil+%26+Gas+Video"></div>
+
+  <div class="cursor-glow" id="glow"></div>
+  <div class="ov1"></div>
+  <div class="ov2" id="ov2"></div>
+  <div class="ov3"></div>
+
+  <div class="content" id="content">
+    <div class="badge" id="badge">
+      <span class="badge-dot"></span>
+      <span id="badgeText">Healthcare AI</span>
+    </div>
+    <h1 class="headline">
+      <span class="underline-wrap"><span id="line1"></span><span class="underline" id="underline"></span></span><br>
+      <span id="line2"></span>
+    </h1>
+    <p class="sub" id="sub">AI-powered prescriptions and clinical tools for modern doctors.</p>
+    <div class="tags" id="tags"></div>
+    <div class="cta-row">
+      <button class="cta-primary" id="ctaPrimary">Explore Healthcare</button>
+      <button class="cta-secondary">▶ Watch Demo</button>
+    </div>
+  </div>
+
+  <button class="nav-arrow left" id="prevBtn" aria-label="Previous">‹</button>
+  <button class="nav-arrow right" id="nextBtn" aria-label="Next">›</button>
+
+  <div class="footer">
+    <div class="dots" id="dots"></div>
+    <span class="counter" id="counter">01 / 03</span>
+  </div>
+</section>
+
+<script>
+const SLIDES = [
+  { badge:'Healthcare AI', accent:'#60a5fa', btnBg:'#2563eb', btnShadow:'rgba(37,99,235,.4)',
+    line1:'Smarter Healthcare', line2:'Through AI Systems',
+    sub:'AI-powered prescriptions and clinical tools for modern doctors.',
+    tags:['Smart Prescriptions','AI Workflows','Digital Records'], cta:'Explore Healthcare' },
+  { badge:'CA Finance Platform', accent:'#a78bfa', btnBg:'#7c3aed', btnShadow:'rgba(124,58,237,.4)',
+    line1:'CA Accounting', line2:'Made Effortless',
+    sub:'GST, ITR, and Balance Sheets — automated for chartered accountants.',
+    tags:['GST & Tax Filing','Client Portal','Smart Reports'], cta:'Explore Finance' },
+  { badge:'Industrial Intelligence', accent:'#fb923c', btnBg:'#ea580c', btnShadow:'rgba(234,88,12,.4)',
+    line1:'Oil & Gas', line2:'Intelligence Dashboards',
+    sub:'Monitor production, operations, and KPIs in real time.',
+    tags:['Live Monitoring','Production Analytics','KPI Dashboards'], cta:'Explore Dashboards' },
+];
+
+let current = 0;
+const hero = document.getElementById('hero');
+const bgSlides = document.querySelectorAll('.bg-slide');
+const dotsWrap = document.getElementById('dots');
+
+function hexToRgba(hex, a){
+  const v = hex.replace('#','');
+  const r = parseInt(v.substr(0,2),16), g = parseInt(v.substr(2,2),16), b = parseInt(v.substr(4,2),16);
+  return `rgba(${r},${g},${b},${a})`;
+}
+
+function splitChars(text){
+  return [...text].map((ch,i) => `<span class="char" style="animation-delay:${(i*0.028).toFixed(2)}s">${ch===' '?'&nbsp;':ch}</span>`).join('');
+}
+
+function buildDots(){
+  dotsWrap.innerHTML = '';
+  SLIDES.forEach((s,i) => {
+    const wrap = document.createElement('div');
+    wrap.className = 'dot-wrap';
+    wrap.innerHTML = `<div class="dot ${i===current?'active':''}" data-i="${i}"><div class="dot-fill"></div></div><div class="tooltip">${s.line1}</div>`;
+    wrap.querySelector('.dot').addEventListener('click', () => render(i));
+    dotsWrap.appendChild(wrap);
+  });
+}
+
+function render(i){
+  current = i;
+  const s = SLIDES[i];
+  hero.style.setProperty('--accent', s.accent);
+  hero.style.setProperty('--accent-1a', hexToRgba(s.accent, .10));
+  hero.style.setProperty('--accent-22', hexToRgba(s.accent, .27));
+  hero.style.setProperty('--btn-bg', s.btnBg);
+  hero.style.setProperty('--btn-shadow', s.btnShadow);
+
+  bgSlides.forEach(b => b.classList.toggle('active', +b.dataset.i === i));
+
+  document.getElementById('badgeText').textContent = s.badge;
+  document.getElementById('sub').textContent = s.sub;
+  document.getElementById('counter').textContent = `0${i+1} / 0${SLIDES.length}`;
+  document.getElementById('ctaPrimary').textContent = s.cta;
+
+  // re-trigger char animation
+  const l1 = document.getElementById('line1');
+  const l2 = document.getElementById('line2');
+  l1.innerHTML = splitChars(s.line1);
+  l2.innerHTML = splitChars(s.line2);
+
+  // re-trigger underline draw
+  const ul = document.getElementById('underline');
+  ul.style.animation = 'none'; void ul.offsetWidth; ul.style.animation = '';
+
+  // tags
+  const tagsWrap = document.getElementById('tags');
+  tagsWrap.innerHTML = s.tags.map(t => `<span class="tag"><b>✓</b>${t}</span>`).join('');
+
+  // re-trigger badge/sub/tags/cta fade-up by replaying animation
+  ['badge','sub','tags'].forEach(id => {
+    const el = document.getElementById(id);
+    el.style.animation = 'none'; void el.offsetWidth; el.style.animation = '';
+  });
+  const ctaRow = document.querySelector('.cta-row');
+  ctaRow.style.animation = 'none'; void ctaRow.offsetWidth; ctaRow.style.animation = '';
+
+  buildDots();
+}
+
+document.getElementById('prevBtn').addEventListener('click', () => render((current - 1 + SLIDES.length) % SLIDES.length));
+document.getElementById('nextBtn').addEventListener('click', () => render((current + 1) % SLIDES.length));
+
+// cursor glow
+hero.addEventListener('mousemove', e => {
+  const r = hero.getBoundingClientRect();
+  hero.style.setProperty('--mx', ((e.clientX - r.left)/r.width*100) + '%');
+  hero.style.setProperty('--my', ((e.clientY - r.top)/r.height*100) + '%');
+});
+
+// magnetic + ripple CTA
+const ctaPrimary = document.getElementById('ctaPrimary');
+ctaPrimary.addEventListener('mousemove', e => {
+  const r = ctaPrimary.getBoundingClientRect();
+  const x = (e.clientX - r.left - r.width/2) * 0.25;
+  const y = (e.clientY - r.top - r.height/2) * 0.4;
+  ctaPrimary.style.transform = `translate(${x}px,${y}px)`;
+});
+ctaPrimary.addEventListener('mouseleave', () => { ctaPrimary.style.transform = 'translate(0,0)'; });
+ctaPrimary.addEventListener('click', e => {
+  const r = ctaPrimary.getBoundingClientRect();
+  const ripple = document.createElement('span');
+  ripple.className = 'ripple';
+  const size = Math.max(r.width, r.height);
+  ripple.style.width = ripple.style.height = size + 'px';
+  ripple.style.left = (e.clientX - r.left - size/2) + 'px';
+  ripple.style.top = (e.clientY - r.top - size/2) + 'px';
+  ctaPrimary.appendChild(ripple);
+  setTimeout(() => ripple.remove(), 650);
+});
+
+// swipe
+let touchX = 0;
+hero.addEventListener('touchstart', e => { touchX = e.touches[0].clientX; });
+hero.addEventListener('touchend', e => {
+  const diff = touchX - e.changedTouches[0].clientX;
+  if (Math.abs(diff) > 50) diff > 0 ? render((current+1)%SLIDES.length) : render((current-1+SLIDES.length)%SLIDES.length);
+});
+
+// auto-advance
+setInterval(() => render((current+1) % SLIDES.length), 6000);
+
+render(0);
+</script>
+</body>
+</html>

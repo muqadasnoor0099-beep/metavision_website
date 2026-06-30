@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>MetaVision — Hero Background Animation Options</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#000;font-family:'Sora',sans-serif;overflow:hidden}
+
+.switcher{
+  position:fixed; top:0; left:0; right:0; z-index:1000;
+  display:flex; align-items:center; justify-content:center; gap:10px; flex-wrap:wrap;
+  padding:13px 20px;
+  background:rgba(0,0,0,.8); backdrop-filter:blur(14px);
+  border-bottom:1px solid rgba(255,255,255,.08);
+}
+.switcher span{font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:rgba(255,255,255,.4); margin-right:4px}
+.tab{
+  appearance:none; border:1px solid rgba(255,255,255,.14); background:rgba(255,255,255,.04);
+  color:rgba(255,255,255,.65); font-family:'Sora',sans-serif; font-size:12px; font-weight:600;
+  padding:8px 16px; border-radius:8px; cursor:pointer; transition:transform .2s ease, background .2s ease, color .2s ease;
+}
+.tab:hover{ color:#fff; transform:translateY(-2px) }
+.tab.active{ background:#2563eb; border-color:#2563eb; color:#fff }
+
+.hero{ position:relative; width:100%; height:100vh; min-height:600px; overflow:hidden; background:#000 }
+.bg-base{
+  position:absolute; inset:0;
+  background:url('https://placehold.co/1600x900/13243f/60a5fa?text=Hero+Video+%28Medical%29') center/cover no-repeat;
+}
+
+/* Foreground overlays — IDENTICAL to current site */
+.ov1{position:absolute;inset:0;background:rgba(0,0,0,0.44);z-index:5}
+.ov3{position:absolute;inset:0;z-index:5;background:linear-gradient(105deg,rgba(0,0,0,0.70) 0%,rgba(0,0,0,0.18) 52%,transparent 100%),linear-gradient(to top,rgba(0,0,0,0.52) 0%,transparent 44%)}
+
+/* ── Content — kept EXACTLY as current typography/spacing/animation ── */
+.content{ position:absolute; inset:0; z-index:10; display:flex; flex-direction:column; justify-content:center; padding:100px 80px 80px }
+.badge{
+  display:inline-flex; align-items:center; gap:8px; align-self:flex-start;
+  padding:6px 16px; border-radius:999px; margin-bottom:16px;
+  font-size:11px; font-weight:600; letter-spacing:.14em; text-transform:uppercase;
+  border:1px solid rgba(96,165,250,.27); background:rgba(96,165,250,.10); color:#60a5fa;
+  opacity:0; animation:fadeUp .45s .1s ease forwards;
+}
+.badge-dot{ width:6px;height:6px;border-radius:50%; background:#60a5fa; animation:bdot 1.4s ease-in-out infinite }
+@keyframes bdot{0%,100%{opacity:1}50%{opacity:.2}}
+.headline{
+  font-weight:800; line-height:.96; letter-spacing:-.01em; color:#fff; margin-bottom:14px;
+  font-size:clamp(38px,5.5vw,70px);
+  opacity:0; animation:fadeUp .5s .18s ease forwards;
+}
+.headline span{ color:#60a5fa }
+.sub{
+  font-size:15px; line-height:1.65; font-weight:300; color:rgba(255,255,255,.65);
+  max-width:430px; margin-bottom:20px;
+  opacity:0; animation:fadeUp .45s .26s ease forwards;
+}
+.tags{ display:flex; flex-wrap:wrap; gap:8px; margin-bottom:24px; opacity:0; animation:fadeUp .45s .33s ease forwards }
+.tag{
+  display:inline-flex; align-items:center; gap:6px; padding:6px 12px; border-radius:7px;
+  font-size:12px; font-weight:500; color:rgba(255,255,255,.65);
+  background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.14);
+}
+.tag b{ color:#60a5fa; font-size:10px }
+@keyframes fadeUp{ from{opacity:0; transform:translateY(12px)} to{opacity:1; transform:translateY(0)} }
+.cta-row{ display:flex; gap:12px; opacity:0; animation:fadeUp .45s .4s ease forwards }
+.cta-primary{
+  padding:13px 26px; border-radius:8px; border:none; cursor:pointer;
+  font-size:13px; font-weight:600; color:#fff; background:#2563eb;
+  box-shadow:0 4px 20px rgba(37,99,235,.4);
+  transition:transform .2s ease;
+}
+.cta-primary:hover{ transform:translateY(-2px) }
+.cta-secondary{
+  padding:13px 22px; border-radius:8px; cursor:pointer; font-size:13px; font-weight:500;
+  color:rgba(255,255,255,.75); background:rgba(255,255,255,.08); border:1.5px solid rgba(255,255,255,.20);
+}
+.note{
+  position:absolute; bottom:24px; right:80px; z-index:50; max-width:380px; text-align:right;
+  font-size:11.5px; line-height:1.6; color:rgba(255,255,255,.4);
+}
+.note b{ color:rgba(255,255,255,.7) }
+
+/* ════════════════════════════════════════════════════
+   PANEL 1 — AURORA MESH DRIFT
+   Soft colored aurora bands slowly morphing over the video
+════════════════════════════════════════════════════ */
+.layer-aurora{
+  position:absolute; inset:-15%; z-index:2; opacity:.55; mix-blend-mode:screen;
+  background:
+    radial-gradient(ellipse 50% 40% at 20% 30%, rgba(96,165,250,.45), transparent 60%),
+    radial-gradient(ellipse 45% 50% at 80% 70%, rgba(167,139,250,.30), transparent 60%),
+    radial-gradient(ellipse 40% 35% at 60% 15%, rgba(96,165,250,.25), transparent 60%);
+  filter:blur(50px);
+  animation:auroraMove 16s ease-in-out infinite alternate;
+}
+@keyframes auroraMove{
+  0%{ transform:translate(0,0) rotate(0deg) scale(1) }
+  100%{ transform:translate(-4%,3%) rotate(6deg) scale(1.12) }
+}
+
+/* ════════════════════════════════════════════════════
+   PANEL 2 — FLOATING LIGHT ORBS (parallax blobs)
+   Soft blurred color orbs drifting at different speeds/depths
+════════════════════════════════════════════════════ */
+.orb{
+  position:absolute; border-radius:50%; filter:blur(70px); z-index:2; mix-blend-mode:screen;
+}
+.orb1{ width:420px; height:420px; left:-8%; top:8%; background:rgba(96,165,250,.40); animation:orbFloat1 13s ease-in-out infinite alternate }
+.orb2{ width:340px; height:340px; right:-6%; bottom:-4%; background:rgba(167,139,250,.30); animation:orbFloat2 17s ease-in-out infinite alternate }
+.orb3{ width:260px; height:260px; right:18%; top:-6%; background:rgba(125,211,252,.22); animation:orbFloat3 11s ease-in-out infinite alternate }
+@keyframes orbFloat1{ 0%{transform:translate(0,0) scale(1)} 100%{transform:translate(6%,8%) scale(1.15)} }
+@keyframes orbFloat2{ 0%{transform:translate(0,0) scale(1)} 100%{transform:translate(-7%,-6%) scale(1.1)} }
+@keyframes orbFloat3{ 0%{transform:translate(0,0) scale(1)} 100%{transform:translate(-5%,9%) scale(.92)} }
+
+/* ════════════════════════════════════════════════════
+   PANEL 3 — RISING PARTICLES / LIGHT SPECKS
+   Small glowing dots drifting upward continuously, like embers
+════════════════════════════════════════════════════ */
+.particles{ position:absolute; inset:0; z-index:2; overflow:hidden }
+.particle{
+  position:absolute; bottom:-20px; border-radius:50%;
+  background:radial-gradient(circle, rgba(125,180,255,.9), rgba(125,180,255,0) 70%);
+  animation:rise linear infinite;
+  opacity:0;
+}
+@keyframes rise{
+  0%{ transform:translateY(0) translateX(0); opacity:0 }
+  10%{ opacity:.8 }
+  90%{ opacity:.5 }
+  100%{ transform:translateY(-115vh) translateX(var(--drift,40px)); opacity:0 }
+}
+
+/* ════════════════════════════════════════════════════
+   PANEL 4 — ANIMATED GRAIN + LIGHT SWEEP
+   Subtle film-grain texture with a slow diagonal light sweep
+════════════════════════════════════════════════════ */
+.grain{
+  position:absolute; inset:0; z-index:2; opacity:.08; mix-blend-mode:overlay; pointer-events:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  animation:grainShift 1.4s steps(4) infinite;
+}
+@keyframes grainShift{ 0%{transform:translate(0,0)} 50%{transform:translate(-2%,1%)} 100%{transform:translate(0,0)} }
+.sweep{
+  position:absolute; inset:-50%; z-index:2; pointer-events:none; mix-blend-mode:screen;
+  background:linear-gradient(115deg, transparent 35%, rgba(125,180,255,.16) 48%, transparent 60%);
+  animation:sweepMove 7s ease-in-out infinite;
+}
+@keyframes sweepMove{ 0%{ transform:translateX(-30%) } 50%{ transform:translateX(30%) } 100%{ transform:translateX(-30%) } }
+
+.panel-bg{ position:absolute; inset:0; display:none }
+.panel-bg.active{ display:block }
+</style>
+</head>
+<body>
+
+<div class="switcher">
+  <span>Background animation —</span>
+  <button class="tab active" data-target="bg-aurora">1 · Aurora Mesh Drift</button>
+  <button class="tab" data-target="bg-orbs">2 · Floating Light Orbs</button>
+  <button class="tab" data-target="bg-particles">3 · Rising Particles</button>
+  <button class="tab" data-target="bg-grain">4 · Grain + Light Sweep</button>
+</div>
+
+<section class="hero" id="hero">
+  <div class="bg-base"></div>
+
+  <div class="panel-bg active" id="bg-aurora"><div class="layer-aurora"></div></div>
+  <div class="panel-bg" id="bg-orbs">
+    <div class="orb orb1"></div><div class="orb orb2"></div><div class="orb orb3"></div>
+  </div>
+  <div class="panel-bg" id="bg-particles"><div class="particles" id="particleField"></div></div>
+  <div class="panel-bg" id="bg-grain"><div class="sweep"></div><div class="grain"></div></div>
+
+  <div class="ov1"></div>
+  <div class="ov3"></div>
+
+  <!-- Content — same typography/sizes/animation timing as your current hero -->
+  <div class="content">
+    <div class="badge"><span class="badge-dot"></span>Healthcare AI</div>
+    <h1 class="headline">Smarter Healthcare<br>Through <span>AI Systems</span></h1>
+    <p class="sub">AI-powered prescriptions and clinical tools for modern doctors.</p>
+    <div class="tags">
+      <span class="tag"><b>✓</b>Smart Prescriptions</span>
+      <span class="tag"><b>✓</b>AI Workflows</span>
+      <span class="tag"><b>✓</b>Digital Records</span>
+    </div>
+    <div class="cta-row">
+      <button class="cta-primary">Explore Healthcare</button>
+      <button class="cta-secondary">▶ Watch Demo</button>
+    </div>
+  </div>
+
+  <p class="note" id="note"><b>Aurora Mesh Drift</b> — soft color bands slowly morph and rotate behind the video using layered radial gradients with screen-blend, giving depth without distracting from the text.</p>
+</section>
+
+<script>
+const NOTES = {
+  'bg-aurora': '<b>Aurora Mesh Drift</b> — soft colour bands slowly morph & rotate behind the video via layered radial gradients on screen-blend — adds depth without competing with the text.',
+  'bg-orbs': '<b>Floating Light Orbs</b> — three blurred colour orbs drift at different speeds/sizes (parallax feel), echoing your slide accent colour — calm, premium, "alive" without movement in the foreground.',
+  'bg-particles': '<b>Rising Particles</b> — fine glowing specks drift upward continuously like embers/data-points — reinforces the "AI / intelligence" feel, very subtle at low opacity.',
+  'bg-grain': '<b>Grain + Light Sweep</b> — a faint animated film-grain texture plus a slow diagonal light sweep pass — adds a cinematic, tactile "premium video" quality.',
+};
+
+const tabs = document.querySelectorAll('.tab');
+const panels = document.querySelectorAll('.panel-bg');
+const note = document.getElementById('note');
+tabs.forEach(tab => {
+  tab.addEventListener('click', () => {
+    tabs.forEach(t => t.classList.remove('active'));
+    panels.forEach(p => p.classList.remove('active'));
+    tab.classList.add('active');
+    document.getElementById(tab.dataset.target).classList.add('active');
+    note.innerHTML = NOTES[tab.dataset.target];
+  });
+});
+
+// build particle field
+const field = document.getElementById('particleField');
+for (let i = 0; i < 28; i++) {
+  const p = document.createElement('div');
+  p.className = 'particle';
+  const size = 2 + Math.random() * 4;
+  p.style.width = p.style.height = size + 'px';
+  p.style.left = Math.random() * 100 + '%';
+  p.style.setProperty('--drift', (Math.random() * 80 - 40) + 'px');
+  p.style.animationDuration = (9 + Math.random() * 10) + 's';
+  p.style.animationDelay = (Math.random() * -18) + 's';
+  field.appendChild(p);
+}
+</script>
+</body>
+</html>
