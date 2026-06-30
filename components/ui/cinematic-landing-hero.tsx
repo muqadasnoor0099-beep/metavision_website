@@ -210,9 +210,8 @@ export function CinematicHero({
   const requestRef    = useRef<number>(0);
 
   // Theme-driven CSS custom properties consumed by INJECTED_STYLES
-  const themeVars: React.CSSProperties = isDark
+  const themeVars = (isDark
     ? {
-        // @ts-expect-error custom properties
         "--mv-bg":               "#020817",
         "--mv-grid-line":        "rgba(59,130,246,0.07)",
         "--mv-hero-text":        "#ffffff",
@@ -223,7 +222,6 @@ export function CinematicHero({
         "--mv-cta-desc":         "rgba(255,255,255,0.50)",
       }
     : {
-        // @ts-expect-error custom properties
         "--mv-bg":               "#f0f7ff",
         "--mv-grid-line":        "rgba(29,78,216,0.10)",
         "--mv-hero-text":        "#0f172a",
@@ -232,7 +230,7 @@ export function CinematicHero({
         "--mv-silver-from":      "#0f172a",
         "--mv-silver-to":        "rgba(15,23,42,0.55)",
         "--mv-cta-desc":         "rgba(15,23,42,0.55)",
-      };
+      }) satisfies Record<string, string>;
 
   // Mouse parallax
   useEffect(() => {
