@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
 import { Menu, X, ChevronDown } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
@@ -13,6 +13,15 @@ export default function Header() {
   const [scrolled, setScrolled] = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)
   const [dropdownOpen, setDropdownOpen] = useState(false)
+  const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
+
+  const openDropdown = () => {
+    if (closeTimer.current) clearTimeout(closeTimer.current)
+    setDropdownOpen(true)
+  }
+  const scheduleClose = () => {
+    closeTimer.current = setTimeout(() => setDropdownOpen(false), 120)
+  }
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20)
@@ -41,8 +50,8 @@ export default function Header() {
               <div
                 key={link.label}
                 className="relative"
-                onMouseEnter={() => setDropdownOpen(true)}
-                onMouseLeave={() => setDropdownOpen(false)}
+                onMouseEnter={openDropdown}
+                onMouseLeave={scheduleClose}
               >
                 <button className="flex items-center gap-1 text-white/60 hover:text-white text-sm transition-colors">
                   {link.label}
@@ -56,11 +65,14 @@ export default function Header() {
                       exit={{ opacity: 0, y: -6 }}
                       transition={{ duration: 0.15 }}
                       className="absolute top-full left-0 mt-2 w-64 glass-card py-2"
+                      onMouseEnter={openDropdown}
+                      onMouseLeave={scheduleClose}
                     >
                       {link.children.map((child) => (
                         <Link
                           key={child.href}
                           href={child.href}
+                          onClick={() => setDropdownOpen(false)}
                           className="block px-4 py-2.5 text-sm text-white/60 hover:text-white hover:bg-white/5 transition-colors"
                         >
                           {child.label}
