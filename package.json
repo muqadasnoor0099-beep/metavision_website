@@ -5,6 +5,7 @@
   "scripts": {
     "sync-demo": "node scripts/sync-demo-video.mjs",
     "dev": "next dev",
+    "prebuild": "node scripts/sync-demo-video.mjs || true",
     "build": "next build",
     "start": "next start",
     "lint": "eslint"

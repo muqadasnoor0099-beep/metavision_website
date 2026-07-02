@@ -5,6 +5,7 @@ import Header from '@/components/layout/Header'
 import Footer from '@/components/layout/Footer'
 import ThemeProvider from '@/components/providers/ThemeProvider'
 import SmoothScroll from '@/components/providers/SmoothScroll'
+import ChunkErrorRecovery from '@/components/providers/ChunkErrorRecovery'
 import './globals.css'
 
 const sora = Sora({
@@ -39,6 +40,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <Script id="theme-init" strategy="beforeInteractive">
           {`(function(){try{var t=localStorage.getItem('mv-theme');if(t==='dark')document.documentElement.classList.remove('light')}catch(e){}})();`}
         </Script>
+        <ChunkErrorRecovery />
         <ThemeProvider>
           <SmoothScroll>
             <Header />
