@@ -104,6 +104,7 @@ export function GlobeLive({ className = "", speed = 0.003, darkMode = true }: Gl
     let globe: ReturnType<typeof createGlobe> | null = null
     let raf: number
     let phi = 0
+    let destroyed = false   // guard against RAF touching unmounted DOM on back-nav
 
     canvas.style.opacity = "0"
 
@@ -154,6 +155,7 @@ export function GlobeLive({ className = "", speed = 0.003, darkMode = true }: Gl
       })
 
       function tick() {
+        if (destroyed) return   // component unmounted — stop immediately
         if (!paused.current) phi += speed
 
         const currentPhi   = phi + phiBase.current + drag.current.phi
@@ -178,6 +180,7 @@ export function GlobeLive({ className = "", speed = 0.003, darkMode = true }: Gl
     }
 
     return () => {
+      destroyed = true          // stop tick immediately — must come before cancelAnimationFrame
       if (raf)   cancelAnimationFrame(raf)
       if (globe) globe.destroy()
       globe = null
