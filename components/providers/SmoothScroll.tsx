@@ -12,13 +12,11 @@ if (typeof window !== 'undefined') {
 export default function SmoothScroll({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     const lenis = new Lenis({
-      duration: 1.7,
-      // expo ease-out — starts fast, feathers to rest for a longer, glidier tail
+      duration: 1.2,
       easing: t => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       smoothWheel: true,
       wheelMultiplier: 1,
-      touchMultiplier: 1.5,
-      syncTouch: true,
+      touchMultiplier: 1.2,
       infinite: false,
     })
 

@@ -175,20 +175,24 @@ export default function HeroSection() {
         }}
       >
 
-        {/* ── VIDEOS: always mounted so they preload, opacity-switched ── */}
-        {SLIDES.map((s, i) => (
-          <video
-            key={s.video}
-            ref={el => { videoRefs.current[i] = el }}
-            src={s.video}
-            muted
-            loop
-            playsInline
-            preload="auto"
-            className="absolute inset-0 w-full h-full object-cover transition-opacity duration-700"
-            style={{ opacity: current === i ? 1 : 0, zIndex: current === i ? 1 : 0 }}
-          />
-        ))}
+        {/* ── VIDEOS: only preload active + adjacent slides ── */}
+        {SLIDES.map((s, i) => {
+          const isActive = current === i
+          const isAdjacent = Math.abs(current - i) === 1 || (current === 0 && i === SLIDES.length - 1) || (current === SLIDES.length - 1 && i === 0)
+          return (
+            <video
+              key={s.video}
+              ref={el => { videoRefs.current[i] = el }}
+              src={s.video}
+              muted
+              loop
+              playsInline
+              preload={isActive ? 'auto' : isAdjacent ? 'metadata' : 'none'}
+              className="absolute inset-0 w-full h-full object-cover transition-opacity duration-700"
+              style={{ opacity: isActive ? 1 : 0, zIndex: isActive ? 1 : 0 }}
+            />
+          )
+        })}
 
         {/* ── ANIMATED CONTENT: direction-aware slide ── */}
         <AnimatePresence initial={false} mode="popLayout">

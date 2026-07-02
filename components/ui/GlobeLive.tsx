@@ -130,11 +130,10 @@ export function GlobeLive({ className = "", speed = 0.003, darkMode = true }: Gl
         // Depth-based subtle scale (front = larger, back = smaller edge fade)
         const scale = visible ? 0.88 + 0.12 * depth : 0.8
 
-        card.style.transform  = `translate(-50%, calc(-100% - 14px)) scale(${scale.toFixed(3)})`
-        card.style.left       = `${sx.toFixed(1)}px`
-        card.style.top        = `${sy.toFixed(1)}px`
-        card.style.opacity    = visible ? String(Math.min(1, (depth - 0.08) * 8)) : "0"
-        card.style.pointerEvents = visible ? "none" : "none"
+        // Use transform for ALL positioning — GPU composited, zero layout reflow
+        // left/top changes trigger full layout; transform does not
+        card.style.transform = `translate(${sx.toFixed(1)}px, ${sy.toFixed(1)}px) translate(-50%, calc(-100% - 14px)) scale(${scale.toFixed(3)})`
+        card.style.opacity   = visible ? String(Math.min(1, (depth - 0.08) * 8)) : "0"
       })
     }
 
@@ -225,7 +224,7 @@ export function GlobeLive({ className = "", speed = 0.003, darkMode = true }: Gl
             if (el) cardRefs.current.set(m.id, el)
             else cardRefs.current.delete(m.id)
           }}
-          style={{ opacity: 0, left: "50%", top: "50%", transform: "translate(-50%,-100%)" }}
+          style={{ opacity: 0, top: 0, left: 0, transform: "translate(-50%, calc(-100% - 14px))", willChange: "transform, opacity" }}
         >
           <div
             style={{
