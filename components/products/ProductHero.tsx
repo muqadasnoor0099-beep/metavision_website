@@ -8,7 +8,7 @@ import GhostButton from '@/components/ui/GhostButton'
 import DemoModal from '@/components/ui/DemoModal'
 import type { ProductMode } from '@/lib/types'
 
-const BrainCanvas = dynamic(() => import('@/components/three/BrainCanvas'), { ssr: false })
+const BrainCanvas    = dynamic(() => import('@/components/three/BrainCanvas'),    { ssr: false })
 const WorkflowCanvas = dynamic(() => import('@/components/three/WorkflowCanvas'), { ssr: false })
 
 interface Props {
@@ -36,7 +36,12 @@ export default function ProductHero({
 
         {/* Left */}
         <div className="flex flex-col justify-center px-8 lg:px-16 py-20 lg:py-0 gap-7 relative z-10">
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.55 }} className="flex flex-col gap-6">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.55 }}
+            className="flex flex-col gap-6"
+          >
             <div className="flex items-center gap-2">
               <span className="w-1.5 h-1.5 rounded-full bg-gold shadow-[0_0_6px_#2563eb]" />
               <span className="text-gold text-[11px] font-semibold tracking-widest uppercase">{overline}</span>
@@ -65,10 +70,44 @@ export default function ProductHero({
           </motion.div>
         </div>
 
-        {/* Right 3D */}
+        {/* Right — permanent dark neon stage so the 3D model is vivid in both themes.
+            The Three.js canvas uses alpha:true (transparent background), so without
+            an explicit dark background the neon lines vanish on light-mode pages. */}
         <div className="relative hidden lg:flex items-center justify-center overflow-hidden">
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_55%_45%,rgba(212,175,55,0.1),transparent_65%)]" />
-          <div className="absolute inset-0 bg-[repeating-linear-gradient(0deg,transparent,transparent_3px,rgba(212,175,55,0.012)_3px,rgba(212,175,55,0.012)_4px)] pointer-events-none" />
+          {/* 1. Deep navy base */}
+          <div
+            className="absolute inset-0"
+            style={{ background: 'linear-gradient(140deg,#020c1f 0%,#030f28 55%,#041232 100%)' }}
+          />
+          {/* 2. Electric blue radial glow — centre */}
+          <div
+            className="absolute inset-0"
+            style={{ background: 'radial-gradient(ellipse 80% 70% at 55% 50%,rgba(37,99,235,0.65) 0%,rgba(8,20,65,0.4) 40%,transparent 68%)' }}
+          />
+          {/* 3. Cyan accent — upper-right corner */}
+          <div
+            className="absolute inset-0"
+            style={{ background: 'radial-gradient(ellipse 55% 50% at 82% 18%,rgba(6,182,212,0.38) 0%,transparent 56%)' }}
+          />
+          {/* 4. Violet accent — lower-left corner */}
+          <div
+            className="absolute inset-0"
+            style={{ background: 'radial-gradient(ellipse 50% 45% at 18% 82%,rgba(139,92,246,0.28) 0%,transparent 56%)' }}
+          />
+          {/* 5. Dot grid */}
+          <div
+            className="absolute inset-0 pointer-events-none"
+            style={{
+              backgroundImage: 'radial-gradient(rgba(96,165,250,0.20) 1px,transparent 1px)',
+              backgroundSize: '28px 28px',
+            }}
+          />
+          {/* 6. Edge vignette — darkens corners so model feels centred */}
+          <div
+            className="absolute inset-0"
+            style={{ background: 'radial-gradient(ellipse 88% 88% at 50% 50%,transparent 48%,rgba(2,8,28,0.82) 100%)' }}
+          />
+          {/* 7. Three.js canvas */}
           <div className="absolute inset-0">
             {mode === 'medical' ? <BrainCanvas /> : <WorkflowCanvas />}
           </div>
