@@ -18,116 +18,158 @@ const FOOTER_COLS = {
   ],
 }
 
-// ─── Water-wave config ───────────────────────────────────────────────────────
-// SVG canvas: 1440 × 320 viewBox.
-// Each path is drawn 2880 wide (2×VW) so translating by −VW loops seamlessly.
+// ─── Canvas ──────────────────────────────────────────────────────────────────
 const VW = 1440
-const VH = 320
-
-// 6 wave layers — closer waves (centre) are faster, larger, and more opaque.
-// yPct  : vertical position as % of VH
-// amp   : peak-to-trough in SVG units
-// dur   : one full loop in seconds (slower = feels more distant)
-// phase : negative begin offset so waves are already mid-cycle on page load
-// op    : stroke-opacity (dark mode); halved automatically in light mode
-const WAVES = [
-  { yPct: 14, amp: 10, dur: 28, phase: -3,  op: 0.035, sw: 0.9,  color: '#93c5fd' },
-  { yPct: 30, amp: 18, dur: 20, phase: -9,  op: 0.055, sw: 1.1,  color: '#60a5fa' },
-  { yPct: 46, amp: 26, dur: 14, phase: -5,  op: 0.08,  sw: 1.4,  color: '#3b82f6' },
-  { yPct: 60, amp: 22, dur: 17, phase: -12, op: 0.065, sw: 1.25, color: '#2563eb' },
-  { yPct: 75, amp: 16, dur: 22, phase: -7,  op: 0.045, sw: 1.0,  color: '#1d4ed8' },
-  { yPct: 88, amp: 12, dur: 32, phase: -1,  op: 0.03,  sw: 0.85, color: '#1e40af' },
-]
+const VH = 380
 
 /**
- * Smooth sine wave drawn with quadratic bezier segments.
- * The path is 2× the viewBox width so a -VW SVG-unit translate loops cleanly.
- * 4 full cycles × 2 segments each = 8 Q commands.
+ * Smooth sinusoidal wave path using cubic bezier curves (sharper crests,
+ * rounder troughs — closer to real Stokes waves than pure sine).
+ *
+ * Path is 2×VW wide → translating by −VW loops seamlessly.
+ * cycles: how many full up/down cycles across 2×VW.
  */
-function wavePath(yPct: number, amp: number): string {
-  const y0    = (yPct / 100) * VH
-  const total = VW * 2            // path width = 2 × 1440 = 2880
-  const segs  = 8                 // 4 full cycles × 2 half-cycles
-  const sw    = total / segs      // 360 units per half-cycle
+function crestPath(yPct: number, amp: number, cycles = 5): string {
+  const y0   = (yPct / 100) * VH
+  const tw   = VW * 2
+  const segW = tw / (cycles * 2)   // width of one half-cycle
 
-  let d = `M 0,${y0.toFixed(2)}`
-  for (let i = 0; i < segs; i++) {
-    const cx  = sw * i + sw / 2
-    const cy  = y0 + (i % 2 === 0 ? -amp : amp)   // alternate peak / trough
-    const ex  = sw * (i + 1)
-    d += ` Q ${cx.toFixed(2)},${cy.toFixed(2)} ${ex.toFixed(2)},${y0.toFixed(2)}`
+  let d = `M 0,${y0.toFixed(1)}`
+  for (let i = 0; i < cycles * 2; i++) {
+    const x0 = segW * i
+    const x1 = x0 + segW
+    const dir = i % 2 === 0 ? -1 : 1   // −1 = up (crest), +1 = down (trough)
+
+    // Cubic bezier: sharp crest, flat trough — like real water
+    // Control pts pulled further out for crests, pulled in for troughs
+    const pull = dir === -1 ? 1.6 : 0.8
+    const cx1  = x0 + segW * 0.25
+    const cy1  = y0 + dir * amp * pull
+    const cx2  = x0 + segW * 0.75
+    const cy2  = y0 + dir * amp * pull
+    d += ` C ${cx1.toFixed(1)},${cy1.toFixed(1)} ${cx2.toFixed(1)},${cy2.toFixed(1)} ${x1.toFixed(1)},${y0.toFixed(1)}`
   }
   return d
 }
+
+/** Closed filled wave: wave top + rectangle down to footer bottom. */
+function fillPath(yPct: number, amp: number, cycles = 5): string {
+  const tw = VW * 2
+  return `${crestPath(yPct, amp, cycles)} L ${tw},${VH} L 0,${VH} Z`
+}
+
+// ─── Wave layers ─────────────────────────────────────────────────────────────
+// Each layer = a filled area below the wave crest + a bright crest stroke.
+// Layers are ordered back (slow, low, dark) → front (fast, high, bright).
+const LAYERS = [
+  { yPct: 82, amp: 14, dur: 32, phase: -5,  fill: '#1e3a8a', crestC: '#3b82f6', fillOp: 0.12, crestOp: 0.20, sw: 0.9, cycles: 4 },
+  { yPct: 70, amp: 20, dur: 24, phase: -11, fill: '#1d4ed8', crestC: '#3b82f6', fillOp: 0.10, crestOp: 0.25, sw: 1.1, cycles: 4 },
+  { yPct: 57, amp: 26, dur: 18, phase: -7,  fill: '#2563eb', crestC: '#60a5fa', fillOp: 0.09, crestOp: 0.32, sw: 1.3, cycles: 5 },
+  { yPct: 44, amp: 30, dur: 13, phase: -3,  fill: '#3b82f6', crestC: '#93c5fd', fillOp: 0.07, crestOp: 0.40, sw: 1.5, cycles: 5 },
+  { yPct: 32, amp: 22, dur: 10, phase: -8,  fill: '#60a5fa', crestC: '#bfdbfe', fillOp: 0.05, crestOp: 0.50, sw: 1.8, cycles: 6 },
+]
 
 // ─────────────────────────────────────────────────────────────────────────────
 export default function Footer() {
   const { theme } = useTheme()
   const isDark    = theme === 'dark'
-  const opMul     = isDark ? 1 : 0.45
+  const opMul     = isDark ? 1 : 0.35
 
   return (
     <footer
       className="relative border-t border-gold/10 overflow-hidden"
       style={{ backgroundColor: 'var(--clr-bg)' }}
     >
-      {/* ── Water-wave SVG ──────────────────────────────────────────────── */}
+      {/* ── Ocean wave SVG ──────────────────────────────────────────────── */}
       <svg
         aria-hidden="true"
         className="pointer-events-none select-none absolute inset-0 w-full h-full"
         viewBox={`0 0 ${VW} ${VH}`}
         preserveAspectRatio="none"
-        style={{ overflow: 'visible' }}
       >
         <defs>
-          {/* Soft glow — makes each wave look luminous */}
-          <filter id="wglow" x="-2%" y="-200%" width="104%" height="500%">
-            <feGaussianBlur in="SourceGraphic" stdDeviation="1.8" result="b"/>
+          {/* Multi-pass glow for crest lines — gives a neon water-light look */}
+          <filter id="crest-glow" x="-4%" y="-300%" width="108%" height="700%">
+            <feGaussianBlur in="SourceGraphic" stdDeviation="3" result="soft"/>
+            <feGaussianBlur in="SourceGraphic" stdDeviation="1" result="hard"/>
             <feMerge>
-              <feMergeNode in="b"/>
+              <feMergeNode in="soft"/>
+              <feMergeNode in="hard"/>
               <feMergeNode in="SourceGraphic"/>
             </feMerge>
           </filter>
 
-          {/* Vertical fade mask: waves fade at very top + bottom of footer */}
-          <linearGradient id="wvfade" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%"   stopColor="white" stopOpacity="0"  />
-            <stop offset="18%"  stopColor="white" stopOpacity="1"  />
-            <stop offset="82%"  stopColor="white" stopOpacity="1"  />
-            <stop offset="100%" stopColor="white" stopOpacity="0"  />
+          {/* Subtle glow on filled areas */}
+          <filter id="fill-glow" x="-2%" y="-10%" width="104%" height="120%">
+            <feGaussianBlur in="SourceGraphic" stdDeviation="4" result="blur"/>
+            <feMerge>
+              <feMergeNode in="blur"/>
+              <feMergeNode in="SourceGraphic"/>
+            </feMerge>
+          </filter>
+
+          {/* Per-layer fill gradients: transparent at crest → solid at bottom */}
+          {LAYERS.map(({ fill }, i) => (
+            <linearGradient key={i} id={`wfg${i}`} x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%"   stopColor={fill} stopOpacity="0"   />
+              <stop offset="40%"  stopColor={fill} stopOpacity="0.5" />
+              <stop offset="100%" stopColor={fill} stopOpacity="1"   />
+            </linearGradient>
+          ))}
+
+          {/* Top-fade mask: upper portion of footer stays clean */}
+          <linearGradient id="top-fade" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%"  stopColor="white" stopOpacity="0" />
+            <stop offset="22%" stopColor="white" stopOpacity="1" />
+            <stop offset="100%" stopColor="white" stopOpacity="1"/>
           </linearGradient>
-          <mask id="wvmask">
-            <rect width={VW} height={VH} fill="url(#wvfade)" />
+          <mask id="top-mask">
+            <rect width={VW} height={VH} fill="url(#top-fade)" />
           </mask>
         </defs>
 
-        <g mask="url(#wvmask)" filter="url(#wglow)">
-          {WAVES.map(({ yPct, amp, dur, phase, op, sw, color }, i) => (
-            <path
-              key={i}
-              d={wavePath(yPct, amp)}
-              fill="none"
-              stroke={color}
-              strokeWidth={sw}
-              strokeOpacity={op * opMul}
-              strokeLinecap="round"
-            >
-              {/*
-                animateTransform in SVG user-units:
-                translating by −VW (=−1440) moves the 2880-wide path
-                exactly one loop length — works on every screen size because
-                the SVG scales with preserveAspectRatio="none".
-              */}
-              <animateTransform
-                attributeName="transform"
-                type="translate"
-                from={`0,0`}
-                to={`${-VW},0`}
-                dur={`${dur}s`}
-                begin={`${phase}s`}
-                repeatCount="indefinite"
-              />
-            </path>
+        <g mask="url(#top-mask)">
+          {LAYERS.map(({ yPct, amp, dur, phase, fillOp, crestOp, sw, crestC, cycles }, i) => (
+            <g key={i}>
+              {/* ── Filled wave body ─────────────────────────────────── */}
+              <path
+                d={fillPath(yPct, amp, cycles)}
+                fill={`url(#wfg${i})`}
+                fillOpacity={fillOp * opMul}
+                filter="url(#fill-glow)"
+              >
+                <animateTransform
+                  attributeName="transform"
+                  type="translate"
+                  from="0,0"
+                  to={`${-VW},0`}
+                  dur={`${dur}s`}
+                  begin={`${phase}s`}
+                  repeatCount="indefinite"
+                />
+              </path>
+
+              {/* ── Glowing crest line on top of each wave ───────────── */}
+              <path
+                d={crestPath(yPct, amp, cycles)}
+                fill="none"
+                stroke={crestC}
+                strokeWidth={sw}
+                strokeOpacity={crestOp * opMul}
+                strokeLinecap="round"
+                filter="url(#crest-glow)"
+              >
+                <animateTransform
+                  attributeName="transform"
+                  type="translate"
+                  from="0,0"
+                  to={`${-VW},0`}
+                  dur={`${dur}s`}
+                  begin={`${phase}s`}
+                  repeatCount="indefinite"
+                />
+              </path>
+            </g>
           ))}
         </g>
       </svg>
