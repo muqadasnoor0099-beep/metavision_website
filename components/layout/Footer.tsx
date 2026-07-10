@@ -18,75 +18,85 @@ const FOOTER_COLS = {
   ],
 }
 
-// ─── SVG canvas ────────────────────────────────────────────────────────────────
+// ─── SVG canvas ──────────────────────────────────────────────────────────────
 const VW = 1440
 const VH = 340
+const FY = VH * 0.50   // all lines converge here on the RIGHT edge
 
-// Lines start spread across the LEFT edge and converge at this focal point
-const FX = VW * 0.68
-const FY = VH * 0.50
-
-// 8 starting Y positions, evenly spread left-edge top→bottom
-const Y_STARTS = [0.04, 0.17, 0.30, 0.43, 0.57, 0.70, 0.83, 0.96]
+// 8 start positions spread across the left edge (4 above, 4 below centre)
+const Y_FRACS = [0.05, 0.18, 0.31, 0.44, 0.56, 0.69, 0.82, 0.95]
 
 /**
- * Build one cubic-bezier path from (0, startY) → focal point (FX, FY).
- * Lines above center curve UP first then arc down; lines below curve DOWN then arc up.
- * This creates the spread-and-converge "funnel" with a natural wave.
+ * Two cubic-bezier segments joined at the path midpoint.
+ *
+ * Key rule: BOTH humps go in the SAME direction —
+ *   • Lines above centre  →  both humps arc UPWARD   (away from centre)
+ *   • Lines below centre  →  both humps arc DOWNWARD (away from centre)
+ *
+ * This is different from a sine wave (alternating up/down).
+ * The result looks like a cable or ribbon that bows consistently
+ * in one direction while travelling left → right.
+ *
+ * All lines END at (VW, FY): full-width, converging at the right-edge centre.
  */
 function makePath(yFrac: number): string {
-  const sy = yFrac * VH
-  const signed = yFrac - 0.5                   // negative = above center
-  const amp    = Math.abs(signed) * 130 + 20   // outer lines wave more
+  const sy   = yFrac * VH           // start Y (left edge)
+  const ey   = FY                    // end Y   (right edge, converge)
+  const midY = (sy + ey) / 2        // Y at the path mid-x (VW/2)
+  const dist = Math.abs(yFrac - 0.5)
+  const amp1 = dist * 140 + 22      // first hump — larger
+  const amp2 = dist * 85  + 14      // second hump — slightly smaller (natural decay)
 
-  // CP1: dramatic first sweep away from center (creates the divergent wave look)
-  const cp1x = VW * 0.20
-  const cp1y = sy - signed * amp * 2.4
+  // −1 = above centre (humps go UP = decrease Y)
+  // +1 = below centre (humps go DOWN = increase Y)
+  const dir = yFrac < 0.5 ? -1 : 1
 
-  // CP2: pulls back toward the focal Y (convergence arc)
-  const cp2x = VW * 0.50
-  const cp2y = FY + signed * amp * 0.45
+  // Segment 1 ─ (0, sy) → (VW/2, midY)  : FIRST hump
+  const cx1a = VW * 0.17,  cy1a = sy   + dir * amp1          // strong pull
+  const cx1b = VW * 0.40,  cy1b = midY + dir * amp1 * 0.32   // ease toward midY
 
-  return `M 0,${sy} C ${cp1x},${cp1y} ${cp2x},${cp2y} ${FX},${FY}`
+  // Segment 2 ─ (VW/2, midY) → (VW, ey)  : SECOND hump — same direction as first
+  const cx2a = VW * 0.63,  cy2a = midY + dir * amp2           // second hump
+  const cx2b = VW * 0.85,  cy2b = ey   + dir * amp2 * 0.10   // slight tail
+
+  return [
+    `M 0,${sy}`,
+    `C ${cx1a},${cy1a} ${cx1b},${cy1b} ${VW / 2},${midY}`,
+    `C ${cx2a},${cy2a} ${cx2b},${cy2b} ${VW},${ey}`,
+  ].join(' ')
 }
 
-const LINES = Y_STARTS.map((yf, i) => ({
+const LINES = Y_FRACS.map((yf, i) => ({
   d:    makePath(yf),
-  dist: Math.abs(yf - 0.5),        // distance from center (0=center, 0.5=outer)
-  spd:  1.4 + i * 0.18,            // stream animation speed (s per dash-cycle)
-  del:  i * 0.22,                  // stagger delay (s)
+  dist: Math.abs(yf - 0.5),  // 0 = centre, ~0.46 = outer edge
+  spd:  1.0 + i * 0.13,      // each line streams at slightly different speed
+  del:  -(i * 0.36),          // negative = pre-offset so all are mid-animation on load
 }))
 
 // ─────────────────────────────────────────────────────────────────────────────
 export default function Footer() {
   const { theme } = useTheme()
   const isDark    = theme === 'dark'
-
-  // In light mode dampen opacity so lines don't compete with light background
-  const opMul = isDark ? 1 : 0.45
+  const opMul     = isDark ? 1 : 0.38   // dampen in light mode
 
   return (
     <footer
       className="relative border-t border-gold/10 overflow-hidden"
       style={{ backgroundColor: 'var(--clr-bg)' }}
     >
-      {/* ── CSS keyframes ─────────────────────────────────────────────────── */}
       <style>{`
+        /* Particles flow left → right along each path */
         @keyframes mv-stream {
-          from { stroke-dashoffset: 20; }
-          to   { stroke-dashoffset:  0; }
+          from { stroke-dashoffset:  0; }
+          to   { stroke-dashoffset: -20; }
         }
-        @keyframes mv-pulse {
-          0%,100% { opacity: .55; r: 4; }
-          50%      { opacity: .15; r: 8; }
-        }
-        @keyframes mv-pulse-ring {
-          0%,100% { opacity: .12; r: 18; }
-          50%      { opacity: .03; r: 32; }
+        @keyframes mv-focal-pulse {
+          0%,100% { opacity: .65; transform: scale(1);   }
+          50%      { opacity: .15; transform: scale(2.2); }
         }
       `}</style>
 
-      {/* ── Converging-lines SVG ──────────────────────────────────────────── */}
+      {/* ── Wave SVG ──────────────────────────────────────────────────────── */}
       <svg
         aria-hidden="true"
         className="pointer-events-none select-none absolute inset-0 w-full h-full"
@@ -94,92 +104,75 @@ export default function Footer() {
         preserveAspectRatio="none"
       >
         <defs>
-          {/* Soft glow filter for lines */}
-          <filter id="mv-glow" x="-20%" y="-60%" width="140%" height="220%">
-            <feGaussianBlur in="SourceGraphic" stdDeviation="2.5" result="blur" />
+          {/* Soft neon glow on every line */}
+          <filter id="mv-glow" x="-5%" y="-100%" width="110%" height="300%">
+            <feGaussianBlur in="SourceGraphic" stdDeviation="2.2" result="b"/>
             <feMerge>
-              <feMergeNode in="blur" />
-              <feMergeNode in="SourceGraphic" />
+              <feMergeNode in="b"/>
+              <feMergeNode in="SourceGraphic"/>
             </feMerge>
           </filter>
 
-          {/* Radial glow at focal point */}
-          <radialGradient id="mv-focal-glow" cx="50%" cy="50%" r="50%">
-            <stop offset="0%"   stopColor="#2563eb" stopOpacity="0.5" />
-            <stop offset="100%" stopColor="#2563eb" stopOpacity="0"   />
+          {/* Right-edge convergence glow */}
+          <radialGradient id="mv-rglow" cx="100%" cy="50%" r="30%">
+            <stop offset="0%"   stopColor="#3b82f6" stopOpacity="0.55"/>
+            <stop offset="100%" stopColor="#3b82f6" stopOpacity="0"/>
           </radialGradient>
 
-          {/* Left-edge fade: lines are invisible at x=0 and solidify quickly */}
-          <linearGradient id="mv-fade-left" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%"  stopColor="white" stopOpacity="0"   />
-            <stop offset="12%" stopColor="white" stopOpacity="1"   />
-            <stop offset="100%" stopColor="white" stopOpacity="1"  />
+          {/* Left-edge fade: lines emerge softly from nothing */}
+          <linearGradient id="mv-lfade" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%"  stopColor="white" stopOpacity="0"/>
+            <stop offset="9%"  stopColor="white" stopOpacity="1"/>
+            <stop offset="100%" stopColor="white" stopOpacity="1"/>
           </linearGradient>
-          <mask id="mv-edge-mask">
-            <rect width={VW} height={VH} fill="url(#mv-fade-left)" />
+          <mask id="mv-lmask">
+            <rect width={VW} height={VH} fill="url(#mv-lfade)"/>
           </mask>
         </defs>
 
-        {/* Focal point glow circle */}
-        <circle cx={FX} cy={FY} r="32" fill="url(#mv-focal-glow)"
-          style={{ opacity: opMul * 0.9 }} />
-        <circle cx={FX} cy={FY} r="18" fill="url(#mv-focal-glow)"
-          style={{ opacity: opMul * 0.7 }} />
+        {/* Ambient glow at the right-edge convergence point */}
+        <rect
+          x={VW * 0.72} y={0} width={VW * 0.28} height={VH}
+          fill="url(#mv-rglow)"
+          style={{ opacity: opMul * 0.75 }}
+        />
 
-        <g mask="url(#mv-edge-mask)">
+        {/* All wave lines inside the left-edge fade mask */}
+        <g mask="url(#mv-lmask)">
           {LINES.map(({ d, dist, spd, del }, i) => {
-            // Outer lines are brighter; center line is subtler
-            const baseOp   = (0.04 + dist * 0.06) * opMul
-            const streamOp = (0.22 + dist * 0.12) * opMul
+            // Outer lines are more opaque — inner (near-centre) lines are subtler
+            const threadOp = (0.025 + dist * 0.055) * opMul
+            const flowOp   = (0.16  + dist * 0.18 ) * opMul
 
             return (
               <g key={i} filter="url(#mv-glow)">
-                {/* Static background thread — always visible */}
+                {/* Always-visible faint thread */}
                 <path
-                  d={d}
-                  fill="none"
-                  stroke="#2563eb"
-                  strokeWidth="1"
-                  strokeOpacity={baseOp}
+                  d={d} fill="none"
+                  stroke="#2563eb" strokeWidth="1"
+                  strokeOpacity={threadOp}
                 />
-
-                {/* Animated flowing dashes — streaming particles */}
+                {/* Animated streaming dashes (particles) */}
                 <path
-                  d={d}
-                  fill="none"
-                  stroke="#60a5fa"
-                  strokeWidth="1.5"
-                  strokeOpacity={streamOp}
-                  strokeDasharray="6 14"
-                  style={{
-                    animation: `mv-stream ${spd}s linear ${del}s infinite`,
-                  }}
+                  d={d} fill="none"
+                  stroke="#93c5fd" strokeWidth="1.6"
+                  strokeOpacity={flowOp}
+                  strokeDasharray="7 13"
+                  style={{ animation: `mv-stream ${spd}s linear ${del}s infinite` }}
                 />
               </g>
             )
           })}
         </g>
 
-        {/* Focal point dot + pulsing ring */}
+        {/* Convergence dot at right-edge centre — pulsing */}
         <circle
-          cx={FX} cy={FY}
-          fill="#93c5fd"
+          cx={VW} cy={FY} r="4" fill="#93c5fd"
           style={{
-            opacity: opMul,
-            animation: 'mv-pulse 2.8s ease-in-out infinite',
+            opacity: opMul * 0.8,
+            animation: 'mv-focal-pulse 2.6s ease-in-out infinite',
+            transformOrigin: `${VW}px ${FY}px`,
           }}
-          r="4"
-        />
-        <circle
-          cx={FX} cy={FY}
-          fill="none"
-          stroke="#2563eb"
-          strokeWidth="1"
-          style={{
-            opacity: opMul,
-            animation: 'mv-pulse-ring 2.8s ease-in-out infinite',
-          }}
-          r="18"
         />
       </svg>
 
@@ -189,18 +182,17 @@ export default function Footer() {
 
           {/* Brand */}
           <div className="flex flex-col gap-5">
-            <Logo className="h-14 w-auto drop-shadow-[0_0_24px_rgba(59,130,246,0.25)]" />
+            <Logo className="h-14 w-auto drop-shadow-[0_0_24px_rgba(59,130,246,0.25)]"/>
             <p className="text-white/70 text-sm leading-relaxed max-w-xs">
               Premium AI software for healthcare and finance professionals — built for teams worldwide.
             </p>
             <div className="flex gap-3">
               {[Globe, Share2, Code2].map((Icon, i) => (
                 <a
-                  key={i}
-                  href="#"
+                  key={i} href="#"
                   className="w-8 h-8 rounded-lg border border-white/10 hover:border-gold/30 flex items-center justify-center text-white/60 hover:text-white transition-colors duration-200"
                 >
-                  <Icon size={14} />
+                  <Icon size={14}/>
                 </a>
               ))}
             </div>
@@ -211,7 +203,7 @@ export default function Footer() {
             <div key={title}>
               <h4 className="text-white font-semibold text-sm mb-5">{title}</h4>
               <ul className="flex flex-col gap-3">
-                {links.map((link) => (
+                {links.map(link => (
                   <li key={link.href}>
                     <Link
                       href={link.href}
@@ -230,7 +222,7 @@ export default function Footer() {
             <h4 className="text-white font-semibold text-sm mb-5">Contact</h4>
             <ul className="flex flex-col gap-3">
               <li className="flex items-center gap-2.5 text-white/70 text-sm">
-                <Mail size={14} className="text-gold shrink-0" />
+                <Mail size={14} className="text-gold shrink-0"/>
                 admin@metavision.world
               </li>
             </ul>
