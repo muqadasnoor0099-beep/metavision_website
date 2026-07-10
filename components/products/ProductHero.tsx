@@ -70,44 +70,8 @@ export default function ProductHero({
           </motion.div>
         </div>
 
-        {/* Right — permanent dark neon stage so the 3D model is vivid in both themes.
-            The Three.js canvas uses alpha:true (transparent background), so without
-            an explicit dark background the neon lines vanish on light-mode pages. */}
+        {/* Right 3D */}
         <div className="relative hidden lg:flex items-center justify-center overflow-hidden">
-          {/* 1. Deep navy base */}
-          <div
-            className="absolute inset-0"
-            style={{ background: 'linear-gradient(140deg,#020c1f 0%,#030f28 55%,#041232 100%)' }}
-          />
-          {/* 2. Electric blue radial glow — centre */}
-          <div
-            className="absolute inset-0"
-            style={{ background: 'radial-gradient(ellipse 80% 70% at 55% 50%,rgba(37,99,235,0.65) 0%,rgba(8,20,65,0.4) 40%,transparent 68%)' }}
-          />
-          {/* 3. Cyan accent — upper-right corner */}
-          <div
-            className="absolute inset-0"
-            style={{ background: 'radial-gradient(ellipse 55% 50% at 82% 18%,rgba(6,182,212,0.38) 0%,transparent 56%)' }}
-          />
-          {/* 4. Violet accent — lower-left corner */}
-          <div
-            className="absolute inset-0"
-            style={{ background: 'radial-gradient(ellipse 50% 45% at 18% 82%,rgba(139,92,246,0.28) 0%,transparent 56%)' }}
-          />
-          {/* 5. Dot grid */}
-          <div
-            className="absolute inset-0 pointer-events-none"
-            style={{
-              backgroundImage: 'radial-gradient(rgba(96,165,250,0.20) 1px,transparent 1px)',
-              backgroundSize: '28px 28px',
-            }}
-          />
-          {/* 6. Edge vignette — darkens corners so model feels centred */}
-          <div
-            className="absolute inset-0"
-            style={{ background: 'radial-gradient(ellipse 88% 88% at 50% 50%,transparent 48%,rgba(2,8,28,0.82) 100%)' }}
-          />
-          {/* 7. Three.js canvas */}
           <div className="absolute inset-0">
             {mode === 'medical' ? <BrainCanvas /> : <WorkflowCanvas />}
           </div>
