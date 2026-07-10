@@ -4,7 +4,7 @@ import nodemailer from 'nodemailer'
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json()
-    const { name, email, phone, company, message, interest, type } = body
+    const { name, email, company, message, interest, type } = body
 
     if (!name || !email || !message) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 })
@@ -56,7 +56,6 @@ export async function POST(req: NextRequest) {
     <table>
       <tr><td>Full Name</td><td>${name}</td></tr>
       <tr><td>Email</td><td><a href="mailto:${email}" style="color:#2563eb">${email}</a></td></tr>
-      ${phone    ? `<tr><td>Phone</td><td>${phone}</td></tr>` : ''}
       ${company  ? `<tr><td>Company</td><td>${company}</td></tr>` : ''}
       ${interest ? `<tr><td>Interested In</td><td>${interestLabel[interest] ?? interest}</td></tr>` : ''}
     </table>

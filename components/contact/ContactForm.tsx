@@ -8,13 +8,12 @@ import { useTheme } from '@/components/providers/ThemeProvider'
 interface FormState {
   name: string
   email: string
-  phone: string
   company: string
   message: string
   interest: string
 }
 
-const EMPTY: FormState = { name: '', email: '', phone: '', company: '', message: '', interest: '' }
+const EMPTY: FormState = { name: '', email: '', company: '', message: '', interest: '' }
 
 const SERVICES = [
   { value: 'medical',     label: 'NexLink MedAI' },
@@ -61,7 +60,7 @@ export default function ContactForm() {
       if (!res.ok) throw new Error('Send failed')
       setSubmitted(true)
     } catch {
-      setSendError('Failed to send. Please email us directly at metavision786@gmail.com')
+      setSendError('Failed to send. Please email us directly at admin@metavision.world')
     } finally {
       setSending(false)
     }
@@ -143,27 +142,15 @@ export default function ContactForm() {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-        <div>
-          <label className="block text-xs font-semibold mb-1.5" style={{ color: tok.label }}>Company Name</label>
-          <input
-            className="w-full rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-gold/50 transition-colors"
-            style={fieldStyle('company')}
-            placeholder="Enter your company name"
-            value={form.company}
-            onChange={set('company')}
-          />
-        </div>
-        <div>
-          <label className="block text-xs font-semibold mb-1.5" style={{ color: tok.label }}>Phone Number</label>
-          <input
-            className="w-full rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-gold/50 transition-colors"
-            style={fieldStyle('phone')}
-            placeholder="Enter your phone number"
-            value={form.phone}
-            onChange={set('phone')}
-          />
-        </div>
+      <div>
+        <label className="block text-xs font-semibold mb-1.5" style={{ color: tok.label }}>Company Name</label>
+        <input
+          className="w-full rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-gold/50 transition-colors"
+          style={fieldStyle('company')}
+          placeholder="Enter your company name"
+          value={form.company}
+          onChange={set('company')}
+        />
       </div>
 
       <div>

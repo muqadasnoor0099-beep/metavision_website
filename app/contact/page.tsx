@@ -2,7 +2,7 @@
 
 import { motion } from 'framer-motion'
 import {
-  Phone, Mail, MapPin, Clock, ExternalLink,
+  Mail, MapPin, Clock, ExternalLink,
   Sparkles, Target, ShieldCheck, Cloud, Headset, TrendingUp,
 } from 'lucide-react'
 import ContactForm from '@/components/contact/ContactForm'
@@ -14,10 +14,9 @@ const OFFICE_ADDRESS = 'DHA Phase 5, Islamabad, Pakistan'
 const OFFICE_MAPS_URL = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(OFFICE_ADDRESS)}`
 
 const HERO_INFO = [
-  { Icon: Phone, label: 'Call Us',        value: '+92 300 1234567' },
-  { Icon: Mail,  label: 'Email Us',       value: 'metavision786@gmail.com' },
-  { Icon: MapPin,label: 'Visit Our Office', value: OFFICE_ADDRESS },
-  { Icon: Clock, label: 'Business Hours', value: 'Mon - Fri: 9:00 AM - 6:00 PM' },
+  { Icon: Mail,   label: 'Email Us',        value: 'admin@metavision.world' },
+  { Icon: MapPin, label: 'Visit Our Office', value: OFFICE_ADDRESS },
+  { Icon: Clock,  label: 'Business Hours',   value: 'Mon - Fri: 9:00 AM - 6:00 PM' },
 ]
 
 const WHY_PARTNER = [
