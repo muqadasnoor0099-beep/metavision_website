@@ -5,58 +5,56 @@ import { Canvas, useFrame, useThree } from '@react-three/fiber'
 import * as THREE from 'three'
 
 // ─── Neon tube line ───────────────────────────────────────────────────────────
-// Two overlapping tubes: a thin bright core + a wider semi-transparent halo.
-// AdditiveBlending on the halo creates the bloom / glow without post-processing.
+// Core  = thin bright tube  (very high emissive — the "lit" part of the neon)
+// Shell = wide halo tube    (additive blend = bloom glow without post-processing)
 function NeonLine({
-  start, end, coreColor, glowColor,
+  start, end, coreColor, shellColor,
 }: {
   start: [number, number, number]
   end:   [number, number, number]
   coreColor: string
-  glowColor: string
+  shellColor: string
 }) {
-  const { coreTube, haloTube } = useMemo(() => {
+  const { core, shell } = useMemo(() => {
     const s     = new THREE.Vector3(...start)
     const e     = new THREE.Vector3(...end)
     const curve = new THREE.LineCurve3(s, e)
     return {
-      coreTube: new THREE.TubeGeometry(curve, 1, 0.0055, 6, false),
-      haloTube: new THREE.TubeGeometry(curve, 1, 0.022,  6, false),
+      core:  new THREE.TubeGeometry(curve, 1, 0.014, 8, false),   // thick bright core
+      shell: new THREE.TubeGeometry(curve, 1, 0.055, 8, false),   // wide glow halo
     }
   }, [start, end])
 
   return (
     <group>
-      {/* Bright core — the actual neon tube */}
-      <mesh geometry={coreTube}>
+      <mesh geometry={core}>
         <meshStandardMaterial
           color={coreColor}
           emissive={coreColor}
-          emissiveIntensity={8}
-          transparent
-          opacity={0.95}
+          emissiveIntensity={18}
+          toneMapped={false}
         />
       </mesh>
-      {/* Wide halo — additive blend creates glow bloom */}
-      <mesh geometry={haloTube}>
+      <mesh geometry={shell}>
         <meshStandardMaterial
-          color={glowColor}
-          emissive={glowColor}
-          emissiveIntensity={3}
+          color={shellColor}
+          emissive={shellColor}
+          emissiveIntensity={6}
           transparent
-          opacity={0.18}
+          opacity={0.32}
           depthWrite={false}
           blending={THREE.AdditiveBlending}
           side={THREE.DoubleSide}
+          toneMapped={false}
         />
       </mesh>
     </group>
   )
 }
 
-// ─── Neon node dot ────────────────────────────────────────────────────────────
+// ─── Glowing node ─────────────────────────────────────────────────────────────
 function NeonNode({
-  position, phase = 0, color, size = 0.045,
+  position, phase = 0, color, size = 0.07,
 }: {
   position: [number, number, number]
   phase?: number
@@ -67,32 +65,45 @@ function NeonNode({
 
   useFrame(({ clock }) => {
     if (!coreRef.current) return
-    coreRef.current.scale.setScalar(0.7 + Math.sin(clock.elapsedTime * 1.8 + phase) * 0.3)
+    coreRef.current.scale.setScalar(0.72 + Math.sin(clock.elapsedTime * 2 + phase) * 0.28)
   })
 
   return (
     <group position={position}>
-      {/* White-hot core */}
+      {/* White-hot core — simulates the bright centre of a real neon node */}
       <mesh ref={coreRef}>
-        <sphereGeometry args={[size, 10, 10]} />
-        <meshStandardMaterial color="#ffffff" emissive={color} emissiveIntensity={10} />
-      </mesh>
-      {/* Inner bloom */}
-      <mesh>
-        <sphereGeometry args={[size * 2.8, 10, 10]} />
+        <sphereGeometry args={[size, 14, 14]} />
         <meshStandardMaterial
-          color={color} emissive={color} emissiveIntensity={4}
-          transparent opacity={0.22}
-          depthWrite={false} blending={THREE.AdditiveBlending}
+          color="#ffffff"
+          emissive={color}
+          emissiveIntensity={20}
+          toneMapped={false}
         />
       </mesh>
-      {/* Outer halo */}
+      {/* Mid bloom */}
       <mesh>
-        <sphereGeometry args={[size * 6, 10, 10]} />
+        <sphereGeometry args={[size * 3, 12, 12]} />
         <meshStandardMaterial
           color={color}
-          transparent opacity={0.055}
-          depthWrite={false} blending={THREE.AdditiveBlending}
+          emissive={color}
+          emissiveIntensity={8}
+          transparent
+          opacity={0.30}
+          depthWrite={false}
+          blending={THREE.AdditiveBlending}
+          toneMapped={false}
+        />
+      </mesh>
+      {/* Outer soft halo */}
+      <mesh>
+        <sphereGeometry args={[size * 7, 12, 12]} />
+        <meshStandardMaterial
+          color={color}
+          transparent
+          opacity={0.08}
+          depthWrite={false}
+          blending={THREE.AdditiveBlending}
+          toneMapped={false}
         />
       </mesh>
     </group>
@@ -105,9 +116,9 @@ function Packet({
 }: {
   start: [number, number, number]
   end:   [number, number, number]
-  speed: number
+  speed:  number
   offset: number
-  color: string
+  color:  string
 }) {
   const ref = useRef<THREE.Mesh>(null)
   const s   = useMemo(() => new THREE.Vector3(...start), [start])
@@ -115,49 +126,54 @@ function Packet({
 
   useFrame(({ clock }) => {
     if (!ref.current) return
-    const t   = (clock.elapsedTime * speed + offset) % 1
+    const t = (clock.elapsedTime * speed + offset) % 1
     ref.current.position.lerpVectors(s, e, t)
     ;(ref.current.material as THREE.MeshStandardMaterial).opacity = Math.sin(t * Math.PI)
   })
 
   return (
     <mesh ref={ref}>
-      <sphereGeometry args={[0.038, 8, 8]} />
+      <sphereGeometry args={[0.055, 10, 10]} />
       <meshStandardMaterial
-        color={color} emissive={color} emissiveIntensity={12}
-        transparent opacity={0}
+        color={color}
+        emissive={color}
+        emissiveIntensity={22}
+        transparent
+        opacity={0}
+        toneMapped={false}
       />
     </mesh>
   )
 }
 
-// ─── Network layout ───────────────────────────────────────────────────────────
+// ─── Network ──────────────────────────────────────────────────────────────────
 const NODES: [number, number, number][] = [
-  [-2.0,  0.55,  0.0],   // 0 — left anchor
-  [-1.0, -0.40,  0.35],  // 1
-  [ 0.0,  0.65, -0.20],  // 2 — centre
-  [ 1.0, -0.30,  0.40],  // 3
-  [ 2.0,  0.50,  0.0],   // 4 — right anchor
-  [-0.5,  1.45,  0.30],  // 5 — top bridge
-  [ 0.5, -1.35, -0.20],  // 6 — bottom bridge
+  [-2.0,  0.55,  0.0],
+  [-1.0, -0.40,  0.35],
+  [ 0.0,  0.65, -0.20],
+  [ 1.0, -0.30,  0.40],
+  [ 2.0,  0.50,  0.0],
+  [-0.5,  1.45,  0.30],
+  [ 0.5, -1.35, -0.20],
 ]
 
 const EDGES: [number, number][] = [
-  [0, 1], [1, 2], [2, 3], [3, 4],   // main spine
-  [1, 3],                             // cross-shortcut
-  [0, 5], [5, 2], [5, 4],            // top arch
-  [1, 6], [6, 3],                    // bottom arch
+  [0, 1], [1, 2], [2, 3], [3, 4],
+  [1, 3],
+  [0, 5], [5, 2], [5, 4],
+  [1, 6], [6, 3],
 ]
 
-// Cycle through three neon palettes: blue · cyan · violet
+// Three vivid neon palettes — electric blue / pure cyan / hot violet
 const PALETTES = [
-  { coreColor: '#93c5fd', glowColor: '#1d4ed8' },  // blue
-  { coreColor: '#67e8f9', glowColor: '#0891b2' },  // cyan
-  { coreColor: '#c4b5fd', glowColor: '#7c3aed' },  // violet
+  { coreColor: '#38bdf8', shellColor: '#0369a1' },   // electric sky-blue
+  { coreColor: '#22d3ee', shellColor: '#0891b2' },   // pure cyan
+  { coreColor: '#c084fc', shellColor: '#7c3aed' },   // hot violet
 ]
 
 const NODE_COLORS = [
-  '#93c5fd', '#67e8f9', '#93c5fd', '#c4b5fd', '#93c5fd', '#67e8f9', '#c4b5fd',
+  '#38bdf8', '#22d3ee', '#38bdf8', '#c084fc',
+  '#38bdf8', '#22d3ee', '#c084fc',
 ]
 
 // ─── Scene ────────────────────────────────────────────────────────────────────
@@ -167,14 +183,13 @@ function NeonScene() {
 
   useFrame(() => {
     if (!groupRef.current) return
-    groupRef.current.rotation.y += 0.0028
+    groupRef.current.rotation.y += 0.003
     groupRef.current.rotation.x +=
       (pointer.y * 0.12 - groupRef.current.rotation.x) * 0.04
   })
 
   return (
     <group ref={groupRef}>
-      {/* Neon tube lines */}
       {EDGES.map(([a, b], i) => (
         <NeonLine
           key={`l${i}`}
@@ -184,26 +199,24 @@ function NeonScene() {
         />
       ))}
 
-      {/* Flowing particles along each edge */}
       {EDGES.map(([a, b], i) => (
         <Packet
           key={`p${i}`}
           start={NODES[a]}
           end={NODES[b]}
-          speed={0.17 + i * 0.035}
+          speed={0.18 + i * 0.035}
           offset={i * 0.18}
           color={PALETTES[i % PALETTES.length].coreColor}
         />
       ))}
 
-      {/* Glowing node dots */}
       {NODES.map((pos, i) => (
         <NeonNode
           key={`n${i}`}
           position={pos}
           phase={i * 0.85}
           color={NODE_COLORS[i]}
-          size={i === 0 || i === 4 ? 0.06 : 0.044}
+          size={i === 0 || i === 4 ? 0.088 : 0.065}
         />
       ))}
     </group>
@@ -219,14 +232,13 @@ export default function WorkflowCanvas() {
       gl={{ alpha: true, antialias: true }}
       style={{ background: 'transparent' }}
     >
-      {/* Near-zero ambient — let the emissive glow do all the work */}
-      <ambientLight intensity={0.04} />
-      {/* Blue key */}
-      <pointLight position={[-3,  3,  3]} intensity={1.2} color="#2563eb" />
-      {/* Cyan fill */}
-      <pointLight position={[ 3, -2,  2]} intensity={1.0} color="#06b6d4" />
-      {/* Violet rim */}
-      <pointLight position={[ 0, -3, -2]} intensity={0.7} color="#7c3aed" />
+      {/* Very low ambient — emissive does all the colour work */}
+      <ambientLight intensity={0.06} />
+      {/* Vivid key lights that bounce off tubes to add extra glow */}
+      <pointLight position={[-3,  3,  3]} intensity={4}   color="#38bdf8" />
+      <pointLight position={[ 3, -2,  2]} intensity={3.5} color="#22d3ee" />
+      <pointLight position={[ 0, -3, -2]} intensity={2.5} color="#a855f7" />
+      <pointLight position={[ 0,  4, -1]} intensity={2}   color="#ffffff" />
       <NeonScene />
     </Canvas>
   )
