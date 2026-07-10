@@ -17,7 +17,7 @@ const TIMELINE = [
 const TEAM = [
   {
     initials: 'MN',
-    name: 'Mustafa Nawaz Khokher',
+    name: 'Mustafa Nawaz Khokhar',
     role: 'CEO & Founder',
     badge: 'Founder',
     desc: 'Visionary leader driving MetaVision\'s mission to democratise AI across the healthcare and finance sectors.',
