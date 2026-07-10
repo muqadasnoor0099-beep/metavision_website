@@ -5,8 +5,5 @@
   "installCommand": "npm install",
   "outputDirectory": "out",
   "cleanUrls": true,
-  "routes": [
-    { "handle": "filesystem" },
-    { "src": "/(.*)", "dest": "/404.html" }
-  ]
+  "trailingSlash": false
 }
