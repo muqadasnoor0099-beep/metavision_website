@@ -1,245 +1,188 @@
 'use client'
 
-import { useRef, useMemo } from 'react'
+import { useRef, useMemo, useState, useEffect } from 'react'
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
 import * as THREE from 'three'
 
-// ─── Neon tube line ───────────────────────────────────────────────────────────
-// Core  = thin bright tube  (very high emissive — the "lit" part of the neon)
-// Shell = wide halo tube    (additive blend = bloom glow without post-processing)
-function NeonLine({
-  start, end, coreColor, shellColor,
-}: {
-  start: [number, number, number]
-  end:   [number, number, number]
-  coreColor: string
-  shellColor: string
-}) {
-  const { core, shell } = useMemo(() => {
-    const s     = new THREE.Vector3(...start)
-    const e     = new THREE.Vector3(...end)
-    const curve = new THREE.LineCurve3(s, e)
-    return {
-      core:  new THREE.TubeGeometry(curve, 1, 0.014, 8, false),   // thick bright core
-      shell: new THREE.TubeGeometry(curve, 1, 0.055, 8, false),   // wide glow halo
-    }
-  }, [start, end])
-
-  return (
-    <group>
-      <mesh geometry={core}>
-        <meshStandardMaterial
-          color={coreColor}
-          emissive={coreColor}
-          emissiveIntensity={18}
-          toneMapped={false}
-        />
-      </mesh>
-      <mesh geometry={shell}>
-        <meshStandardMaterial
-          color={shellColor}
-          emissive={shellColor}
-          emissiveIntensity={6}
-          transparent
-          opacity={0.32}
-          depthWrite={false}
-          blending={THREE.AdditiveBlending}
-          side={THREE.DoubleSide}
-          toneMapped={false}
-        />
-      </mesh>
-    </group>
-  )
+/* Tracks the `html.light` class so the scene can use brighter accents on dark backgrounds */
+function useThemeColor() {
+  const [isDark, setIsDark] = useState(true)
+  useEffect(() => {
+    const update = () => setIsDark(!document.documentElement.classList.contains('light'))
+    update()
+    const obs = new MutationObserver(update)
+    obs.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] })
+    return () => obs.disconnect()
+  }, [])
+  return isDark
 }
 
-// ─── Glowing node ─────────────────────────────────────────────────────────────
-function NeonNode({
-  position, phase = 0, color, size = 0.07,
-}: {
-  position: [number, number, number]
-  phase?: number
-  color: string
-  size?: number
+function Float({ children, speed = 1, floatIntensity = 1, rotationIntensity = 1 }: {
+  children: React.ReactNode; speed?: number; floatIntensity?: number; rotationIntensity?: number
 }) {
-  const coreRef = useRef<THREE.Mesh>(null)
-
-  useFrame(({ clock }) => {
-    if (!coreRef.current) return
-    coreRef.current.scale.setScalar(0.72 + Math.sin(clock.elapsedTime * 2 + phase) * 0.28)
-  })
-
-  return (
-    <group position={position}>
-      {/* White-hot core — simulates the bright centre of a real neon node */}
-      <mesh ref={coreRef}>
-        <sphereGeometry args={[size, 14, 14]} />
-        <meshStandardMaterial
-          color="#ffffff"
-          emissive={color}
-          emissiveIntensity={20}
-          toneMapped={false}
-        />
-      </mesh>
-      {/* Mid bloom */}
-      <mesh>
-        <sphereGeometry args={[size * 3, 12, 12]} />
-        <meshStandardMaterial
-          color={color}
-          emissive={color}
-          emissiveIntensity={8}
-          transparent
-          opacity={0.30}
-          depthWrite={false}
-          blending={THREE.AdditiveBlending}
-          toneMapped={false}
-        />
-      </mesh>
-      {/* Outer soft halo */}
-      <mesh>
-        <sphereGeometry args={[size * 7, 12, 12]} />
-        <meshStandardMaterial
-          color={color}
-          transparent
-          opacity={0.08}
-          depthWrite={false}
-          blending={THREE.AdditiveBlending}
-          toneMapped={false}
-        />
-      </mesh>
-    </group>
-  )
-}
-
-// ─── Flowing particle ─────────────────────────────────────────────────────────
-function Packet({
-  start, end, speed, offset, color,
-}: {
-  start: [number, number, number]
-  end:   [number, number, number]
-  speed:  number
-  offset: number
-  color:  string
-}) {
-  const ref = useRef<THREE.Mesh>(null)
-  const s   = useMemo(() => new THREE.Vector3(...start), [start])
-  const e   = useMemo(() => new THREE.Vector3(...end),   [end])
-
+  const ref = useRef<THREE.Group>(null)
   useFrame(({ clock }) => {
     if (!ref.current) return
-    const t = (clock.elapsedTime * speed + offset) % 1
+    const t = clock.elapsedTime * speed
+    ref.current.position.y  = Math.sin(t * 0.5)  * 0.1 * floatIntensity
+    ref.current.rotation.x  = Math.sin(t * 0.31) * 0.05 * rotationIntensity
+    ref.current.rotation.z  = Math.sin(t * 0.22) * 0.05 * rotationIntensity
+  })
+  return <group ref={ref}>{children}</group>
+}
+
+/* Pipeline stage positions — a gentle left-to-right flow with one automation shortcut */
+const NODE_POSITIONS: [number, number, number][] = [
+  [-1.9, 0.55, 0],
+  [-0.95, -0.35, 0.35],
+  [0, 0.6, -0.25],
+  [0.95, -0.3, 0.3],
+  [1.9, 0.45, 0],
+]
+
+const CONNECTIONS: [number, number][] = [
+  [0, 1], [1, 2], [2, 3], [3, 4], [1, 3],
+]
+
+function ConnectionLine({ start, end, isDark }: { start: [number, number, number]; end: [number, number, number]; isDark: boolean }) {
+  const line = useMemo(() => {
+    const points = [new THREE.Vector3(...start), new THREE.Vector3(...end)]
+    const geometry = new THREE.BufferGeometry().setFromPoints(points)
+    // Light mode now has a dark neon background — use same vivid colours as dark mode
+    const material = new THREE.LineBasicMaterial({ color: '#60a5fa', opacity: isDark ? 0.4 : 0.55, transparent: true })
+    return new THREE.Line(geometry, material)
+  }, [start, end, isDark])
+
+  return <primitive object={line} />
+}
+
+/* A "data packet" travelling along a connection, looping and fading at each end */
+function Packet({ start, end, speed, offset }: {
+  start: [number, number, number]; end: [number, number, number]; speed: number; offset: number
+}) {
+  const ref = useRef<THREE.Mesh>(null)
+  const s = useMemo(() => new THREE.Vector3(...start), [start])
+  const e = useMemo(() => new THREE.Vector3(...end), [end])
+
+  useFrame((state) => {
+    if (!ref.current) return
+    const t = (state.clock.elapsedTime * speed + offset) % 1
     ref.current.position.lerpVectors(s, e, t)
-    ;(ref.current.material as THREE.MeshStandardMaterial).opacity = Math.sin(t * Math.PI)
+    const mat = ref.current.material as THREE.MeshStandardMaterial
+    mat.opacity = Math.sin(t * Math.PI)
   })
 
   return (
     <mesh ref={ref}>
-      <sphereGeometry args={[0.055, 10, 10]} />
-      <meshStandardMaterial
-        color={color}
-        emissive={color}
-        emissiveIntensity={22}
-        transparent
-        opacity={0}
-        toneMapped={false}
-      />
+      <sphereGeometry args={[0.05, 8, 8]} />
+      <meshStandardMaterial color="#93c5fd" emissive="#93c5fd" emissiveIntensity={3} transparent opacity={0} />
     </mesh>
   )
 }
 
-// ─── Network ──────────────────────────────────────────────────────────────────
-const NODES: [number, number, number][] = [
-  [-2.0,  0.55,  0.0],
-  [-1.0, -0.40,  0.35],
-  [ 0.0,  0.65, -0.20],
-  [ 1.0, -0.30,  0.40],
-  [ 2.0,  0.50,  0.0],
-  [-0.5,  1.45,  0.30],
-  [ 0.5, -1.35, -0.20],
-]
+/* A pipeline stage: pulsing core + slowly tumbling shell */
+function StageNode({ position, phase, shape, isDark }: {
+  position: [number, number, number]; phase: number; shape: 'oct' | 'ico' | 'box'; isDark: boolean
+}) {
+  const coreRef  = useRef<THREE.Mesh>(null)
+  const shellRef = useRef<THREE.Mesh>(null)
 
-const EDGES: [number, number][] = [
-  [0, 1], [1, 2], [2, 3], [3, 4],
-  [1, 3],
-  [0, 5], [5, 2], [5, 4],
-  [1, 6], [6, 3],
-]
+  useFrame((state) => {
+    const t = state.clock.elapsedTime
+    if (coreRef.current) coreRef.current.scale.setScalar(0.8 + Math.sin(t * 1.6 + phase) * 0.22)
+    if (shellRef.current) {
+      shellRef.current.rotation.y += 0.008
+      shellRef.current.rotation.x += 0.005
+    }
+  })
 
-// Three vivid neon palettes — electric blue / pure cyan / hot violet
-const PALETTES = [
-  { coreColor: '#38bdf8', shellColor: '#0369a1' },   // electric sky-blue
-  { coreColor: '#22d3ee', shellColor: '#0891b2' },   // pure cyan
-  { coreColor: '#c084fc', shellColor: '#7c3aed' },   // hot violet
-]
+  return (
+    <group position={position}>
+      <mesh ref={coreRef}>
+        <sphereGeometry args={[0.07, 12, 12]} />
+        <meshStandardMaterial color="#60a5fa" emissive="#60a5fa" emissiveIntensity={2.4} />
+      </mesh>
+      <mesh ref={shellRef}>
+        {shape === 'oct' && <octahedronGeometry args={[0.22, 0]} />}
+        {shape === 'ico' && <icosahedronGeometry args={[0.2, 0]} />}
+        {shape === 'box' && <boxGeometry args={[0.3, 0.3, 0.3]} />}
+        <meshStandardMaterial color={isDark ? '#60a5fa' : '#2563eb'} wireframe opacity={isDark ? 0.55 : 0.4} transparent />
+      </mesh>
+    </group>
+  )
+}
 
-const NODE_COLORS = [
-  '#38bdf8', '#22d3ee', '#38bdf8', '#c084fc',
-  '#38bdf8', '#22d3ee', '#c084fc',
-]
+/* A floating task/document card with a few "text line" accents */
+function FloatingCard({ position, rotation, size, isDark }: {
+  position: [number, number, number]; rotation: [number, number, number]; size: [number, number]; isDark: boolean
+}) {
+  const edges = useMemo(() => new THREE.EdgesGeometry(new THREE.PlaneGeometry(...size)), [size])
+  return (
+    <group position={position} rotation={rotation}>
+      <mesh>
+        <planeGeometry args={size} />
+        <meshStandardMaterial color={isDark ? '#60a5fa' : '#2563eb'} opacity={isDark ? 0.16 : 0.10} transparent side={THREE.DoubleSide} />
+      </mesh>
+      <lineSegments geometry={edges}>
+        <lineBasicMaterial color={isDark ? '#93c5fd' : '#60a5fa'} opacity={isDark ? 0.75 : 0.5} transparent />
+      </lineSegments>
+      {[0.08, -0.02, -0.12].map((y, i) => (
+        <mesh key={i} position={[-size[0] * 0.18, y, 0.001]}>
+          <planeGeometry args={[size[0] * (i === 0 ? 0.5 : 0.34), 0.025]} />
+          <meshStandardMaterial color="#93c5fd" opacity={isDark ? 0.65 : 0.45} transparent />
+        </mesh>
+      ))}
+    </group>
+  )
+}
 
-// ─── Scene ────────────────────────────────────────────────────────────────────
-function NeonScene() {
+function WorkflowScene({ isDark }: { isDark: boolean }) {
   const groupRef = useRef<THREE.Group>(null)
   const { pointer } = useThree()
 
   useFrame(() => {
     if (!groupRef.current) return
-    groupRef.current.rotation.y += 0.003
-    groupRef.current.rotation.x +=
-      (pointer.y * 0.12 - groupRef.current.rotation.x) * 0.04
+    groupRef.current.rotation.y += 0.0025
+    groupRef.current.rotation.x += (pointer.y * 0.1 - groupRef.current.rotation.x) * 0.04
   })
 
   return (
     <group ref={groupRef}>
-      {EDGES.map(([a, b], i) => (
-        <NeonLine
-          key={`l${i}`}
-          start={NODES[a]}
-          end={NODES[b]}
-          {...PALETTES[i % PALETTES.length]}
-        />
+      {/* Pipeline connections */}
+      {CONNECTIONS.map(([a, b], i) => (
+        <ConnectionLine key={`line-${i}`} start={NODE_POSITIONS[a]} end={NODE_POSITIONS[b]} isDark={isDark} />
       ))}
 
-      {EDGES.map(([a, b], i) => (
-        <Packet
-          key={`p${i}`}
-          start={NODES[a]}
-          end={NODES[b]}
-          speed={0.18 + i * 0.035}
-          offset={i * 0.18}
-          color={PALETTES[i % PALETTES.length].coreColor}
-        />
+      {/* Flowing data packets */}
+      {CONNECTIONS.map(([a, b], i) => (
+        <Packet key={`packet-${i}`} start={NODE_POSITIONS[a]} end={NODE_POSITIONS[b]} speed={0.16 + i * 0.05} offset={i * 0.21} />
       ))}
 
-      {NODES.map((pos, i) => (
-        <NeonNode
-          key={`n${i}`}
-          position={pos}
-          phase={i * 0.85}
-          color={NODE_COLORS[i]}
-          size={i === 0 || i === 4 ? 0.088 : 0.065}
-        />
+      {/* Pipeline stages */}
+      {NODE_POSITIONS.map((pos, i) => (
+        <StageNode key={`node-${i}`} position={pos} phase={i * 0.7} shape={i % 3 === 0 ? 'oct' : i % 3 === 1 ? 'ico' : 'box'} isDark={isDark} />
       ))}
+
+      {/* Floating task cards */}
+      <Float speed={1.2} rotationIntensity={0.5} floatIntensity={0.5}>
+        <FloatingCard position={[-1.35, 1.5, 0.7]} rotation={[0.08, 0.32, -0.06]} size={[0.62, 0.42]} isDark={isDark} />
+      </Float>
+      <Float speed={0.9} rotationIntensity={0.45} floatIntensity={0.4}>
+        <FloatingCard position={[1.5, -1.35, 0.6]} rotation={[-0.06, -0.28, 0.05]} size={[0.56, 0.38]} isDark={isDark} />
+      </Float>
     </group>
   )
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
 export default function WorkflowCanvas() {
+  const isDark = useThemeColor()
+
   return (
-    <Canvas
-      camera={{ position: [0, 0, 5.6], fov: 47 }}
-      dpr={[1, 2]}
-      gl={{ alpha: true, antialias: true }}
-      style={{ background: 'transparent' }}
-    >
-      {/* Very low ambient — emissive does all the colour work */}
-      <ambientLight intensity={0.06} />
-      {/* Vivid key lights that bounce off tubes to add extra glow */}
-      <pointLight position={[-3,  3,  3]} intensity={4}   color="#38bdf8" />
-      <pointLight position={[ 3, -2,  2]} intensity={3.5} color="#22d3ee" />
-      <pointLight position={[ 0, -3, -2]} intensity={2.5} color="#a855f7" />
-      <pointLight position={[ 0,  4, -1]} intensity={2}   color="#ffffff" />
-      <NeonScene />
+    <Canvas camera={{ position: [0, 0, 5.4], fov: 48 }} dpr={[1, 2]} gl={{ alpha: true }} style={{ background: 'transparent' }}>
+      <ambientLight intensity={0.32} />
+      <pointLight position={[-3, 3, 3]} intensity={1.8} color="#2563eb" />
+      <pointLight position={[3, -2, 2]} intensity={0.6} color="#ffffff" />
+      <WorkflowScene isDark={isDark} />
     </Canvas>
   )
 }

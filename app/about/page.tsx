@@ -1,7 +1,7 @@
 'use client'
 
 import { useRef, useCallback } from 'react'
-import { motion } from 'framer-motion'
+import { motion, useInView } from 'framer-motion'
 import SectionHeader from '@/components/ui/SectionHeader'
 import GlassCard from '@/components/ui/GlassCard'
 import CTABanner from '@/components/home/CTABanner'
@@ -44,11 +44,230 @@ const TEAM = [
   },
 ]
 
+// ── "What Makes Us Different" bento data ─────────────────────────────────────
 const UNIQUE = [
-  { icon: '🧠', title: 'AI at the Core', body: "Our AI isn't a feature — it's the foundation every product is built on." },
-  { icon: '🛡️', title: 'Compliance-Ready', body: 'Built for evolving data protection and regulatory standards — compliance out of the box.' },
-  { icon: '⚡', title: 'Speed to Value', body: 'Most clients go live in under 48 hours. No 6-month implementations.' },
+  {
+    num: '01', title: 'AI at the Core',
+    body: "Intelligence isn't a feature we bolt on — it's the substrate every product is built on. From inference to insight, AI runs through everything we ship.",
+    metric: '100% AI-Native', rgb: '37,99,235', glow: '#3b82f6', large: true,
+  },
+  {
+    num: '02', title: 'Compliance-Ready',
+    body: 'Security and regulatory compliance are baked in at the architecture level — not added as an afterthought.',
+    metric: 'Zero-Config Security', rgb: '124,58,237', glow: '#a78bfa', large: false,
+  },
+  {
+    num: '03', title: 'Speed to Value',
+    body: 'Most clients go live in under 48 hours. No six-month implementations, no endless discovery sprints.',
+    metric: '< 48 hr Go-Live', rgb: '217,119,6', glow: '#f59e0b', large: false,
+  },
 ]
+
+// ── Neural-net SVG (AI card illustration) ─────────────────────────────────────
+const NN_NODES = [
+  { cx: 28,  cy: 48  }, { cx: 28,  cy: 100 }, { cx: 28,  cy: 152 },
+  { cx: 100, cy: 24  }, { cx: 100, cy: 88  }, { cx: 100, cy: 140 }, { cx: 100, cy: 176 },
+  { cx: 172, cy: 48  }, { cx: 172, cy: 112 }, { cx: 172, cy: 164 },
+  { cx: 240, cy: 80  }, { cx: 240, cy: 140 },
+]
+const NN_EDGES = [
+  [0,3],[0,4],[1,3],[1,4],[1,5],[2,4],[2,5],[2,6],
+  [3,7],[3,8],[4,7],[4,8],[4,9],[5,8],[5,9],[6,9],
+  [7,10],[7,11],[8,10],[8,11],[9,11],
+]
+
+function NeuralNetIllustration() {
+  return (
+    <svg viewBox="0 0 268 200" fill="none" aria-hidden="true"
+      className="w-full" style={{ maxHeight: 110 }}>
+      {NN_EDGES.map(([a, b], i) => (
+        <motion.line
+          key={i}
+          x1={NN_NODES[a].cx} y1={NN_NODES[a].cy}
+          x2={NN_NODES[b].cx} y2={NN_NODES[b].cy}
+          stroke="#3b82f6" strokeWidth="0.8"
+          initial={{ pathLength: 0, opacity: 0 }}
+          animate={{ pathLength: 1, opacity: 0.25 }}
+          transition={{ duration: 1.2, delay: i * 0.04, ease: 'easeOut' }}
+        />
+      ))}
+      {NN_NODES.map((n, i) => (
+        <motion.circle
+          key={i}
+          cx={n.cx} cy={n.cy} r={i === 4 || i === 8 ? 6 : 4}
+          fill="#1d4ed8"
+          stroke="#3b82f6" strokeWidth="1.2"
+          initial={{ scale: 0, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ duration: 0.4, delay: 0.5 + i * 0.06, type: 'spring', stiffness: 260 }}
+          style={{ filter: i === 4 || i === 8 ? 'drop-shadow(0 0 6px #3b82f6)' : undefined }}
+        />
+      ))}
+      {/* Travelling signal dots on two edges */}
+      {[[0,3],[4,8]].map(([a,b], k) => (
+        <motion.circle key={`sig${k}`} r="2.5" fill="#93c5fd"
+          style={{ filter: 'drop-shadow(0 0 4px #60a5fa)' }}
+          animate={{
+            cx: [NN_NODES[a].cx, NN_NODES[b].cx, NN_NODES[a].cx],
+            cy: [NN_NODES[a].cy, NN_NODES[b].cy, NN_NODES[a].cy],
+          }}
+          transition={{ duration: 2.4, delay: k * 1.2, repeat: Infinity, ease: 'easeInOut' }}
+        />
+      ))}
+    </svg>
+  )
+}
+
+// ── Shield SVG (Compliance card) ──────────────────────────────────────────────
+function ShieldIllustration() {
+  return (
+    <svg viewBox="0 0 80 80" fill="none" aria-hidden="true" className="w-12 h-12 lg:w-16 lg:h-16">
+      <motion.path
+        d="M40 8 L64 18 L64 38 C64 54 40 68 40 68 C40 68 16 54 16 38 L16 18 Z"
+        stroke="#a78bfa" strokeWidth="2" fill="rgba(124,58,237,0.1)"
+        initial={{ pathLength: 0 }} animate={{ pathLength: 1 }}
+        transition={{ duration: 1.4, ease: 'easeOut' }}
+      />
+      <motion.path
+        d="M28 40 L36 48 L52 32"
+        stroke="#c4b5fd" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"
+        fill="none"
+        initial={{ pathLength: 0 }} animate={{ pathLength: 1 }}
+        transition={{ duration: 0.7, delay: 1.4, ease: 'easeOut' }}
+      />
+    </svg>
+  )
+}
+
+// ── Speed arc SVG (Speed card) ────────────────────────────────────────────────
+function SpeedIllustration() {
+  const circumference = 2 * Math.PI * 26
+  return (
+    <svg viewBox="0 0 80 80" fill="none" aria-hidden="true" className="w-12 h-12 lg:w-16 lg:h-16">
+      <circle cx="40" cy="40" r="26" stroke="rgba(217,119,6,0.15)" strokeWidth="5" />
+      <motion.circle
+        cx="40" cy="40" r="26"
+        stroke="#f59e0b" strokeWidth="5" strokeLinecap="round"
+        strokeDasharray={circumference}
+        initial={{ strokeDashoffset: circumference }}
+        animate={{ strokeDashoffset: circumference * 0.22 }}
+        transition={{ duration: 1.6, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
+        style={{ transformOrigin: '40px 40px', transform: 'rotate(-90deg)', filter: 'drop-shadow(0 0 4px #f59e0b)' }}
+      />
+      <motion.text x="40" y="45" textAnchor="middle"
+        fill="#fcd34d" fontSize="13" fontWeight="800" fontFamily="var(--font-heading)"
+        initial={{ opacity: 0 }} animate={{ opacity: 1 }}
+        transition={{ delay: 1.2 }}>
+        48h
+      </motion.text>
+    </svg>
+  )
+}
+
+// ── Bento card ────────────────────────────────────────────────────────────────
+function UniqueCard({
+  item, index, large = false,
+}: {
+  item: typeof UNIQUE[0]; index: number; large?: boolean
+}) {
+  const ref = useRef<HTMLDivElement>(null)
+  const inView = useInView(ref, { once: true, amount: 0.15 })
+  const { theme, mounted } = useTheme()
+  const isDark = !mounted || theme === 'dark'
+
+  const cardBg  = isDark ? 'rgba(255,255,255,0.03)' : '#ffffff'
+  const border  = isDark ? `rgba(${item.rgb},0.18)` : `rgba(${item.rgb},0.14)`
+  const titleC  = isDark ? '#ffffff' : '#0f172a'
+  const bodyC   = isDark ? 'rgba(255,255,255,0.45)' : '#64748b'
+  const numC    = isDark ? `rgba(${item.rgb},0.06)` : `rgba(${item.rgb},0.05)`
+
+  return (
+    <motion.div
+      ref={ref}
+      initial={{ opacity: 0, y: 44 }}
+      animate={inView ? { opacity: 1, y: 0 } : {}}
+      transition={{ delay: index * 0.13, duration: 0.65, type: 'spring', stiffness: 190, damping: 22 }}
+      className="h-full"
+    >
+      <div
+        className="relative overflow-hidden rounded-[22px] h-full flex flex-col"
+        style={{
+          background: cardBg,
+          border: `1px solid ${border}`,
+          boxShadow: isDark ? 'none' : `0 4px 28px rgba(${item.rgb},0.06)`,
+          transition: 'transform 0.28s ease, box-shadow 0.28s ease',
+        }}
+        onMouseEnter={e => {
+          e.currentTarget.style.transform = 'translateY(-6px)'
+          e.currentTarget.style.boxShadow = `0 20px 52px rgba(${item.rgb},${isDark ? 0.18 : 0.13})`
+        }}
+        onMouseLeave={e => {
+          e.currentTarget.style.transform = 'translateY(0)'
+          e.currentTarget.style.boxShadow = isDark ? 'none' : `0 4px 28px rgba(${item.rgb},0.06)`
+        }}
+      >
+        {/* Glowing top bar */}
+        <div className="absolute top-0 inset-x-0 h-[2px] rounded-t-[22px]"
+          style={{ background: `linear-gradient(90deg,transparent,${item.glow},transparent)`, opacity: 0.9 }} />
+        {/* Ambient bloom */}
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-3/4 h-10 pointer-events-none"
+          style={{ background: `radial-gradient(ellipse at 50% 0%,rgba(${item.rgb},0.14),transparent 70%)` }} />
+
+        {/* Watermark number */}
+        <div className="absolute top-0 right-3 leading-none pointer-events-none select-none font-heading"
+          style={{ fontSize: large ? 90 : 80, fontWeight: 900, color: numC, letterSpacing: '-4px', lineHeight: 1 }}>
+          <span className="hidden lg:inline" style={{ fontSize: large ? 140 : 110 }}>{item.num}</span>
+          <span className="lg:hidden">{item.num}</span>
+        </div>
+
+        {/* Illustration zone */}
+        <div className={`relative z-10 flex items-center justify-center ${large ? 'py-6 px-6 lg:py-9 lg:px-9' : 'py-4 px-5 lg:py-7 lg:px-7'}`}
+          style={{ minHeight: large ? 120 : 90 }}>
+          {index === 0 && <NeuralNetIllustration />}
+          {index === 1 && <ShieldIllustration />}
+          {index === 2 && <SpeedIllustration />}
+        </div>
+
+        {/* Divider */}
+        <div className="mx-4 lg:mx-6" style={{ height: 1, background: `linear-gradient(90deg,transparent,rgba(${item.rgb},0.25),transparent)` }} />
+
+        {/* Content */}
+        <div className="relative z-10 flex flex-col flex-1 p-4 lg:p-6" style={{ gap: 8 }}>
+          {/* Number badge */}
+          <div className="text-[9px] lg:text-[10px] font-bold tracking-[0.2em] uppercase"
+            style={{ color: item.glow }}>
+            {item.num}
+          </div>
+
+          <div className="font-heading font-bold" style={{ fontSize: large ? 17 : 14, letterSpacing: '-0.03em', color: titleC, lineHeight: 1.2 }}>
+            <span className="lg:hidden">{item.title}</span>
+            <span className="hidden lg:inline" style={{ fontSize: large ? 22 : 17 }}>{item.title}</span>
+          </div>
+
+          <p className="text-[12px] lg:text-[13px] leading-relaxed flex-1" style={{ color: bodyC }}>
+            {item.body}
+          </p>
+
+          {/* Metric chip */}
+          <div className="inline-flex items-center gap-1.5 lg:gap-2 self-start rounded-full px-2.5 lg:px-3.5 py-1 lg:py-1.5 mt-1"
+            style={{
+              background: `rgba(${item.rgb},0.10)`,
+              border: `1px solid rgba(${item.rgb},0.25)`,
+              fontSize: 10, fontWeight: 700, color: item.glow,
+            }}>
+            <motion.span
+              animate={{ opacity: [1, 0.2, 1] }}
+              transition={{ duration: 1.8, repeat: Infinity, delay: index * 0.4 }}
+              className="rounded-full"
+              style={{ width: 6, height: 6, background: item.glow, boxShadow: `0 0 6px ${item.glow}`, display: 'inline-block', flexShrink: 0 }}
+            />
+            {item.metric}
+          </div>
+        </div>
+      </div>
+    </motion.div>
+  )
+}
 
 type TeamMember = typeof TEAM[0]
 
@@ -363,19 +582,35 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* What makes us unique */}
-      <section className="py-16 px-6 lg:px-8 max-w-7xl mx-auto">
-        <SectionHeader overline="Our Edge" title="What Makes Us" titleGold="Different" />
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-12">
-          {UNIQUE.map((item, i) => (
-            <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1 }}>
-              <GlassCard hover>
-                <div className="text-3xl mb-4">{item.icon}</div>
-                <h3 className="text-white font-heading font-semibold mb-2">{item.title}</h3>
-                <p className="text-white/45 text-sm leading-relaxed">{item.body}</p>
-              </GlassCard>
-            </motion.div>
-          ))}
+      {/* What makes us unique — bento grid */}
+      <section className="py-20 px-6 lg:px-8 relative overflow-hidden">
+        <div className="absolute inset-0 pointer-events-none"
+          style={{ background: 'radial-gradient(ellipse 70% 50% at 50% 50%,rgba(37,99,235,0.04),transparent)' }} />
+        <div className="max-w-7xl mx-auto relative z-10">
+          <SectionHeader overline="Our Edge" title="What Makes Us" titleGold="Different" />
+
+          {/* Desktop bento: large card left, two small cards right
+              Mobile: horizontal snap-scroll row */}
+          <div
+            className="mt-14 grid gap-5
+              grid-cols-1
+              lg:grid-cols-[1.55fr_1fr] lg:grid-rows-2"
+          >
+            {/* Card 01 — large, spans both rows on desktop */}
+            <div className="lg:row-span-2">
+              <UniqueCard item={UNIQUE[0]} index={0} large />
+            </div>
+
+            {/* Card 02 */}
+            <div>
+              <UniqueCard item={UNIQUE[1]} index={1} />
+            </div>
+
+            {/* Card 03 */}
+            <div>
+              <UniqueCard item={UNIQUE[2]} index={2} />
+            </div>
+          </div>
         </div>
       </section>
 
