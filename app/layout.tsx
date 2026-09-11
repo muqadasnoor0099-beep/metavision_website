@@ -29,7 +29,7 @@ const inter = Inter({
 export const metadata: Metadata = {
   title: 'MetaVision — AI Software for Healthcare & Finance',
   description:
-    'Premium AI-powered software for doctors and chartered accountants. Real-time consultations, intelligent prescriptions, and automated accounting workflows.',
+    'Premium AI-powered software for hospitals and chartered accounting firms. Real-time consultations, intelligent prescriptions, and automated accounting workflows.',
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

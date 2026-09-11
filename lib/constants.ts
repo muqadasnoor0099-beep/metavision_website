@@ -128,7 +128,7 @@ export const ACCOUNTING_FEATURES: Feature[] = [
 ]
 
 export const WHY_US = [
-  { value: '1,700+', label: 'Professionals', description: 'Trusted by doctors and CAs worldwide.' },
+  { value: '1,700+', label: 'Professionals', description: 'Trusted by hospitals and CA firms worldwide.' },
   { value: 'AI-First', label: 'Philosophy', description: 'Not bolted on — AI is core to every workflow.' },
   { value: '100%', label: 'Compliance', description: 'Built for evolving data protection and tax regulations.' },
 ]

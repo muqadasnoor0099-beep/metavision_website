@@ -523,7 +523,7 @@ export default function AboutPage() {
               <span className="bg-gradient-to-r from-gold to-gold-light bg-clip-text text-transparent">That Thinks</span>
             </h1>
             <p className="text-white/50 text-base leading-relaxed max-w-2xl mx-auto">
-              MetaVision is an AI-first software company dedicated to transforming how healthcare professionals and chartered accountants work. We believe the best tools should feel like extensions of your expertise — fast, intelligent, and invisible.
+              MetaVision is an AI-first software company dedicated to transforming how hospitals and chartered accounting firms work. We believe the best tools should feel like extensions of your expertise — fast, intelligent, and invisible.
             </p>
           </motion.div>
         </div>
