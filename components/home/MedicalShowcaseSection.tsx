@@ -915,7 +915,7 @@ export default function MedicalShowcaseSection() {
                       Explore Platform
                       <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                     </Link>
-                    <Link href="/contact" style={{
+                    <Link href="/demo" style={{
                       display: 'inline-flex', alignItems: 'center', gap: 8,
                       padding: '11px 24px', borderRadius: 10, fontWeight: 700, fontSize: 13,
                       border: `1.5px solid ${outerBlue}55`, color: outerMuted, textDecoration: 'none',

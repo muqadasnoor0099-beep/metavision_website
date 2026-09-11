@@ -26,7 +26,7 @@ function AnimatedNumber({ value }: { value: number }) {
 
 // ── Data ──────────────────────────────────────────────────────────────────
 const STATS = [
-  { Icon: Users,      numVal: 1700, suffix: '+', isNumber: true,  label: 'Professionals', description: 'Trusted by doctors and CAs worldwide.' },
+  { Icon: Users,      numVal: 1700, suffix: '+', isNumber: true,  label: 'Professionals', description: 'Trusted by hospitals and CA firms worldwide.' },
   { Icon: Brain,      numVal: null, suffix: '',  isNumber: false, staticVal: 'AI-First',  label: 'Philosophy',   description: 'Not bolted on — AI is core to every workflow.' },
   { Icon: ShieldCheck,numVal: 100,  suffix: '%', isNumber: true,  label: 'Compliance',   description: 'Built for evolving data protection regulations.' },
   { Icon: Globe2,     numVal: 50,   suffix: '+', isNumber: true,  label: 'Countries',    description: 'Serving enterprise clients across the globe.' },
@@ -144,7 +144,7 @@ export default function WhyUsSection() {
               }}
               className="max-w-lg"
             >
-              From solo practitioners to hospital chains, professionals worldwide rely on
+              From regional clinics to hospital chains, healthcare institutions worldwide rely on
               MetaVision to navigate complex operational landscapes with precision.
             </motion.p>
 
@@ -244,10 +244,11 @@ export default function WhyUsSection() {
               initial={{ opacity: 0, y: 28 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: '-80px' }}
+              whileHover={{ y: -3, transition: { duration: 0.25, ease: EASE_OUT } }}
               transition={{ delay: 0.1 + i * 0.1, duration: 0.55, ease: EASE_OUT }}
             >
               <motion.div
-                className="p-2.5 rounded-lg flex items-center justify-center flex-shrink-0"
+                className="relative p-2.5 rounded-lg flex items-center justify-center flex-shrink-0"
                 style={{ backgroundColor: tok.iconBg, border: `1px solid ${tok.iconBorder}` }}
                 initial={{ scale: 0, rotate: -20 }}
                 whileInView={{ scale: 1, rotate: 0 }}
@@ -255,7 +256,13 @@ export default function WhyUsSection() {
                 transition={{ delay: 0.25 + i * 0.1, ...SPRING }}
                 whileHover={{ scale: 1.12, transition: { duration: 0.2 } }}
               >
-                <Icon size={18} style={{ color: tok.iconColor }} />
+                <motion.span
+                  className="absolute inset-0 rounded-lg pointer-events-none"
+                  style={{ boxShadow: `0 0 0 1px ${tok.iconColor}` }}
+                  animate={{ opacity: [0, 0.5, 0], scale: [1, 1.5, 1.8] }}
+                  transition={{ duration: 2.6, repeat: Infinity, ease: 'easeOut', delay: i * 0.4 }}
+                />
+                <Icon size={18} style={{ color: tok.iconColor }} className="relative z-10" />
               </motion.div>
 
               <div>

@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
+import Link from 'next/link'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import DemoModal from '@/components/ui/DemoModal'
 import { PRODUCT_DEMO_BY_MODE } from '@/lib/constants'
@@ -20,7 +21,7 @@ const SLIDES = [
     prefix: 'Through ',
     words:  ['AI Systems', 'Diagnosis', 'Prescriptions'] as string[],
     suffix: '',
-    sub:    'AI-powered prescriptions and clinical tools for modern doctors.',
+    sub:    'AI-powered prescriptions and clinical tools for modern hospitals.',
     tags:   ['Smart Prescriptions', 'AI Workflows', 'Digital Records'],
     cta:    'Explore Healthcare',
     mode:   'medical' as ProductMode,
@@ -162,8 +163,9 @@ export default function HeroSection() {
     <>
       <style>{`
         /* Sora loaded via next/font — no extra import needed */
-        @keyframes bdot   { 0%,100%{opacity:1} 50%{opacity:.2} }
-        @keyframes cblink { 0%,100%{opacity:1} 50%{opacity:0}  }
+        @keyframes bdot     { 0%,100%{opacity:1} 50%{opacity:.2} }
+        @keyframes cblink   { 0%,100%{opacity:1} 50%{opacity:0}  }
+        @keyframes kenburns { from{transform:scale(1)} to{transform:scale(1.07)} }
       `}</style>
 
       <section
@@ -189,7 +191,12 @@ export default function HeroSection() {
               playsInline
               preload={isActive ? 'auto' : isAdjacent ? 'metadata' : 'none'}
               className="absolute inset-0 w-full h-full object-cover transition-opacity duration-700"
-              style={{ opacity: isActive ? 1 : 0, zIndex: isActive ? 1 : 0 }}
+              style={{
+                opacity: isActive ? 1 : 0,
+                zIndex: isActive ? 1 : 0,
+                transformOrigin: 'center center',
+                animation: isActive ? `kenburns ${DURATION + 700}ms ease-out forwards` : 'none',
+              }}
             />
           )
         })}
@@ -290,16 +297,17 @@ export default function HeroSection() {
                 >
                   {slide.cta}
                 </button>
-                <button
-                  className="px-5 py-3 rounded-[8px] text-[13px] font-medium transition-colors"
+                <Link
+                  href="/demo"
+                  className="px-5 py-3 rounded-[8px] text-[13px] font-medium transition-colors inline-flex items-center"
                   style={{
                     background: 'rgba(255,255,255,0.08)',
                     border: '1.5px solid rgba(255,255,255,0.20)',
                     color: 'rgba(255,255,255,0.75)',
                   }}
                 >
-                  ▶ Watch Demo
-                </button>
+                  Request a Demo
+                </Link>
               </motion.div>
             </div>
           </motion.div>
@@ -308,7 +316,7 @@ export default function HeroSection() {
         {/* ── LEFT ARROW ── */}
         <button
           onClick={goPrev}
-          className="absolute left-4 top-1/2 -translate-y-1/2 z-50 w-10 h-10 rounded-full flex items-center justify-center transition-all duration-200 hover:scale-110 active:scale-95"
+          className="absolute left-4 top-1/2 -translate-y-1/2 z-50 w-10 h-10 rounded-full flex items-center justify-center transition-transform duration-200 hover:scale-110 active:scale-95"
           style={{ background: 'rgba(0,0,0,0.35)', border: '1px solid rgba(255,255,255,0.18)', backdropFilter: 'blur(6px)' }}
           aria-label="Previous slide"
         >
@@ -318,7 +326,7 @@ export default function HeroSection() {
         {/* ── RIGHT ARROW ── */}
         <button
           onClick={goNext}
-          className="absolute right-4 top-1/2 -translate-y-1/2 z-50 w-10 h-10 rounded-full flex items-center justify-center transition-all duration-200 hover:scale-110 active:scale-95"
+          className="absolute right-4 top-1/2 -translate-y-1/2 z-50 w-10 h-10 rounded-full flex items-center justify-center transition-transform duration-200 hover:scale-110 active:scale-95"
           style={{ background: 'rgba(0,0,0,0.35)', border: '1px solid rgba(255,255,255,0.18)', backdropFilter: 'blur(6px)' }}
           aria-label="Next slide"
         >
@@ -328,16 +336,27 @@ export default function HeroSection() {
         {/* ── FOOTER: dots + counter (no progress bar) ── */}
         <div className="absolute bottom-8 inset-x-[80px] z-50 flex items-center gap-4">
           <div className="flex gap-1.5">
-            {SLIDES.map((_, i) => (
+            {SLIDES.map((s, i) => (
               <button
                 key={i}
                 onClick={() => goTo(i, i > current ? 1 : -1)}
-                className="h-[3px] rounded-full border-none p-0 cursor-pointer transition-all duration-300"
+                className="relative h-[3px] rounded-full border-none p-0 cursor-pointer overflow-hidden transition-[width] duration-300"
                 style={{
                   width:      current === i ? 40 : 18,
-                  background: current === i ? slide.accent : 'rgba(255,255,255,0.25)',
+                  background: 'rgba(255,255,255,0.25)',
                 }}
-              />
+              >
+                {current === i && (
+                  <motion.span
+                    key={current}
+                    className="absolute inset-y-0 left-0 rounded-full"
+                    style={{ background: s.accent }}
+                    initial={{ width: '0%' }}
+                    animate={{ width: '100%' }}
+                    transition={{ duration: DURATION / 1000, ease: 'linear' }}
+                  />
+                )}
+              </button>
             ))}
           </div>
 

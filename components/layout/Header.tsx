@@ -92,7 +92,7 @@ export default function Header() {
 
         <div className="hidden lg:flex items-center gap-3">
           <ThemeToggle />
-          <GoldButton href="/contact" size="sm">Get Demo</GoldButton>
+          <GoldButton href="/demo" size="sm">Get Demo</GoldButton>
         </div>
 
         {/* Mobile right side */}
@@ -146,7 +146,7 @@ export default function Header() {
                 </div>
               ))}
               <div className="pt-2">
-                <GoldButton href="/contact" className="w-full justify-center">Get Demo</GoldButton>
+                <GoldButton href="/demo" className="w-full justify-center">Get Demo</GoldButton>
               </div>
             </nav>
           </motion.div>

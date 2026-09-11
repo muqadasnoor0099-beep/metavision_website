@@ -188,6 +188,22 @@ function ServiceCard({
   const scale   = useTransform(sp, [t0, t1], [0.94, 1])
   const hoverY  = useMotionValue(0)
 
+  const cardRef = useRef<HTMLDivElement>(null)
+  const rx      = useMotionValue(0)
+  const ry      = useMotionValue(0)
+  const srx     = useSpring(rx, { stiffness: 300, damping: 22 })
+  const sry     = useSpring(ry, { stiffness: 300, damping: 22 })
+
+  function onMouseMove(e: React.MouseEvent<HTMLDivElement>) {
+    const el = cardRef.current
+    if (!el) return
+    const rect = el.getBoundingClientRect()
+    const px = (e.clientX - rect.left) / rect.width - 0.5
+    const py = (e.clientY - rect.top) / rect.height - 0.5
+    ry.set(px * 8)
+    rx.set(-py * 8)
+  }
+
   const cardBg     = isDark ? 'rgba(255,255,255,0.035)' : 'rgba(255,255,255,0.82)'
   const cardBorder = isDark ? 'rgba(255,255,255,0.075)' : `${service.accent}28`
   const cardShadow = isDark ? 'none' : `0 4px 18px rgba(0,0,0,0.06), 0 1px 4px rgba(0,0,0,0.04)`
@@ -197,10 +213,14 @@ function ServiceCard({
 
   return (
     <motion.div
+      ref={cardRef}
       style={{
         opacity,
         scale,
         y: useTransform([y, hoverY], ([a, b]) => (a as number) + (b as number)),
+        rotateX: srx,
+        rotateY: sry,
+        transformPerspective: 900,
         willChange: 'transform, opacity',
         background: cardBg,
         border: `1px solid ${cardBorder}`,
@@ -211,8 +231,9 @@ function ServiceCard({
         translateZ: 0,
       }}
       className="group relative flex flex-col gap-4 p-6 cursor-default select-none overflow-hidden"
+      onMouseMove={onMouseMove}
       onHoverStart={() => hoverY.set(-7)}
-      onHoverEnd={() => hoverY.set(0)}
+      onHoverEnd={() => { hoverY.set(0); rx.set(0); ry.set(0) }}
       whileHover={{
         boxShadow: `0 26px 60px ${service.accent}22, 0 6px 20px rgba(0,0,0,${isDark ? '0.45' : '0.12'})`,
         borderColor: `${service.accent}40`,
