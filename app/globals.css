@@ -50,6 +50,11 @@ html.light {
     /* scroll-behavior handled by Lenis smooth scroll */
   }
   body {
+    /* Framer Motion's useScroll (ServicesSection) walks the offsetParent
+       chain for its scroll-offset math; body defaulting to static made it
+       warn about non-static containers even though the tracked section
+       itself is already `relative`. */
+    position: relative;
     background-color: var(--clr-bg);
     color: #ffffff;
     font-family: var(--font-sora), sans-serif;
