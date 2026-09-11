@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import nodemailer from 'nodemailer'
+import { Resend } from 'resend'
 
 export async function POST(req: NextRequest) {
   try {
@@ -10,15 +10,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 })
     }
 
-    const transporter = nodemailer.createTransport({
-      host:   process.env.SMTP_HOST,
-      port:   Number(process.env.SMTP_PORT) || 587,
-      secure: process.env.SMTP_SECURE === 'true',
-      auth: {
-        user: process.env.SMTP_USER,
-        pass: process.env.SMTP_PASS,
-      },
-    })
+    const resend = new Resend(process.env.RESEND_API_KEY)
 
     const isDemo    = type === 'demo'
     const subject   = isDemo
@@ -26,9 +18,11 @@ export async function POST(req: NextRequest) {
       : `📬 Contact Form — ${name} (${company || email})`
 
     const interestLabel: Record<string, string> = {
-      medical:    'NexLink MedAI',
-      accounting: 'CA Accounting Software',
-      both:       'Both Products',
+      medical:     'NexLink MedAI',
+      accounting:  'Workflow Management System',
+      consulting:  'IT Consulting',
+      development: 'Custom Software Development',
+      other:       'Other',
     }
 
     const html = `
@@ -65,13 +59,18 @@ export async function POST(req: NextRequest) {
 </body>
 </html>`
 
-    await transporter.sendMail({
-      from:    `"MetaVision Website" <${process.env.SMTP_USER}>`,
+    const { error } = await resend.emails.send({
+      from:    process.env.RESEND_FROM || 'MetaVision Website <onboarding@resend.dev>',
       to:      'admin@metavision.world',
       replyTo: email,
       subject,
       html,
     })
+
+    if (error) {
+      console.error('Resend send error:', error)
+      return NextResponse.json({ error: 'Failed to send email' }, { status: 500 })
+    }
 
     return NextResponse.json({ success: true })
   } catch (err) {

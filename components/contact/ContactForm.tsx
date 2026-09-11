@@ -23,7 +23,26 @@ const SERVICES = [
   { value: 'other',       label: 'Other' },
 ]
 
-export default function ContactForm() {
+interface Props {
+  /** Sent to /api/contact — drives the admin email subject line ("Demo Request" vs "Contact Form"). @default 'contact' */
+  formType?: 'contact' | 'demo'
+  heading?: string
+  messageLabel?: string
+  messagePlaceholder?: string
+  submitLabel?: string
+  successTitle?: string
+  successMessage?: string
+}
+
+export default function ContactForm({
+  formType = 'contact',
+  heading = 'Send Us a Message',
+  messageLabel = 'Tell Us About Your Project *',
+  messagePlaceholder = 'Write your message here...',
+  submitLabel = 'Send Message',
+  successTitle = 'Message Sent!',
+  successMessage = "We'll get back to you within 24 hours.",
+}: Props) {
   const { theme } = useTheme()
   const isDark = theme === 'dark'
 
@@ -55,7 +74,7 @@ export default function ContactForm() {
       const res = await fetch('/api/contact', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(form),
+        body: JSON.stringify({ ...form, type: formType }),
       })
       if (!res.ok) throw new Error('Send failed')
       setSubmitted(true)
@@ -87,8 +106,8 @@ export default function ContactForm() {
         style={{ background: tok.cardBg, border: `1px solid ${tok.cardBorder}`, boxShadow: tok.cardShadow }}
       >
         <CheckCircle size={40} className="text-gold" />
-        <h3 className="font-heading font-bold text-xl" style={{ color: tok.heading }}>Message Sent!</h3>
-        <p className="text-sm" style={{ color: tok.label }}>We&apos;ll get back to you within 24 hours.</p>
+        <h3 className="font-heading font-bold text-xl" style={{ color: tok.heading }}>{successTitle}</h3>
+        <p className="text-sm" style={{ color: tok.label }}>{successMessage}</p>
         <button onClick={() => { setForm(EMPTY); setSubmitted(false) }} className="text-gold text-sm hover:underline">
           Send another message
         </button>
@@ -113,7 +132,7 @@ export default function ContactForm() {
         <div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0" style={{ background: '#2563eb' }}>
           <Send size={17} style={{ color: '#ffffff' }} />
         </div>
-        <h2 className="font-heading font-bold text-xl" style={{ color: tok.heading }}>Send Us a Message</h2>
+        <h2 className="font-heading font-bold text-xl" style={{ color: tok.heading }}>{heading}</h2>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
@@ -168,11 +187,11 @@ export default function ContactForm() {
       </div>
 
       <div>
-        <label className="block text-xs font-semibold mb-1.5" style={{ color: tok.label }}>Tell Us About Your Project *</label>
+        <label className="block text-xs font-semibold mb-1.5" style={{ color: tok.label }}>{messageLabel}</label>
         <textarea
           className="w-full rounded-lg px-4 py-3 text-sm resize-none focus:outline-none focus:border-gold/50 transition-colors"
           style={fieldStyle('message')}
-          placeholder="Write your message here..."
+          placeholder={messagePlaceholder}
           value={form.message}
           onChange={set('message')}
           rows={5}
@@ -189,7 +208,7 @@ export default function ContactForm() {
         style={{ background: '#2563eb', boxShadow: '0 4px 16px rgba(37,99,235,0.35)', color: '#ffffff' }}
       >
         <Send size={15} />
-        {sending ? 'Sending…' : 'Send Message'}
+        {sending ? 'Sending…' : submitLabel}
       </button>
     </form>
   )
