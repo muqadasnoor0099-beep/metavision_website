@@ -10,6 +10,7 @@ export const HERO_CONTENT: Record<ProductMode, HeroContent> = {
     ctaLabel: 'Explore NexLink MedAI',
     ctaHref: '/products/medical',
     stats: [
+      { value: '500+', label: 'Clinics' },
       { value: '98%', label: 'Uptime SLA' },
       { value: '2M+', label: 'Consultations' },
     ],
@@ -23,6 +24,7 @@ export const HERO_CONTENT: Record<ProductMode, HeroContent> = {
     ctaLabel: 'Explore Workflow Management System',
     ctaHref: '/products/accounting',
     stats: [
+      { value: '1,200+', label: 'CA Firms' },
       { value: '99.9%', label: 'Accuracy' },
       { value: '50M+', label: 'Records Processed' },
     ],
@@ -123,6 +125,12 @@ export const ACCOUNTING_FEATURES: Feature[] = [
   { icon: 'Users', title: 'Client Management', description: 'Centralised client database and communication hub.' },
   { icon: 'Shield', title: 'Audit Trail', description: 'Complete immutable log of every financial action.' },
   { icon: 'LayoutDashboard', title: 'Multi-firm Dashboard', description: 'Manage multiple firms from a single unified view.' },
+]
+
+export const WHY_US = [
+  { value: '1,700+', label: 'Professionals', description: 'Trusted by hospitals and CA firms worldwide.' },
+  { value: 'AI-First', label: 'Philosophy', description: 'Not bolted on — AI is core to every workflow.' },
+  { value: '100%', label: 'Compliance', description: 'Built for evolving data protection and tax regulations.' },
 ]
 
 export const TESTIMONIALS: Testimonial[] = [

@@ -190,7 +190,7 @@ export function CinematicHero({
   metricValue   = 98,
   metricLabel   = "Uptime SLA",
   ctaHeading    = "Transform Your Practice.",
-  ctaDescription = "Start your free trial today — no credit card required.",
+  ctaDescription = "Join 500+ clinics already using NexLink MedAI. Start your free trial today — no credit card required.",
   badge1Label   = "AI Prescription",
   badge1Sub     = "Generated instantly",
   badge2Label   = "Patient Check-in",

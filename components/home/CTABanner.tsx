@@ -44,7 +44,7 @@ export default function CTABanner() {
           transition={{ delay: 0.1 }}
           className="text-white/50 text-base leading-relaxed max-w-xl"
         >
-          Start your free trial today — no credit card required.
+          Join 1,700+ professionals already using MetaVision. Start your free trial today — no credit card required.
         </motion.p>
 
         <motion.div
