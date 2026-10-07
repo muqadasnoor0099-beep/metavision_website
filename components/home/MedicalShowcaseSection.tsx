@@ -698,8 +698,7 @@ function SceneProgress({ scene, duration }: { scene: number; duration: number })
 
 // ─── Main Section ─────────────────────────────────────────────────────────────
 export default function MedicalShowcaseSection() {
-  const [scene, setScene]     = useState(0)
-  const [playing, setPlaying] = useState(false)
+  const [scene, setScene] = useState(0)
   const sectionRef = useRef<HTMLElement>(null)
   const timerRef   = useRef<ReturnType<typeof setInterval> | null>(null)
   const isInView   = useInView(sectionRef, { once: true, margin: '-15%' })
@@ -723,18 +722,12 @@ export default function MedicalShowcaseSection() {
     setScene(s => (s + 1) % TOTAL_SCENES)
   }, [])
 
-  // Autoplay on scroll entry
+  // Advance scenes — autoplay starts once the section scrolls into view
   useEffect(() => {
     if (!isInView) return
-    setPlaying(true)
-  }, [isInView])
-
-  // Advance scenes
-  useEffect(() => {
-    if (!playing) return
     timerRef.current = setInterval(nextScene, SCENE_DURATION)
     return () => { if (timerRef.current) clearInterval(timerRef.current) }
-  }, [playing, nextScene])
+  }, [isInView, nextScene])
 
   const SceneComp = SCENE_COMPONENTS[scene]
   const meta      = SCENES[scene]

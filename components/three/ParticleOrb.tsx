@@ -27,6 +27,15 @@ function fibonacciSphere(n: number, r: number): Float32Array {
   return pos
 }
 
+// Computed once at module load (COUNT never changes) rather than during
+// render, since this is purely decorative size variation, not simulation
+// state — sidesteps calling Math.random() from within a render path.
+const PARTICLE_SIZES = (() => {
+  const s = new Float32Array(COUNT)
+  for (let i = 0; i < COUNT; i++) s[i] = 2.5 + Math.random() * 2.5
+  return s
+})()
+
 function useThemeColor() {
   const [isDark, setIsDark] = useState(true)
   useEffect(() => {
@@ -47,17 +56,16 @@ interface OrbProps {
 function OrbScene({ modeKey, isDark }: OrbProps) {
   const pointsRef = useRef<THREE.Points>(null)
   const geoRef = useRef<THREE.BufferGeometry>(null)
-  const { camera, size } = useThree()
+  const { camera } = useThree()
 
-  // Per-particle state (not React state — lives in refs for perf)
+  // Per-particle state (not React state — mutated in place every frame in
+  // useFrame/effects below for performance; recreating these Float32Arrays
+  // 60x/second would be the actual bug). This is react-three-fiber's
+  // documented "mutate, don't set state" pattern for render-loop data.
   const origin   = useMemo(() => fibonacciSphere(COUNT, RADIUS), [])
   const current  = useMemo(() => origin.slice(), [origin])
   const velocity = useMemo(() => new Float32Array(COUNT * 3), [])
-  const sizes    = useMemo(() => {
-    const s = new Float32Array(COUNT)
-    for (let i = 0; i < COUNT; i++) s[i] = 2.5 + Math.random() * 2.5
-    return s
-  }, [])
+  const sizes    = PARTICLE_SIZES
 
   // Mouse in NDC
   const mouse = useRef(new THREE.Vector2(9999, 9999))
@@ -74,7 +82,8 @@ function OrbScene({ modeKey, isDark }: OrbProps) {
     return () => window.removeEventListener('mousemove', onMove)
   }, [])
 
-  // Mode switch → burst scatter
+  // Mode switch → burst scatter. Mutates the shared velocity buffer in
+  // place by design — see the comment on its useMemo above.
   useEffect(() => {
     if (modeKey === prevMode.current) return
     prevMode.current = modeKey
@@ -82,9 +91,11 @@ function OrbScene({ modeKey, isDark }: OrbProps) {
       const nx = origin[i * 3]     / RADIUS
       const ny = origin[i * 3 + 1] / RADIUS
       const nz = origin[i * 3 + 2] / RADIUS
+      /* eslint-disable react-hooks/immutability */
       velocity[i * 3]     += nx * BURST_STRENGTH * (0.5 + Math.random())
       velocity[i * 3 + 1] += ny * BURST_STRENGTH * (0.5 + Math.random())
       velocity[i * 3 + 2] += nz * BURST_STRENGTH * (0.5 + Math.random())
+      /* eslint-enable react-hooks/immutability */
     }
   }, [modeKey, origin, velocity])
 
@@ -106,6 +117,11 @@ function OrbScene({ modeKey, isDark }: OrbProps) {
   const plane     = useMemo(() => new THREE.Plane(new THREE.Vector3(0, 0, 1), 0), [])
   const mouseWorld = useMemo(() => new THREE.Vector3(), [])
 
+  // useFrame runs outside React's render cycle (r3f's per-frame callback);
+  // mutating `current`/`velocity`/the geometry's position buffer in place
+  // here — instead of via setState — is the standard, necessary r3f
+  // pattern for 60fps particle simulation.
+  /* eslint-disable react-hooks/immutability */
   useFrame(({ clock }) => {
     if (!pointsRef.current || !geoRef.current) return
 
@@ -165,6 +181,7 @@ function OrbScene({ modeKey, isDark }: OrbProps) {
 
     geoRef.current.attributes.position.needsUpdate = true
   })
+  /* eslint-enable react-hooks/immutability */
 
   return (
     <points ref={pointsRef}>

@@ -66,9 +66,19 @@ function Typewriter({ words, color }: { words: string[]; color: string }) {
   const st = useRef({ wi: 0, ci: 0, del: false, paused: false })
   const timer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined)
 
+  // Text reset adjusted during render (React's recommended pattern for
+  // resetting state on a prop change) so it lands in the same render as the
+  // new `words`, rather than a synchronous setState inside the effect below.
+  // The `st` ref reset stays in the effect — writing a ref during render is
+  // disallowed even though setState there is fine.
+  const [prevWords, setPrevWords] = useState(words)
+  if (words !== prevWords) {
+    setPrevWords(words)
+    setText('')
+  }
+
   useEffect(() => {
     st.current = { wi: 0, ci: 0, del: false, paused: false }
-    setText('')
     function tick() {
       const s = st.current
       const w = words[s.wi]
@@ -85,7 +95,6 @@ function Typewriter({ words, color }: { words: string[]; color: string }) {
     }
     timer.current = setTimeout(tick, 300)
     return () => clearTimeout(timer.current)
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [words]) // re-mounts when slide changes
 
   return (
@@ -173,7 +182,9 @@ export default function HeroSection() {
         onTouchStart={e => { touchStartX.current = e.touches[0].clientX }}
         onTouchEnd={e => {
           const diff = touchStartX.current - e.changedTouches[0].clientX
-          if (Math.abs(diff) > 50) diff > 0 ? goNext() : goPrev()
+          if (Math.abs(diff) > 50) {
+            if (diff > 0) goNext(); else goPrev()
+          }
         }}
       >
 

@@ -75,7 +75,7 @@ export default function TestimonialsSection() {
                     <Star key={j} size={13} className="text-gold fill-gold" />
                   ))}
                 </div>
-                <p className="text-white/65 text-sm leading-relaxed mb-5">"{t.quote}"</p>
+                <p className="text-white/65 text-sm leading-relaxed mb-5">&ldquo;{t.quote}&rdquo;</p>
                 <div>
                   <div className="text-white font-semibold text-sm">{t.name}</div>
                   <div className="text-white/40 text-xs mt-0.5">{t.role}, {t.company}</div>

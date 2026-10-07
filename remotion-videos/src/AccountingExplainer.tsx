@@ -7,7 +7,7 @@ import {
   useVideoConfig,
   Sequence,
 } from 'remotion'
-import { BG, GOLD, GOLD_LIGHT, SURFACE, SURFACE_HIGH, TEXT, TEXT_MUTED, FONT_HEADING, FONT_BODY } from './design'
+import { BG, GOLD, GOLD_LIGHT, SURFACE_HIGH, TEXT, TEXT_MUTED, FONT_HEADING, FONT_BODY } from './design'
 import { GoldPill, GoldGradientText } from './components/GoldPill'
 import { GlassCard } from './components/GlassCard'
 import { BarChart } from './components/BarChart'
@@ -421,7 +421,7 @@ function SceneFeatureClients() {
             <GoldGradientText size={40}>Management Hub</GoldGradientText>
           </div>
           <div style={{ ...slideUp(frame, 14), fontSize: 16, color: TEXT_MUTED, lineHeight: 1.75 }}>
-            Keep every client's documents, deadlines, communication, and task status in one place.
+            Keep every client&apos;s documents, deadlines, communication, and task status in one place.
             Never miss a filing or lose a document again.
           </div>
           {['Centralised client database', 'Task & deadline tracking per client', 'Document storage & version control', 'Shared client portal for approvals'].map((pt, i) => (
@@ -488,7 +488,7 @@ function SceneStats() {
         <div style={{ ...slideUp(frame, 32), maxWidth: 700, textAlign: 'center' }}>
           <GlassCard>
             <div style={{ fontSize: 17, color: TEXT_MUTED, lineHeight: 1.8, fontStyle: 'italic' }}>
-              "Filing 200+ GST returns used to take a week. Now it takes a day. MetaVision is a game-changer for our firm."
+              &quot;Filing 200+ GST returns used to take a week. Now it takes a day. MetaVision is a game-changer for our firm.&quot;
             </div>
             <div style={{ marginTop: 16, fontSize: 14, fontWeight: 700, color: GOLD }}>CA Bilal Ahmed</div>
             <div style={{ fontSize: 12, color: TEXT_MUTED, marginTop: 2 }}>Founding Partner, Ahmed & Partners, Lahore</div>

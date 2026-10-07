@@ -62,6 +62,11 @@ export default function ParticleEffectForHero({ dark = true }: { dark?: boolean 
     }))
   }, [dark]) // eslint-disable-line react-hooks/exhaustive-deps
 
+  // Always points at the latest `animate` closure — lets requestAnimationFrame
+  // schedule itself recursively without referencing `animate` before its own
+  // `const` declaration finishes.
+  const animateRef = useRef<(t: number) => void>(() => {})
+
   const animate = useCallback((t: number) => {
     const cv = canvasRef.current
     if (!cv) return
@@ -84,7 +89,10 @@ export default function ParticleEffectForHero({ dark = true }: { dark?: boolean 
 
     // 2. Drifting bg stars
     ctx.fillStyle = dark ? '#ffffff' : '#1e3a8a'
+    // Ref-held particle state is mutated in place every frame by design
+    // (60fps canvas sim) — reallocating arrays here would be the actual bug.
     for (const p of bgRef.current) {
+      // eslint-disable-next-line react-hooks/immutability
       p.x += p.vx; p.y += p.vy
       if (p.x < 0) p.x = W; if (p.x > W) p.x = 0
       if (p.y < 0) p.y = H; if (p.y > H) p.y = 0
@@ -101,8 +109,10 @@ export default function ParticleEffectForHero({ dark = true }: { dark?: boolean 
     for (const p of parts) {
       const dx = mouse.x - p.x, dy = mouse.y - p.y
       const d = Math.sqrt(dx * dx + dy * dy)
+      // Same ref-held mutable sim state as above.
       if (mouse.active && d < MOUSE_R && d > .01) {
         const f = (MOUSE_R - d) / MOUSE_R
+        // eslint-disable-next-line react-hooks/immutability
         p.vx -= (dx / d) * f * REPULSION * 5
         p.vy -= (dy / d) * f * REPULSION * 5
       }
@@ -177,8 +187,12 @@ export default function ParticleEffectForHero({ dark = true }: { dark?: boolean 
       ctx.fill()
     }
 
-    rafRef.current = requestAnimationFrame(animate)
+    rafRef.current = requestAnimationFrame(animateRef.current)
   }, [dark])
+
+  useEffect(() => {
+    animateRef.current = animate
+  }, [animate])
 
   useEffect(() => {
     const wrap = wrapRef.current

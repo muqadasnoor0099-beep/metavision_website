@@ -3,6 +3,7 @@ import {
   AbsoluteFill,
   Html5Audio,
   interpolate,
+  random,
   spring,
   staticFile,
   useCurrentFrame,
@@ -98,10 +99,13 @@ function Glass({ children, style }: { children: React.ReactNode; style?: React.C
 function Waveform({ frame, color = BLUE_L, bars = 28, height = 40 }: {
   frame: number; color?: string; bars?: number; height?: number
 }) {
+  // Seeded (not Math.random) so bar phase/frequency stay stable across
+  // frames — Remotion can render frames out of order during export, and
+  // real randomness would make the waveform jitter instead of animate.
   const phases = React.useMemo(() =>
-    Array.from({ length: bars }, () => Math.random() * Math.PI * 2), [bars])
+    Array.from({ length: bars }, (_, i) => random(`wave-phase-${i}`) * Math.PI * 2), [bars])
   const freqs = React.useMemo(() =>
-    Array.from({ length: bars }, () => 0.08 + Math.random() * 0.12), [bars])
+    Array.from({ length: bars }, (_, i) => 0.08 + random(`wave-freq-${i}`) * 0.12), [bars])
 
   return (
     <div style={{ display: 'flex', alignItems: 'center', gap: 3, height }}>
@@ -258,7 +262,7 @@ function Scene1() {
                 }} />
               </div>
               <span style={{ fontSize: 11, color: RED, fontWeight: 700, letterSpacing: '0.14em' }}>
-                AI LISTENING · DOCTOR'S VOICE
+                AI LISTENING · DOCTOR&apos;S VOICE
               </span>
             </div>
             <Waveform frame={frame} color={BLUE_L} bars={32} height={42} />
@@ -268,8 +272,8 @@ function Scene1() {
               border: `1px solid ${BLUE}33`,
               fontSize: 13, color: W60, lineHeight: 1.7, fontStyle: 'italic' as const,
             }}>
-              "Patient presents with fever of 38.7, dry persistent cough for three days,
-              moderate fatigue and frontal headache..."
+              &quot;Patient presents with fever of 38.7, dry persistent cough for three days,
+              moderate fatigue and frontal headache...&quot;
             </div>
           </Glass>
         </div>
@@ -444,7 +448,7 @@ function Scene2() {
             <div style={{ fontSize: 11, color: W35, fontWeight: 700, letterSpacing: '0.12em', marginBottom: 12 }}>LIVE TRANSCRIPT</div>
             <div style={{ fontSize: 13, color: W60, lineHeight: 1.8 }}>
               <span style={{ color: BLUE_L, fontWeight: 700 }}>Patient: </span>
-              "I've had a high fever for three days, around 38–39 degrees. I have a dry cough and feel very tired..."
+              &quot;I&apos;ve had a high fever for three days, around 38–39 degrees. I have a dry cough and feel very tired...&quot;
             </div>
             <div style={{ display: 'flex', gap: 6, marginTop: 12 }}>
               <div style={{ width: 4, height: 4, borderRadius: '50%', background: BLUE_L, marginTop: 6 }} />

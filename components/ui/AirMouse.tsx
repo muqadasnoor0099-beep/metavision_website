@@ -3,10 +3,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Hand, X, Loader2, AlertCircle, ChevronDown, ChevronUp } from 'lucide-react'
-
-declare global {
-  interface Window { Hands: any; Camera: any }
-}
+import type { MediaPipeCameraInstance, MediaPipeHandsInstance, MediaPipeHandsResults } from '@/lib/mediapipe'
 
 type Status  = 'idle' | 'loading' | 'ready' | 'error'
 type Gesture = 'move' | 'click' | 'scroll' | 'none'
@@ -45,8 +42,8 @@ export default function AirMouse() {
   const cursorRef    = useRef<HTMLDivElement>(null)
   const ringRef      = useRef<HTMLDivElement>(null)
   const videoRef     = useRef<HTMLVideoElement>(null)
-  const handsRef     = useRef<any>(null)
-  const cameraRef    = useRef<any>(null)
+  const handsRef     = useRef<MediaPipeHandsInstance | null>(null)
+  const cameraRef    = useRef<MediaPipeCameraInstance | null>(null)
 
   const smoothX      = useRef(0)
   const smoothY      = useRef(0)
@@ -76,7 +73,7 @@ export default function AirMouse() {
   useEffect(() => () => cleanup(), [cleanup])
 
   // ── Per-frame results ──────────────────────────────────────────────────────
-  const onResults = useCallback((results: any) => {
+  const onResults = useCallback((results: MediaPipeHandsResults) => {
     const cursor = cursorRef.current
     const ring   = ringRef.current
     if (!cursor || !ring) return
@@ -233,9 +230,9 @@ export default function AirMouse() {
       smoothX.current = window.innerWidth  / 2
       smoothY.current = window.innerHeight / 2
       setStatus('ready')
-    } catch (err: any) {
+    } catch (err) {
       setErrorMsg(
-        err?.name === 'NotAllowedError'
+        err instanceof DOMException && err.name === 'NotAllowedError'
           ? 'Camera permission denied. Please allow camera and try again.'
           : 'Could not start Air Mouse. Check your camera is connected.',
       )

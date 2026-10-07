@@ -17,7 +17,6 @@ import { fade } from '@remotion/transitions/fade'
 const DARK = '#06070d'
 const ACCENT = '#2563eb'
 const ACCENT_LIGHT = '#60a5fa'
-const ACCENT_CYAN = '#22d3ee'
 const GOLD = '#d4af37'
 const GOLD_LIGHT = '#f5d060'
 const WHITE = '#ffffff'
@@ -504,7 +503,7 @@ function SceneActionable() {
         <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
           <Pill label="Actionable Items" frame={frame} delay={0} />
           <div style={{ ...slideUp(frame, 8), fontSize: 40, fontWeight: 800, lineHeight: 1.1 }}>
-            Every person knows<br /><BlueHeadline size={40}>exactly what's next.</BlueHeadline>
+            Every person knows<br /><BlueHeadline size={40}>exactly what&apos;s next.</BlueHeadline>
           </div>
           <div style={{ ...slideUp(frame, 16), fontSize: 16, color: WHITE_60, lineHeight: 1.75 }}>
             View every item that requires your action across all modules and tasks —
@@ -649,7 +648,7 @@ function SceneOutro() {
         </div>
 
         <div style={{ ...fadeIn(frame, 40, 25), display: 'flex', gap: 10, marginTop: 14 }}>
-          {thumbs.map((name, i) => (
+          {thumbs.map((name) => (
             <div key={name} style={{ width: 122, height: 70, borderRadius: 8, overflow: 'hidden', border: '1px solid rgba(37,99,235,0.28)', boxShadow: '0 4px 16px rgba(0,0,0,0.5)', opacity: 0.88 }}>
               <Img src={staticFile(`screenshots/${name}.jpeg`)} style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'top' }} />
             </div>

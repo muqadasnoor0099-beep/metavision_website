@@ -311,11 +311,11 @@ function SceneActionable() {
         <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
           <div style={slideUp(frame, 0)}><Pill label="Cross-Firm Consultations" /></div>
           <div style={{ ...slideUp(frame, 8), fontSize: 40, fontWeight: 800, lineHeight: 1.1 }}>
-            Every person knows<br /><BlueHeadline size={40}>exactly what's next.</BlueHeadline>
+            Every person knows<br /><BlueHeadline size={40}>exactly what&apos;s next.</BlueHeadline>
           </div>
           <div style={{ ...slideUp(frame, 16), fontSize: 16, color: WHITE_60, lineHeight: 1.75 }}>
             The platform supports consultations across firms, enabling broader collaboration.
-            Each user's personalised queue shows Pending, Worked On, and Assigned items — instantly.
+            Each user&apos;s personalised queue shows Pending, Worked On, and Assigned items — instantly.
           </div>
           {[
             { label: 'Pending Items', val: '8' },
@@ -378,82 +378,6 @@ function SceneOpportunities() {
   )
 }
 
-// ─── SCENE: Create Opportunity — Guided New-Business Workflow ────────────────
-
-function SceneCreateOpportunity() {
-  const frame = useCurrentFrame()
-
-  return (
-    <Dark>
-      <AbsoluteFill style={{ display: 'grid', gridTemplateColumns: '1.35fr 1fr', gap: 56, padding: '56px 80px', alignItems: 'center' }}>
-        {/* Left: screenshot */}
-        <div style={{ ...fadeIn(frame, 0, 30), height: 470, position: 'relative' }}>
-          <ScreenFrame src={staticFile('screenshots/create-opportunity.jpeg')} frame={frame} delay={0} zoomDuration={220}>
-            <CalloutBadge label="Step" value="1 of 3" x="8px" y="8px" frame={frame} delay={24} />
-            <CalloutBadge label="Workflow" value="Guided" x="8px" y="80px" frame={frame} delay={32} />
-          </ScreenFrame>
-        </div>
-
-        {/* Right: copy */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
-          <div style={slideUp(frame, 4)}><Pill label="New Business Workflow" /></div>
-          <div style={{ ...slideUp(frame, 12), fontSize: 42, fontWeight: 800, lineHeight: 1.1 }}>
-            Capture every deal,<br /><BlueHeadline size={42}>step by step.</BlueHeadline>
-          </div>
-          <div style={{ ...slideUp(frame, 20), fontSize: 16, color: WHITE_60, lineHeight: 1.75 }}>
-            A guided multi-step workflow keeps new business consistent and complete —
-            from the first client touchpoint to a fully scoped opportunity.
-          </div>
-          {['Step 1: Client Selection', 'Step 2: Client Information', 'Step 3: Opportunity Details', 'Converts directly into a project once won'].map((pt, i) => (
-            <div key={i} style={{ ...slideUp(frame, 28 + i * 5), display: 'flex', alignItems: 'center', gap: 12 }}>
-              <div style={{ width: 5, height: 5, borderRadius: '50%', background: ACCENT, flexShrink: 0 }} />
-              <span style={{ fontSize: 15, color: WHITE_60 }}>{pt}</span>
-            </div>
-          ))}
-        </div>
-      </AbsoluteFill>
-    </Dark>
-  )
-}
-
-// ─── SCENE: Project Setup Workflow — Opportunity → Live Project ─────────────
-
-function SceneProjectSetup() {
-  const frame = useCurrentFrame()
-
-  return (
-    <Dark>
-      <AbsoluteFill style={{ display: 'grid', gridTemplateColumns: '1fr 1.35fr', gap: 56, padding: '56px 80px', alignItems: 'center' }}>
-        {/* Left: copy */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
-          <div style={slideUp(frame, 0)}><Pill label="Opportunity → Project" /></div>
-          <div style={{ ...slideUp(frame, 8), fontSize: 42, fontWeight: 800, lineHeight: 1.1 }}>
-            From won deal to<br /><BlueHeadline size={42}>live project — instantly.</BlueHeadline>
-          </div>
-          <div style={{ ...slideUp(frame, 16), fontSize: 16, color: WHITE_60, lineHeight: 1.75 }}>
-            Once an opportunity is won, convert it into a project through a guided
-            setup flow — no manual re-entry, nothing lost in translation.
-          </div>
-          {['Project Setup: details & deadlines', 'Project Execution: upload contracts', 'Add milestones', 'Add information requests & complete setup'].map((pt, i) => (
-            <div key={i} style={{ ...slideUp(frame, 24 + i * 5), display: 'flex', alignItems: 'center', gap: 12 }}>
-              <div style={{ width: 5, height: 5, borderRadius: '50%', background: ACCENT, flexShrink: 0 }} />
-              <span style={{ fontSize: 15, color: WHITE_60 }}>{pt}</span>
-            </div>
-          ))}
-        </div>
-
-        {/* Right: screenshot */}
-        <div style={{ ...fadeIn(frame, 6, 30), height: 480, position: 'relative' }}>
-          <ScreenFrame src={staticFile('screenshots/project-setup.jpeg')} frame={frame} delay={6} zoomDuration={250}>
-            <CalloutBadge label="Stage" value="Project Execution" x="8px" y="8px" frame={frame} delay={30} />
-            <CalloutBadge label="Step" value="Info Requests" x="8px" y="80px" frame={frame} delay={38} />
-          </ScreenFrame>
-        </div>
-      </AbsoluteFill>
-    </Dark>
-  )
-}
-
 // ─── SCENE 6: Project Dashboard — Role-Based UX (1200–1440f = 40–48s) ────────
 
 function SceneDashboard() {
@@ -469,7 +393,7 @@ function SceneDashboard() {
             Every user sees<br /><BlueHeadline size={42}>what they need.</BlueHeadline>
           </div>
           <div style={{ ...slideUp(frame, 16), fontSize: 16, color: WHITE_60, lineHeight: 1.75 }}>
-            Each user's experience is tailored based on their role. A partner sees the full picture;
+            Each user&apos;s experience is tailored based on their role. A partner sees the full picture;
             a team member sees their queue. Efficiency and security built in by design.
           </div>
           {['Summary · Kanban · Milestones · Deliverables', 'Information Requests & Communication Box', 'Contract status per project', 'Task & milestone donut analytics'].map((pt, i) => (

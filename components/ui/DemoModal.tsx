@@ -23,18 +23,28 @@ export default function DemoModal({ open, onClose, videoSrc, title }: Props) {
   const videoRef = useRef<HTMLVideoElement>(null)
   const [loadError, setLoadError] = useState<string | null>(null)
 
+  // Reset the load error whenever the modal reopens or the video changes —
+  // adjusted during render (React's recommended pattern for resetting state
+  // on a prop change) rather than in an effect, so it takes effect in the
+  // same render instead of triggering an extra one.
+  const [prevKey, setPrevKey] = useState(`${open}:${videoSrc}`)
+  const key = `${open}:${videoSrc}`
+  if (key !== prevKey) {
+    setPrevKey(key)
+    setLoadError(null)
+  }
+
   const onCanPlay = useCallback(() => {
     if (!open) return
     tryPlay(videoRef.current)
   }, [open])
 
-  // Pause when closed; reset error when src changes
+  // Pause when closed
   useEffect(() => {
     if (!open) {
       videoRef.current?.pause()
     }
-    setLoadError(null)
-  }, [open, videoSrc])
+  }, [open])
 
   // Close on Escape key
   useEffect(() => {

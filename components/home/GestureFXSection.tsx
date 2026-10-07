@@ -1,8 +1,7 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
-
-declare global { interface Window { Hands: any } }
+import type { MediaPipeHandLandmark, MediaPipeHandsInstance } from '@/lib/mediapipe'
 
 // ── Particle type (module-level — avoids interface-inside-function-body parse error) ──
 interface Pt {
@@ -60,7 +59,7 @@ export default function GestureFXSection() {
 
     let particles: Pt[]  = []
     let targets: {x:number;y:number}[] = []
-    let handLandmarks: any[] = []
+    let handLandmarks: MediaPipeHandLandmark[][] = []
     let transitioning = false
     let lastHandTime  = 0
 
@@ -302,7 +301,7 @@ export default function GestureFXSection() {
 
     // ── Camera ────────────────────────────────────────────────────────────
     let mpReady  = false
-    let mpHands: any = null
+    let mpHands: MediaPipeHandsInstance | null = null
 
     async function startCamera() {
       if (!video) return
@@ -322,10 +321,10 @@ export default function GestureFXSection() {
           video!.onloadedmetadata = () => resolve()
           setTimeout(resolve, 3000)
         })
-        try { await video.play() } catch(_) {}
+        try { await video.play() } catch {}
         setCamStatus('active')
         initMP()
-      } catch (_) {
+      } catch {
         setCamStatus('denied')
       }
     }
@@ -343,7 +342,7 @@ export default function GestureFXSection() {
           maxNumHands: 2, modelComplexity: 0,
           minDetectionConfidence: 0.65, minTrackingConfidence: 0.55,
         })
-        h.onResults((r: any) => {
+        h.onResults((r) => {
           handLandmarks = r.multiHandLandmarks || []
           setHandCount(handLandmarks.length)
           if (handLandmarks.length) lastHandTime = Date.now()
@@ -351,7 +350,7 @@ export default function GestureFXSection() {
         await h.initialize()
         mpHands = h; mpReady = true
         pumpFrames()
-      } catch(_) {}
+      } catch {}
     }
 
     let pumping = false
@@ -361,7 +360,7 @@ export default function GestureFXSection() {
       const loop = async () => {
         if (stopped) return
         if (video && video.readyState >= 2 && !video.paused && mpHands) {
-          try { await mpHands.send({ image: video }) } catch(_) {}
+          try { await mpHands.send({ image: video }) } catch {}
         }
         setTimeout(loop, 50)
       }
@@ -397,7 +396,7 @@ export default function GestureFXSection() {
     const tipStart  = setTimeout(showTip, 5000)
 
     // ── expose switchWord to React ────────────────────────────────────────
-    ;(window as any).__gfxSwitch = (word: string, idx: number) => switchWord(word, idx)
+    window.__gfxSwitch = (word: string, idx: number) => switchWord(word, idx)
 
     return () => {
       stopped = true
@@ -407,12 +406,12 @@ export default function GestureFXSection() {
       clearTimeout(tipStart)
       window.removeEventListener('resize', resize)
       if (video.srcObject) (video.srcObject as MediaStream).getTracks().forEach(t => t.stop())
-      delete (window as any).__gfxSwitch
+      delete window.__gfxSwitch
     }
   }, [])
 
   const handleWordClick = (word: string, idx: number) => {
-    ;(window as any).__gfxSwitch?.(word, idx)
+    window.__gfxSwitch?.(word, idx)
   }
 
   return (
@@ -592,8 +591,6 @@ export default function GestureFXSection() {
           animation: 'gfx-fade 1s ease 1.5s both',
         }}>
           {[
-            ['500+', 'Clinics Onboarded'],
-            ['2M+',  'Consultations'],
             ['98%',  'Uptime SLA'],
           ].map(([n, l]) => (
             <div key={l} style={{ textAlign: 'right' }}>
