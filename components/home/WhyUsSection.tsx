@@ -1,36 +1,12 @@
 'use client'
 
-import { motion, useInView, useMotionValue, animate, useTransform } from 'framer-motion'
-import { useEffect, useRef } from 'react'
-import { Users, Brain, ShieldCheck, Globe2, ArrowRight } from 'lucide-react'
+import { motion } from 'framer-motion'
+import { ArrowRight } from 'lucide-react'
 import Link from 'next/link'
 import { GlobeLive } from '@/components/ui/GlobeLive'
 import { useTheme } from '@/components/providers/ThemeProvider'
 
-const SPRING   = { type: 'spring', stiffness: 260, damping: 24 } as const
 const EASE_OUT = [0.16, 1, 0.3, 1] as const
-
-// ── Counting number ───────────────────────────────────────────────────────
-function AnimatedNumber({ value }: { value: number }) {
-  const mv     = useMotionValue(0)
-  const disp   = useTransform(mv, v => Math.floor(v).toLocaleString())
-  const ref    = useRef<HTMLSpanElement>(null)
-  const inView = useInView(ref, { once: true, margin: '-80px' })
-  useEffect(() => {
-    if (!inView) return
-    const ctrl = animate(mv, value, { duration: 2, ease: EASE_OUT })
-    return ctrl.stop
-  }, [inView, mv, value])
-  return <motion.span ref={ref}>{disp}</motion.span>
-}
-
-// ── Data ──────────────────────────────────────────────────────────────────
-const STATS = [
-  { Icon: Users,      numVal: 1700, suffix: '+', isNumber: true,  label: 'Professionals', description: 'Trusted by hospitals and CA firms worldwide.' },
-  { Icon: Brain,      numVal: null, suffix: '',  isNumber: false, staticVal: 'AI-First',  label: 'Philosophy',   description: 'Not bolted on — AI is core to every workflow.' },
-  { Icon: ShieldCheck,numVal: 100,  suffix: '%', isNumber: true,  label: 'Compliance',   description: 'Built for evolving data protection regulations.' },
-  { Icon: Globe2,     numVal: 50,   suffix: '+', isNumber: true,  label: 'Countries',    description: 'Serving enterprise clients across the globe.' },
-]
 
 const TITLE_WORDS = [['Trusted', 'by'], ['Industry', 'Leaders']]
 
@@ -214,95 +190,6 @@ export default function WhyUsSection() {
             </div>
           </motion.div>
         </div>
-
-        {/* ── Stats bar ─────────────────────────────────────────────── */}
-        <motion.div
-          className="rounded-xl grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-0 relative overflow-hidden"
-          style={{
-            background:  tok.cardBg,
-            border:      `1px solid ${tok.cardBorder}`,
-            boxShadow:   tok.cardShadow,
-          }}
-          initial={{ opacity: 0, y: 48 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-80px' }}
-          transition={{ duration: 0.7, ease: EASE_OUT }}
-        >
-          {/* Floating glow */}
-          <motion.div
-            className="absolute top-0 right-0 -mr-20 -mt-20 w-56 h-56 rounded-full pointer-events-none"
-            style={{ backgroundColor: tok.glowPulse, filter: 'blur(80px)' }}
-            animate={{ scale: [1, 1.4, 1], opacity: tok.glowOpacity }}
-            transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
-          />
-
-          {STATS.map(({ Icon, numVal, suffix, isNumber, staticVal, label, description }, i) => (
-            <motion.div
-              key={label}
-              className="flex items-start gap-4 p-8 relative z-10"
-              style={{ borderLeft: i === 0 ? 'none' : `1px solid ${tok.dividerLine}` }}
-              initial={{ opacity: 0, y: 28 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: '-80px' }}
-              whileHover={{ y: -3, transition: { duration: 0.25, ease: EASE_OUT } }}
-              transition={{ delay: 0.1 + i * 0.1, duration: 0.55, ease: EASE_OUT }}
-            >
-              <motion.div
-                className="relative p-2.5 rounded-lg flex items-center justify-center flex-shrink-0"
-                style={{ backgroundColor: tok.iconBg, border: `1px solid ${tok.iconBorder}` }}
-                initial={{ scale: 0, rotate: -20 }}
-                whileInView={{ scale: 1, rotate: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.25 + i * 0.1, ...SPRING }}
-                whileHover={{ scale: 1.12, transition: { duration: 0.2 } }}
-              >
-                <motion.span
-                  className="absolute inset-0 rounded-lg pointer-events-none"
-                  style={{ boxShadow: `0 0 0 1px ${tok.iconColor}` }}
-                  animate={{ opacity: [0, 0.5, 0], scale: [1, 1.5, 1.8] }}
-                  transition={{ duration: 2.6, repeat: Infinity, ease: 'easeOut', delay: i * 0.4 }}
-                />
-                <Icon size={18} style={{ color: tok.iconColor }} className="relative z-10" />
-              </motion.div>
-
-              <div>
-                <div
-                  className="text-2xl font-bold leading-tight"
-                  style={{
-                    fontFamily: 'var(--font-plus-jakarta), "Plus Jakarta Sans", sans-serif',
-                    color: tok.statValue,
-                  }}
-                >
-                  {isNumber && numVal !== null
-                    ? <><AnimatedNumber value={numVal} />{suffix}</>
-                    : staticVal}
-                </div>
-
-                <motion.div
-                  className="text-xs font-semibold uppercase tracking-wider mb-1 mt-0.5"
-                  style={{ color: tok.statLabel, fontFamily: 'var(--font-inter), Inter, sans-serif' }}
-                  initial={{ opacity: 0 }}
-                  whileInView={{ opacity: 1 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: 0.4 + i * 0.1, duration: 0.4 }}
-                >
-                  {label}
-                </motion.div>
-
-                <motion.p
-                  className="text-xs leading-relaxed"
-                  style={{ color: tok.statDesc, fontFamily: 'var(--font-inter), Inter, sans-serif' }}
-                  initial={{ opacity: 0 }}
-                  whileInView={{ opacity: 1 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: 0.5 + i * 0.1, duration: 0.4 }}
-                >
-                  {description}
-                </motion.p>
-              </div>
-            </motion.div>
-          ))}
-        </motion.div>
 
       </div>
     </section>

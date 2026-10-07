@@ -413,7 +413,7 @@ export default function ServicesSection() {
           transition={{ duration: 0.5, delay: 0.1 }}
           className="flex justify-center gap-8 mb-8 relative z-10"
         >
-          {([['6+','Industries'],['50+','Clients'],['99%','Uptime']] as const).map(([n,l]) => (
+          {([['6+','Industries'],['99%','Uptime']] as const).map(([n,l]) => (
             <div key={l} className="text-center">
               <div
                 className="text-[22px] font-extrabold leading-none"
@@ -560,7 +560,7 @@ export default function ServicesSection() {
                 Metavision engineers intelligent systems powering the next generation of healthcare, finance, and industrial enterprises.
               </p>
               <div className="flex gap-7 mb-8">
-                {([['6+','Industries'],['50+','Clients'],['99%','Uptime']] as const).map(([n,l]) => (
+                {([['6+','Industries'],['99%','Uptime']] as const).map(([n,l]) => (
                   <div key={l}>
                     <div
                       className="text-[26px] font-extrabold leading-none"

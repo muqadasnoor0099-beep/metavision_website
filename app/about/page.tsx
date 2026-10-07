@@ -9,7 +9,7 @@ import { useTheme } from '@/components/providers/ThemeProvider'
 
 const TIMELINE = [
   { year: '2024', title: 'HA EngagePro', description: 'Delivered HA EngagePro, an end-to-end client lifecycle platform — from project initiation to secure, authenticated engagement tracking.' },
-  { year: '2025', title: 'NexLink MedAI', description: 'Launched NexLink MedAI, our AI-powered telemedicine and prescription platform, onboarding 50+ clinics in the first 6 months.' },
+  { year: '2025', title: 'NexLink MedAI', description: 'Launched NexLink MedAI, our AI-powered telemedicine and prescription platform, onboarding clinics in its first six months.' },
   { year: '2025', title: 'NexLink Clinical Intelligence', description: 'Introduced NexLink Clinical Intelligence, transforming messy EHR records into a structured, FHIR-ready clinical data backbone.' },
   { year: '2026', title: 'Oil & Gas Dashboards', description: 'Expanded into industrial intelligence with real-time Oil & Gas dashboards for production monitoring and enterprise analytics.' },
 ]
