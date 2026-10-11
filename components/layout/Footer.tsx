@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { Mail, Globe, Share2, Code2 } from 'lucide-react'
+import { Mail, Globe, Code2, Twitter } from 'lucide-react'
 import Logo from '@/components/ui/Logo'
 
 const FOOTER_COLS = {
@@ -148,10 +148,17 @@ export default function Footer() {
               Premium AI software for healthcare and finance professionals — built for teams worldwide.
             </p>
             <div className="flex gap-3">
-              {[Globe, Share2, Code2].map((Icon, i) => (
+              {[
+                { Icon: Globe,   href: 'https://metavision.world',        label: 'Website' },
+                { Icon: Twitter, href: 'https://x.com/metavisionworld',   label: 'X (Twitter)' },
+                { Icon: Code2,   href: '#',                               label: 'GitHub' },
+              ].map(({ Icon, href, label }) => (
                 <a
-                  key={i}
-                  href="#"
+                  key={label}
+                  href={href}
+                  aria-label={label}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="w-8 h-8 rounded-lg border border-white/10 hover:border-gold/30 flex items-center justify-center text-white/60 hover:text-white transition-colors duration-200"
                 >
                   <Icon size={14} />
