@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { Mail, Globe, Code2 } from 'lucide-react'
 import Logo from '@/components/ui/Logo'
+import OrbitingCirclesGlobe from '@/components/ui/orbiting-circles-02'
 
 const FOOTER_COLS = {
   Products: [
@@ -21,121 +22,10 @@ export default function Footer() {
       className="relative border-t border-gold/10 overflow-hidden"
       style={{ backgroundColor: 'var(--clr-bg)' }}
     >
-      {/* ── Ocean wave silhouette — crests from the right ────────────────── */}
-      <svg
-        aria-hidden="true"
-        className="pointer-events-none select-none absolute inset-x-0 bottom-0 w-full"
-        style={{ height: '260px' }}
-        viewBox="0 0 1440 260"
-        preserveAspectRatio="none"
-      >
-        <defs>
-          {/* Wave body gradient: fades in from bottom, transparent at crest */}
-          <linearGradient id="wv-fill" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%"   stopColor="#1d4ed8" stopOpacity="0"   />
-            <stop offset="45%"  stopColor="#1d4ed8" stopOpacity="0.10"/>
-            <stop offset="100%" stopColor="#1e3a8a" stopOpacity="0.22"/>
-          </linearGradient>
-
-          {/* Second wave layer */}
-          <linearGradient id="wv-fill2" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%"   stopColor="#2563eb" stopOpacity="0"   />
-            <stop offset="50%"  stopColor="#2563eb" stopOpacity="0.08"/>
-            <stop offset="100%" stopColor="#1e40af" stopOpacity="0.18"/>
-          </linearGradient>
-
-          {/* Neon crest glow — 3 passes */}
-          <filter id="wv-crest" x="-2%" y="-200%" width="104%" height="600%">
-            <feGaussianBlur in="SourceGraphic" stdDeviation="8"   result="g1"/>
-            <feGaussianBlur in="SourceGraphic" stdDeviation="3"   result="g2"/>
-            <feGaussianBlur in="SourceGraphic" stdDeviation="0.8" result="g3"/>
-            <feMerge>
-              <feMergeNode in="g1"/>
-              <feMergeNode in="g2"/>
-              <feMergeNode in="g3"/>
-              <feMergeNode in="SourceGraphic"/>
-            </feMerge>
-          </filter>
-
-          {/* Soft glow under the crest for extra depth */}
-          <filter id="wv-bloom" x="-2%" y="-100%" width="104%" height="400%">
-            <feGaussianBlur in="SourceGraphic" stdDeviation="20" result="b"/>
-            <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
-          </filter>
-
-          {/* Right-side mask: wave is strongest on the right, fades left */}
-          <linearGradient id="wv-mask-grad" x1="0" y1="0" x2="1" y2="0">
-            <stop offset="0%"   stopColor="white" stopOpacity="0"  />
-            <stop offset="28%"  stopColor="white" stopOpacity="0.6"/>
-            <stop offset="55%"  stopColor="white" stopOpacity="1"  />
-            <stop offset="100%" stopColor="white" stopOpacity="1"  />
-          </linearGradient>
-          <mask id="wv-mask">
-            <rect width="1440" height="260" fill="url(#wv-mask-grad)" />
-          </mask>
-        </defs>
-
-        <g mask="url(#wv-mask)">
-          {/* ── Back wave (deepest, tallest crest on right) ── */}
-          <path
-            d="M 0,260 L 1440,260 L 1440,55
-               C 1280,30  1100,110 920,85
-               C 740,60   560,140  380,125
-               C 220,112  90,150   0,165 Z"
-            fill="url(#wv-fill)"
-          />
-          {/* Crest stroke for back wave */}
-          <path
-            d="M 0,165
-               C 90,150   220,112  380,125
-               C 560,140  740,60   920,85
-               C 1100,110 1280,30  1440,55"
-            fill="none"
-            stroke="#3b82f6"
-            strokeWidth="2"
-            strokeOpacity="0.55"
-            filter="url(#wv-crest)"
-          />
-
-          {/* ── Front wave (lower, wider curves) ── */}
-          <path
-            d="M 0,260 L 1440,260 L 1440,120
-               C 1300,95  1120,165  940,148
-               C 760,131  580,190  400,175
-               C 240,162  100,195  0,210 Z"
-            fill="url(#wv-fill2)"
-          />
-          {/* Crest stroke for front wave — brighter */}
-          <path
-            d="M 0,210
-               C 100,195  240,162  400,175
-               C 580,190  760,131  940,148
-               C 1120,165 1300,95  1440,120"
-            fill="none"
-            stroke="#60a5fa"
-            strokeWidth="1.6"
-            strokeOpacity="0.70"
-            filter="url(#wv-crest)"
-          />
-
-          {/* ── Foam crest accent — thin bright line at peak ── */}
-          <path
-            d="M 820,76
-               C 920,58   1060,38  1180,46
-               C 1280,52  1380,44  1440,50"
-            fill="none"
-            stroke="#bfdbfe"
-            strokeWidth="1.2"
-            strokeOpacity="0.85"
-            strokeLinecap="round"
-            filter="url(#wv-crest)"
-          />
-
-          {/* Ambient bloom under peak */}
-          <ellipse cx="1200" cy="80" rx="320" ry="55"
-            fill="#2563eb" fillOpacity="0.10" filter="url(#wv-bloom)" />
-        </g>
-      </svg>
+      {/* ── Orbiting globe background ────────────────────────────────────── */}
+      <div className="pointer-events-none select-none absolute inset-x-0 bottom-0 opacity-35">
+        <OrbitingCirclesGlobe />
+      </div>
 
       {/* ── Footer content ───────────────────────────────────────────────── */}
       <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8 py-16">
