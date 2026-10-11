@@ -591,9 +591,9 @@ export default function GestureFXSection() {
           animation: 'gfx-fade 1s ease 1.5s both',
         }}>
           {[
-            ['500+', 'Clinics Onboarded'],
-            ['2M+',  'Consultations'],
-            ['98%',  'Uptime SLA'],
+            ['AI-First', 'Approach'],
+            ['100%',     'Compliance'],
+            ['< 48h',    'Go-Live'],
           ].map(([n, l]) => (
             <div key={l} style={{ textAlign: 'right' }}>
               <div style={{

@@ -9,11 +9,7 @@ export const HERO_CONTENT: Record<ProductMode, HeroContent> = {
       'Seamless live video consultations with intelligent AI prescription suggestions — built for modern healthcare workflows.',
     ctaLabel: 'Explore NexLink MedAI',
     ctaHref: '/products/medical',
-    stats: [
-      { value: '500+', label: 'Clinics' },
-      { value: '98%', label: 'Uptime SLA' },
-      { value: '2M+', label: 'Consultations' },
-    ],
+    stats: [],
   },
   accounting: {
     overline: 'Professional CA Workflow Suite',
@@ -23,11 +19,7 @@ export const HERO_CONTENT: Record<ProductMode, HeroContent> = {
       'End-to-end workflow platform for chartered accountants — GST filing, ITR preparation, balance sheets, and client management all in one place.',
     ctaLabel: 'Explore Workflow Management System',
     ctaHref: '/products/accounting',
-    stats: [
-      { value: '1,200+', label: 'CA Firms' },
-      { value: '99.9%', label: 'Accuracy' },
-      { value: '50M+', label: 'Records Processed' },
-    ],
+    stats: [],
   },
 }
 
@@ -128,34 +120,11 @@ export const ACCOUNTING_FEATURES: Feature[] = [
 ]
 
 export const WHY_US = [
-  { value: '1,700+', label: 'Professionals', description: 'Trusted by hospitals and CA firms worldwide.' },
   { value: 'AI-First', label: 'Philosophy', description: 'Not bolted on — AI is core to every workflow.' },
   { value: '100%', label: 'Compliance', description: 'Built for evolving data protection and tax regulations.' },
 ]
 
-export const TESTIMONIALS: Testimonial[] = [
-  {
-    quote: "MetaVision's medical platform cut our prescription errors by 80%. The AI suggestions are remarkably accurate.",
-    name: 'Dr. Fatima Malik',
-    role: 'Senior Physician',
-    company: 'Shifa International Hospital',
-    rating: 5,
-  },
-  {
-    quote: 'Filing 200+ tax returns used to take a week. Now it takes a day. MetaVision is a game-changer for our firm.',
-    name: 'CA Bilal Ahmed',
-    role: 'Founding Partner',
-    company: 'Ahmed & Partners',
-    rating: 5,
-  },
-  {
-    quote: 'The telemedicine portal was live in 48 hours. Patient satisfaction scores went up 30% in the first month.',
-    name: 'Dr. Tariq Hussain',
-    role: 'Hospital Director',
-    company: 'Aga Khan Hospital',
-    rating: 5,
-  },
-]
+export const TESTIMONIALS: Testimonial[] = []
 
 export const NAV_LINKS: NavLink[] = [
   { label: 'Home', href: '/' },

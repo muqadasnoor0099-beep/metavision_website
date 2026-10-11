@@ -26,10 +26,10 @@ function AnimatedNumber({ value }: { value: number }) {
 
 // ── Data ──────────────────────────────────────────────────────────────────
 const STATS = [
-  { Icon: Users,      numVal: 1700, suffix: '+', isNumber: true,  label: 'Professionals', description: 'Trusted by hospitals and CA firms worldwide.' },
-  { Icon: Brain,      numVal: null, suffix: '',  isNumber: false, staticVal: 'AI-First',  label: 'Philosophy',   description: 'Not bolted on — AI is core to every workflow.' },
-  { Icon: ShieldCheck,numVal: 100,  suffix: '%', isNumber: true,  label: 'Compliance',   description: 'Built for evolving data protection regulations.' },
-  { Icon: Globe2,     numVal: 50,   suffix: '+', isNumber: true,  label: 'Countries',    description: 'Serving enterprise clients across the globe.' },
+  { Icon: Brain,      numVal: null, suffix: '', isNumber: false, staticVal: 'AI-First',      label: 'Philosophy',  description: 'Not bolted on — AI is core to every workflow.' },
+  { Icon: ShieldCheck,numVal: null, suffix: '', isNumber: false, staticVal: '100%',           label: 'Compliance',  description: 'Built for evolving data protection regulations.' },
+  { Icon: Globe2,     numVal: null, suffix: '', isNumber: false, staticVal: 'Global',         label: 'Reach',       description: 'Serving enterprise clients across the globe.' },
+  { Icon: Users,      numVal: null, suffix: '', isNumber: false, staticVal: 'Enterprise',     label: 'Grade',       description: 'Built for hospitals and CA firms at scale.' },
 ]
 
 const TITLE_WORDS = [['Trusted', 'by'], ['Industry', 'Leaders']]
