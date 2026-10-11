@@ -77,7 +77,9 @@ export default function Footer() {
 
           {/* Brand — full width on mobile, 1 col on desktop */}
           <div className="flex flex-col gap-5 md:col-span-2 lg:col-span-1">
-            <Logo className="h-12 w-auto drop-shadow-[0_0_24px_rgba(59,130,246,0.25)]" />
+            <div className="w-36 sm:w-44">
+              <Logo className="w-full h-auto drop-shadow-[0_0_24px_rgba(59,130,246,0.25)]" />
+            </div>
             <p className="text-white/55 text-sm leading-relaxed max-w-xs">
               Premium AI software for healthcare and finance professionals — built for teams worldwide.
             </p>
