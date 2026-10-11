@@ -2,16 +2,69 @@
 
 import { useRef, useCallback } from 'react'
 import { motion, useInView } from 'framer-motion'
+import { Calendar, Stethoscope, BrainCircuit, BarChart3, Clock } from 'lucide-react'
 import SectionHeader from '@/components/ui/SectionHeader'
 import GlassCard from '@/components/ui/GlassCard'
 import CTABanner from '@/components/home/CTABanner'
 import { useTheme } from '@/components/providers/ThemeProvider'
+import RadialOrbitalTimeline from '@/components/ui/radial-orbital-timeline'
 
-const TIMELINE = [
-  { year: '2024', title: 'HA EngagePro', description: 'Delivered HA EngagePro, an end-to-end client lifecycle platform — from project initiation to secure, authenticated engagement tracking.' },
-  { year: '2025', title: 'NexLink MedAI', description: 'Launched NexLink MedAI, our AI-powered telemedicine and prescription platform for seamless doctor–patient consultations and intelligent prescription workflows.' },
-  { year: '2025', title: 'NexLink Clinical Intelligence', description: 'Introduced NexLink Clinical Intelligence, transforming messy EHR records into a structured, FHIR-ready clinical data backbone.' },
-  { year: '2026', title: 'Oil & Gas Dashboards', description: 'Expanded into industrial intelligence with real-time Oil & Gas dashboards for production monitoring and enterprise analytics.' },
+const ORBITAL_TIMELINE = [
+  {
+    id: 1,
+    title: 'HA EngagePro',
+    date: '2024',
+    content: 'End-to-end client lifecycle platform — from project initiation to secure, authenticated engagement tracking.',
+    category: 'Platform',
+    icon: Calendar,
+    relatedIds: [2],
+    status: 'completed' as const,
+    energy: 100,
+  },
+  {
+    id: 2,
+    title: 'NexLink MedAI',
+    date: 'Q1 2025',
+    content: 'AI-powered telemedicine and prescription platform for seamless doctor–patient consultations and intelligent prescription workflows.',
+    category: 'Healthcare',
+    icon: Stethoscope,
+    relatedIds: [1, 3],
+    status: 'completed' as const,
+    energy: 95,
+  },
+  {
+    id: 3,
+    title: 'Clinical Intelligence',
+    date: 'Q3 2025',
+    content: 'Transforms messy EHR records into a structured, FHIR-ready clinical data backbone for better care decisions.',
+    category: 'Healthcare',
+    icon: BrainCircuit,
+    relatedIds: [2, 4],
+    status: 'completed' as const,
+    energy: 88,
+  },
+  {
+    id: 4,
+    title: 'Oil & Gas Dashboards',
+    date: '2026',
+    content: 'Real-time industrial intelligence dashboards for production monitoring and enterprise analytics.',
+    category: 'Industrial',
+    icon: BarChart3,
+    relatedIds: [3, 5],
+    status: 'in-progress' as const,
+    energy: 65,
+  },
+  {
+    id: 5,
+    title: 'Next Milestone',
+    date: 'H2 2026',
+    content: 'The next chapter of MetaVision — expanding AI capabilities across new verticals and global markets.',
+    category: 'Roadmap',
+    icon: Clock,
+    relatedIds: [4],
+    status: 'pending' as const,
+    energy: 20,
+  },
 ]
 
 const TEAM = [
@@ -555,31 +608,10 @@ export default function AboutPage() {
       {/* Timeline */}
       <section className="py-20 px-6 lg:px-8 max-w-7xl mx-auto">
         <SectionHeader overline="Our Journey" title="How We" titleGold="Got Here" />
-        <div className="mt-14 relative">
-          <div className="absolute left-4 md:left-1/2 top-0 bottom-0 w-px bg-gold/10" />
-          <div className="flex flex-col gap-10">
-            {TIMELINE.map((item, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, x: i % 2 === 0 ? -20 : 20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5 }}
-                className={`relative flex flex-col md:flex-row gap-6 ${i % 2 === 0 ? 'md:flex-row-reverse' : ''}`}
-              >
-                <div className="md:w-1/2" />
-                <div className="absolute left-1 md:left-1/2 w-3 h-3 rounded-full bg-gold border-2 border-[#060609] md:-translate-x-1.5 mt-2 z-10" />
-                <div className="pl-10 md:pl-0 md:w-1/2">
-                  <GlassCard>
-                    <div className="text-gold font-bold text-sm mb-1">{item.year}</div>
-                    <div className="text-white font-semibold mb-2">{item.title}</div>
-                    <p className="text-white/45 text-sm leading-relaxed">{item.description}</p>
-                  </GlassCard>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
+        <p className="text-center text-white/40 text-sm mt-4 mb-10">
+          Click any node to explore — click the background to reset
+        </p>
+        <RadialOrbitalTimeline timelineData={ORBITAL_TIMELINE} />
       </section>
 
       {/* What makes us unique — bento grid */}
