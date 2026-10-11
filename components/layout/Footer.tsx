@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { Mail, Globe, Code2, Twitter } from 'lucide-react'
+import { Mail, Globe, Code2 } from 'lucide-react'
 import Logo from '@/components/ui/Logo'
 
 const FOOTER_COLS = {
@@ -148,22 +148,33 @@ export default function Footer() {
               Premium AI software for healthcare and finance professionals — built for teams worldwide.
             </p>
             <div className="flex gap-3">
-              {[
-                { Icon: Globe,   href: 'https://metavision.world',        label: 'Website' },
-                { Icon: Twitter, href: 'https://x.com/metavisionworld',   label: 'X (Twitter)' },
-                { Icon: Code2,   href: '#',                               label: 'GitHub' },
-              ].map(({ Icon, href, label }) => (
-                <a
-                  key={label}
-                  href={href}
-                  aria-label={label}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="w-8 h-8 rounded-lg border border-white/10 hover:border-gold/30 flex items-center justify-center text-white/60 hover:text-white transition-colors duration-200"
-                >
-                  <Icon size={14} />
-                </a>
-              ))}
+              <a
+                href="https://metavision.world"
+                aria-label="Website"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-8 h-8 rounded-lg border border-white/10 hover:border-gold/30 flex items-center justify-center text-white/60 hover:text-white transition-colors duration-200"
+              >
+                <Globe size={14} />
+              </a>
+              <a
+                href="https://x.com/metavisionworld"
+                aria-label="X (Twitter)"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-8 h-8 rounded-lg border border-white/10 hover:border-gold/30 flex items-center justify-center text-white/60 hover:text-white transition-colors duration-200"
+              >
+                <svg width="12" height="12" viewBox="0 0 1200 1227" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                  <path d="M714.163 519.284L1160.89 0H1055.03L667.137 450.887L357.328 0H0L468.492 681.821L0 1226.37H105.866L515.491 750.218L842.672 1226.37H1200L714.137 519.284H714.163ZM569.165 687.828L521.697 619.934L144.011 79.6899H306.615L611.412 515.685L658.88 583.579L1055.08 1150.3H892.476L569.165 687.854V687.828Z"/>
+                </svg>
+              </a>
+              <a
+                href="#"
+                aria-label="GitHub"
+                className="w-8 h-8 rounded-lg border border-white/10 hover:border-gold/30 flex items-center justify-center text-white/60 hover:text-white transition-colors duration-200"
+              >
+                <Code2 size={14} />
+              </a>
             </div>
           </div>
 
